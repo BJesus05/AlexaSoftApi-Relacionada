@@ -22,6 +22,12 @@ let dataTableOptions = {
       titleAttr: 'Imprimir',
       className: 'btn btn-info',
     },
+    {
+      extend: 'colvis',
+      text: 'Visibilidad Columna',
+      columns: ':not(.no-export)',
+      className: 'btn btn-dark'
+    },
   ],
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
@@ -29,6 +35,7 @@ let dataTableOptions = {
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: '20%', targets: [1] },
+    { targets: [6], visible: false, className: 'no-export' },
   ],
   pageLength: 3,
   destroy: true,
