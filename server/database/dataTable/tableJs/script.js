@@ -27,7 +27,7 @@ let dataTableOptions = {
   columnDefs: [
     { className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
     { orderable: false, targets: [2] },
-    { searchable: false, targets: [1] },
+    // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: '20%', targets: [1] },
   ],
   pageLength: 3,
