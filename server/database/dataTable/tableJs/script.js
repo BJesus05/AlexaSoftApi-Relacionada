@@ -328,7 +328,7 @@ const listUsers = async () => {
                     <td><i class="fa-solid fa-circle-check"></i></td>
                     <td>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${index})"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 </tr>`;
     });

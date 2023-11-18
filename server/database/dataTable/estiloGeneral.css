@@ -1,7 +1,8 @@
-body .sinFondo{
+body .sinFondo {
     background-color: white !important;
 }
-body .textoNav{
+
+body .textoNav {
     font-size: 1.4em !important;
 }
 
@@ -13,28 +14,35 @@ body .textoNav{
 /*Colores generales*/
 
 /*Borde vinotinto*/
-body .bordeVino{
+body .bordeVino {
     border: #73293D solid 3px !important;
     border-radius: 10px !important;
 }
 
 /*Fondo vinotinto*/
-body .fondoVino{
+body .fondoVino {
     background-color: #73293D !important;
 }
 
 /*Borde oro*/
-body .bordeOro{
+body .bordeOro {
     border: #D8B468 solid 3px !important;
     border-radius: 10px !important;
 }
 
 /*Fondo oro*/
-body .fondoOro{
+body .fondoOro {
     background-color: #D8B468 !important;
 }
 
 /*Texto oro*/
-body .textoOro{
+body .textoOro {
     background-color: #D8B468 !important;
 }
+
+.custom-alert-class {
+    width: auto !important;
+    max-width: 80%;
+    left: 20% !important;
+    transform: translateX(-78%);
+  }
