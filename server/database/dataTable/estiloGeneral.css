@@ -42,7 +42,7 @@ body .textoOro {
 
 .custom-alert-class {
     width: auto !important;
-    max-width: 80%;
-    left: 20% !important;
-    transform: translateX(-78%);
+    max-width: 90%;
+    right: 0% !important;
+    transform: translateX(0%);
   }
