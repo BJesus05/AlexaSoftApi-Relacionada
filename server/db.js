@@ -5,5 +5,5 @@ export const Pool = createPool({
         user: "root",
         password: "",
         port: 3306,
-        database: "tasks"
+        database: "alexa_soft"
 });
