@@ -1,0 +1,40 @@
+body .sinFondo{
+    background-color: white !important;
+}
+body .textoNav{
+    font-size: 1.4em !important;
+}
+
+/*Para cambiar el cursor*/
+.clickeable {
+    cursor: pointer;
+}
+
+/*Colores generales*/
+
+/*Borde vinotinto*/
+body .bordeVino{
+    border: #73293D solid 3px !important;
+    border-radius: 10px !important;
+}
+
+/*Fondo vinotinto*/
+body .fondoVino{
+    background-color: #73293D !important;
+}
+
+/*Borde oro*/
+body .bordeOro{
+    border: #D8B468 solid 3px !important;
+    border-radius: 10px !important;
+}
+
+/*Fondo oro*/
+body .fondoOro{
+    background-color: #D8B468 !important;
+}
+
+/*Texto oro*/
+body .textoOro{
+    background-color: #D8B468 !important;
+}
