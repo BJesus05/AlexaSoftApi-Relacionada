@@ -5,8 +5,16 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
+      text: 'Crear <i class="fa-solid fa-folder-plus"></i>',
+      titleAttr: 'Crear',
+      className: 'btn btn-warning',
+      action: function (e, dt, node, config) {
+        openCreateModal();
+      },
+    },
+    {
       extend: "excelHtml5",
-      text: '<i class="fas fa-file-excel"></i> ',
+      text: ' Excel <i class="fas fa-file-excel"></i>',
       titleAttr: "Exportar a Excel",
       className: "btn btn-success",
       exportOptions: {
@@ -15,7 +23,7 @@ let dataTableOptions = {
     },
     {
       extend: "pdfHtml5",
-      text: '<i class="fas fa-file-pdf"></i> ',
+      text: ' PDF <i class="fas fa-file-pdf"></i> ',
       titleAttr: "Exportar a PDF",
       className: "btn btn-danger",
       exportOptions: {
@@ -24,7 +32,7 @@ let dataTableOptions = {
     },
     {
       extend: "print",
-      text: '<i class="fa fa-print"></i> ',
+      text: ' Imprimir <i class="fa fa-print"></i>',
       titleAttr: "Imprimir",
       className: "btn btn-info",
       customize: function (win) {
@@ -286,6 +294,10 @@ let dataTableOptions = {
   },
 };
 
+const openCreateModal = () => {
+  $('#staticBackdrop').modal('show');
+};
+
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTable.destroy();
@@ -315,7 +327,7 @@ const listUsers = async () => {
                     <td> ${user.company.name} </td>
                     <td><i class="fa-solid fa-circle-check"></i></td>
                     <td>
-                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
                         <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 </tr>`;

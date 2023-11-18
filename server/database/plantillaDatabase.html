@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="css/estiloGeneral.css">
 
     <!-- Font-Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- DataTable CSS -->
     <link href="dataTable/DataTables-1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -145,6 +147,49 @@
             </table>
         </div>
     </div> <!-- Fin DataTable -->
+
+    <!-- Inicio Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Campo 1:</label>
+                            <input type="text" class="form-control" id="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Campo 2:</label>
+                            <input type="text" class="form-control" id="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Campo 3:</label>
+                            <input type="text" class="form-control" id="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Campo 4:</label>
+                            <input type="text" class="form-control" id="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Campo 5:</label>
+                            <input type="text" class="form-control" id="">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fin Modal-->
+
 </body>
 
 <!-- JQuery -->
