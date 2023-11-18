@@ -6,8 +6,8 @@ let dataTableOptions = {
   buttons: [
     {
       text: 'Crear <i class="fa-solid fa-folder-plus"></i>',
-      titleAttr: 'Crear',
-      className: 'btn btn-warning',
+      titleAttr: "Crear",
+      className: "btn btn-warning",
       action: function (e, dt, node, config) {
         openCreateModal();
       },
@@ -18,7 +18,7 @@ let dataTableOptions = {
       titleAttr: "Exportar a Excel",
       className: "btn btn-success",
       exportOptions: {
-        columns: ":visible"
+        columns: ":visible",
       },
     },
     {
@@ -36,7 +36,7 @@ let dataTableOptions = {
       titleAttr: "Imprimir",
       className: "btn btn-info",
       customize: function (win) {
-        let table = $(win.document.body).find('table').DataTable();
+        let table = $(win.document.body).find("table").DataTable();
         table.columns().every(function (index) {
           if (!table.column(index).visible()) {
             table.column(index).visible(false);
@@ -44,7 +44,7 @@ let dataTableOptions = {
         });
       },
       exportOptions: {
-        columns: ':visible',
+        columns: ":visible",
       },
     },
     "colvis",
@@ -295,7 +295,41 @@ let dataTableOptions = {
 };
 
 const openCreateModal = () => {
-  $('#staticBackdrop').modal('show');
+  $("#staticBackdrop").modal("show");
+};
+
+let users = [];
+const updateFilteredList = () => {
+  const inputValue = $("#campo4").val().toLowerCase();
+
+  const listResultados = $("#resultadoBusquedaCampo4");
+  listResultados.empty();
+
+  if (inputValue.trim() === "") {
+    return;
+  }
+
+  const filteredData = users.filter((user) =>
+    Object.values(user).some((value, key) => {
+      if (key === 1 && user.name.toLowerCase().includes(inputValue)) {
+        // Si la búsqueda es por "nombre", mostrar el "ID" (Cambiar según solicitud si no se va usar, coloquen este codigo en bloque de comentario)
+        return true;
+      }
+      return String(value).toLowerCase().includes(inputValue);
+    })
+  );
+
+  if (filteredData.length > 0) {
+    filteredData.forEach((result) => {
+      const listItem = $("<li>").text("Resultado: " + result.id).addClass("list-group-item");
+      listResultados.append(listItem);
+    });
+  } else {
+    const listItem = $("<li>")
+      .text("No se encontraron resultados.")
+      .addClass("list-group-item");
+    listResultados.append(listItem);
+  }
 };
 
 const initDataTable = async () => {
@@ -307,37 +341,41 @@ const initDataTable = async () => {
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
+  $("#campo4").on("input", function () {
+    dataTable.column(".campo4:name").search($(this).val()).draw();
+    updateFilteredList();
+  });
+
   dataTableIsInitialized = true;
 };
 
 const listUsers = async () => {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
-    const users = await response.json();
-    console.log(users);
+    users = await response.json();
 
     let content = ``;
     users.forEach((user, index) => {
       content += `
-                <tr>
-                    <td> ${index + 1} </td>
-                    <td> ${user.name} </td>
-                    <td> ${user.email} </td>
-                    <td> ${user.address.city} </td>
-                    <td> ${user.company.name} </td>
-                    <td><i class="fa-solid fa-circle-check"></i></td>
-                    <td>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${index})"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr>`;
+              <tr>
+                  <td> ${index + 1} </td>
+                  <td> ${user.name} </td>
+                  <td> ${user.email} </td>
+                  <td> ${user.address.city} </td>
+                  <td class="campo4"> ${user.company.name} </td>
+                  <td><i class="fa-solid fa-circle-check"></i></td>
+                  <td>
+                      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
+                      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${index})"><i class="fa-solid fa-trash-can"></i></button>
+                  </td>
+              </tr>`;
     });
-    table_users.innerHTML = content;
+    $("#table_users").html(content);
   } catch (error) {
     alert(error);
   }
 };
 
-window.addEventListener("load", async () => {
+$(document).ready(async () => {
   await initDataTable();
 });

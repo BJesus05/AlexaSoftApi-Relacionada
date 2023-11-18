@@ -154,7 +154,7 @@
     <!-- Inicio Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog d-flex align-items-center justify-content-center min-vh-100">
+        <div class="modal-dialog modal-dialog-centered min-vh-100">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
@@ -178,9 +178,9 @@
                             <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo3" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo4" class="col-form-label">Campo 4:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo4" required>
+                            <label for="campo4" class="col-form-label">Campo 4 (Buscar Opcional):</label>
+                            <input type="text" class="form-control campo4" id="campo4">
+                            <ul id="resultadoBusquedaCampo4" class="list-group"></ul>
                         </div>
                         <div class="mb-3">
                             <label for="estadoSelect" class="col-form-label">Campo 5: (Opcional)</label>
@@ -201,6 +201,7 @@
             </div>
         </div>
     </div> <!-- Fin Modal -->
+
 </body>
 
 <!-- Personalizado JS -->
@@ -230,6 +231,6 @@
 <script src="dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
 <script src="dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
-<script src="dataTable/tableJs/script.js"></script>
+<script src="dataTable/tableJs/plantillaScript.js"></script>
 
 </html>

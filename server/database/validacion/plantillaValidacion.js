@@ -62,10 +62,10 @@ function validarFormulario() {
 function mostrarAlertaExitosa(mensaje) {
     Swal.fire({
         imageUrl: "../../images/logoAlexa.jpg",
-        imageWidth: 400,
-        imageHeight: 200,
+        imageWidth: 200,
+        imageHeight: 100,
         imageAlt: "Alexa Soft",
-        title: "Cargando...",
+        title: "Cargando...", 
         showConfirmButton: false,
         allowOutsideClick: false,
         willOpen: function () {
