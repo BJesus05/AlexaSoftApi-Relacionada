@@ -140,9 +140,9 @@ router.delete('/motivocancelacion/:idMotivo', async(req,res) => {
 
 
 //Motivo citas
-router.get('/motivocancelacion', async(req,res) => {
+router.get('/citas', async(req,res) => {
     try {
-        const [result] = await Pool.query("Select * from motivocancelacion");
+        const [result] = await Pool.query("Select * from citas");
         console.log(result)
         res.json(result)
     } catch (error) {
@@ -150,10 +150,10 @@ router.get('/motivocancelacion', async(req,res) => {
     }
    
 });
-router.get('/motivocancelacion/:idMotivo' , async (req,res) => {
+router.get('/citas/:idCita' , async (req,res) => {
 
     try{
-        const [result] = await Pool.query("Select * from motivocancelacion where idMotivo = ?", [req.params.idMotivo]);
+        const [result] = await Pool.query("Select * from citas where idCita = ?", [req.params.idCita]);
         console.log(result)
         if (result.length === 0) {
             res.status(404).json({mensaje: "tarea no encontrada"})
@@ -164,10 +164,10 @@ router.get('/motivocancelacion/:idMotivo' , async (req,res) => {
     }
 
 });
-router.post('/motivocancelacion', async (req,res) => {
+router.post('/citas', async (req,res) => {
     try{
         const {motivo} =req.body;
-        const [result] =  await Pool.query ("INSERT INTO motivocancelacion(motivo) VALUES (?)", [motivo]);
+        const [result] =  await Pool.query ("INSERT INTO citas(motivo) VALUES (?)", [motivo]);
         res.json({
             idMotivo: result.insertId,
             numeroDia,
@@ -179,18 +179,18 @@ router.post('/motivocancelacion', async (req,res) => {
         return res.status(500).json({ message: error.message})
     }
 });
-router.put('/motivocancelacion/:idMotivo', async(req,res) => {
+router.put('/citas/:idCita', async(req,res) => {
     try {
         const {motivo} =req.body;
-        const [result] = await Pool.query("update motivocancelacion set ? where idMotivo = ?", [req.body,req.params.idMotivo]);
+        const [result] = await Pool.query("update citas set ? where idCita = ?", [req.body,req.params.idCita]);
         res.json(result)
     } catch (error) {
         return res.status(500).json({ message: error.message})
     }
 });
-router.delete('/motivocancelacion/:idMotivo', async(req,res) => {
+router.delete('/citas/:idCita', async(req,res) => {
     try {
-            const [result] = await Pool.query("delete from motivocancelacion where idMotivo = ?", [req.params.idMotivo]);
+            const [result] = await Pool.query("delete from citas where idCita = ?", [req.params.idCita]);
         
         if (result.affectedRows === 0) {
              res.sendStatus(404).json({mensaje: "tarea no encontrada"})
