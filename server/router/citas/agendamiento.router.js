@@ -78,6 +78,11 @@ router.delete("/horario/eliminar/:idHorario", async (req, res) => {
   }
 });
 
+
+
+
+
+
 //Motivo cancelacion
 router.get("/motivoscancelacion", async (req, res) => {
   try {

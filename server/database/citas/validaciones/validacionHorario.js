@@ -49,13 +49,15 @@ function validarFormulario() {
     return false;
   }
 
-  // Validar Campo 5 (estadoSelect)
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idHorario = btnConfirmar.getAttribute("data-idhorario");
 
-  // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  mostrarAlertaExitosa(
-    "Validación exitosa. Todos los campos fueron registrados correctamente."
-  );
-  guardarHorario();
+  if (idHorario) {
+    guardarCambios(idHorario);
+  } else {
+    mostrarAlertaExitosa("Validación exitosa. Creando nuevo horario...");
+    guardarHorario();
+  }
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -76,16 +78,16 @@ function mostrarAlertaExitosa(mensaje) {
   });
   setTimeout(() => {
     $("#staticBackdrop").modal("hide");
-
     Swal.fire({
       icon: "success",
       title: "Éxito",
       text: mensaje,
       showConfirmButton: false,
       allowOutsideClick: false,
-      timer: 2000,
+      timer: 3000,
     }).then(() => {
-      document.getElementById("miFormulario").submit();
+      document.getElementById("miFormulario").reset();
+      location.reload();
     });
   }, 3000);
 }
@@ -112,17 +114,16 @@ const confirmDelete = (idHorario) => {
     if (result.isConfirmed) {
       Swal.fire({
         title: "Borrado",
-        text: "El registro ha sido eliminado (simulación).",
+        text: "El registro ha sido eliminado.",
         icon: "success",
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
       }).then(() => {
-        eliminarHorario(idHorario)
-          .then((eliminado) => {
-            if (eliminado) {
-              location.reload();
-            }
-          });
+        eliminarHorario(idHorario).then((eliminado) => {
+          if (eliminado) {
+            location.reload();
+          }
+        });
       });
     }
   });
@@ -132,7 +133,9 @@ function guardarHorario() {
   const numeroDia = document.getElementById("numeroDia");
   const inicioJornada = document.getElementById("inicioJornada");
   const finJornada = document.getElementById("finJornada");
-  const estado = document.getElementById("estado");
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
 
   const url = "http://localhost:4000/horario/registro";
 
@@ -145,7 +148,7 @@ function guardarHorario() {
       numeroDia: numeroDia.value,
       inicioJornada: inicioJornada.value,
       finJornada: finJornada.value,
-      estado: estado.value,
+      estado: estado,
     }),
   })
     .then((response) => {
@@ -184,3 +187,59 @@ function eliminarHorario(idHorario) {
       return false;
     });
 }
+
+const editarHorario = (idHorario) => {
+  const horario = users.find((user) => user.idHorario === idHorario);
+
+  $("#numeroDia").val(horario.numeroDia);
+  $("#inicioJornada").val(horario.inicioJornada);
+  $("#finJornada").val(horario.finJornada);
+  $("#estado").val(horario.estado);
+  $("#btnConfirmar").attr("data-idhorario", idHorario);
+
+  $("#staticBackdrop").modal("show");
+};
+
+const guardarCambios = async (horarioIdSeleccionado) => {
+  if (horarioIdSeleccionado) {
+    const idHorario = horarioIdSeleccionado;
+    const numeroDia = $("#numeroDia").val();
+    const inicioJornada = $("#inicioJornada").val();
+    const finJornada = $("#finJornada").val();
+    const estado = $("#estado").val();
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/horario/${idHorario}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroDia,
+            inicioJornada,
+            finJornada,
+            estado,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // La solicitud PUT fue exitosa
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        // La solicitud PUT no fue exitosa
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud PUT", error);
+    } finally {
+      horarioIdSeleccionado = null;
+    }
+  }
+};
