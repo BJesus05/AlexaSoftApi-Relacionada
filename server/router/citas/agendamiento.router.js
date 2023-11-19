@@ -108,25 +108,21 @@ router.get("/motivoscancelacion/:idMotivo", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-router.post("/motivoscancelacion", async (req, res) => {
+router.post("/motivoscancelacion/registro", async (req, res) => {
   try {
     const { motivo } = req.body;
     const [result] = await Pool.query(
-      "INSERT INTO motivoscancelacion(motivo) VALUES (?)",
-      [motivo]
+      "INSERT INTO motivoscancelacion(motivo) VALUES (?)",[motivo]
     );
     res.json({
       idMotivo: result.insertId,
-      numeroDia,
-      iniciojornada,
-      finjornada,
-      estado,
+      motivo,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
-router.put("/motivoscancelacion/:idMotivo", async (req, res) => {
+router.put("/motivoscancelacion/editar/:idMotivo", async (req, res) => {
   try {
     const { motivo } = req.body;
     const [result] = await Pool.query(
@@ -138,7 +134,7 @@ router.put("/motivoscancelacion/:idMotivo", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-router.delete("/motivoscancelacion/:idMotivo", async (req, res) => {
+router.delete("/motivoscancelacion/eliminar/:idMotivo", async (req, res) => {
   try {
     const [result] = await Pool.query(
       "delete from motivoscancelacion where idMotivo = ?",
