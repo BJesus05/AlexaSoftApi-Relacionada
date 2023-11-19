@@ -1,14 +1,14 @@
-document
-  .getElementById("miFormulario")
+document.getElementById("miFormulario")
   .addEventListener("submit", function (event) {
     event.preventDefault();
     validarFormulario();
   });
 
+
 function validarFormulario() {
   // Deshabilitar temporalmente las validaciones predeterminadas
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
-
+  
   // Validar Campo 1
   var numeroDia = document.getElementById("numeroDia");
   if (numeroDia.value.trim() === "") {
@@ -132,7 +132,9 @@ function guardarHorario() {
   const numeroDia = document.getElementById("numeroDia");
   const inicioJornada = document.getElementById("inicioJornada");
   const finJornada = document.getElementById("finJornada");
-  const estado = document.getElementById("estado");
+  const estadoSelect = document.getElementById('estado');
+const estadoSeleccionado = estadoSelect.value;
+const estado = estadoSeleccionado
 
   const url = "http://localhost:4000/horario/registro";
 
@@ -145,7 +147,7 @@ function guardarHorario() {
       numeroDia: numeroDia.value,
       inicioJornada: inicioJornada.value,
       finJornada: finJornada.value,
-      estado: estado.value,
+      estado: estado,
     }),
   })
     .then((response) => {
@@ -184,3 +186,44 @@ function eliminarHorario(idHorario) {
       return false;
     });
 }
+
+const editarHorario = (idHorario) => {
+  const horario = users.find(user => user.idHorario === idHorario);
+
+  // Llena el modal con los datos del horario
+  $("#numeroDia").val(horario.numeroDia);
+  $("#inicioJornada").val(horario.inicioJornada);
+  $("#finJornada").val(horario.finJornada);
+  $("#estado").val(horario.estado);
+
+  // Almacena el ID actualmente seleccionado
+  horarioIdSeleccionado = idHorario;
+
+  // Abre el modal
+  $("#staticBackdrop").modal("show");
+  guardarCambios(horarioIdSeleccionado)
+};
+
+const guardarCambios = async (horarioIdSeleccionado) => {
+  if (horarioIdSeleccionado) {
+    const idHorario = horarioIdSeleccionado;
+    const numeroDia = $("#numeroDia").val();
+    const inicioJornada = $("#inicioJornada").val();
+    const finJornada = $("#finJornada").val();
+    const estado = $("#estado").val();
+
+    try {
+      const response = await fetch(`http://localhost:4000/horario/${idHorario}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numeroDia, inicioJornada, finJornada, estado }),
+      });
+    } catch (error) {
+      console.error("Error en la solicitud PUT", error);
+    } finally {
+      horarioIdSeleccionado = null; // Limpiar el ID después de la actualización
+    }
+  }
+};

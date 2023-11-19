@@ -178,8 +178,12 @@
                             <input type="time"  class="form-control" id="finJornada" required>
                         </div>
                         <div class="mb-3">
-                            <label for="estado" class="col-form-label">estado</label>
-                            <input type="text" class="form-control" id="estado">
+                            <label for="estado" class="col-form-label">Estado</label>
+                            <select class="form-select" aria-label="Default select example" id="estado" required>
+                                <option value="" selected disabled>Selecciona un estado</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
