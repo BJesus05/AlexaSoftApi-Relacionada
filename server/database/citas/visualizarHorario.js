@@ -362,7 +362,7 @@ const listUsers = async () => {
               <tr>
                   <td> ${idHorario + 1} </td>
                   <td> ${user.numeroDia} </td>
-                  <td> ${user.incioJornada} </td>
+                  <td> ${user.inicioJornada} </td>
                   <td> ${user.finJornada} </td>
                   <td class="campo4"> ${user.estado} </td>
                   <td><i class="fa-solid fa-circle-check"></i></td>
