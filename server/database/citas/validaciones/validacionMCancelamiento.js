@@ -1,123 +1,197 @@
 document.getElementById("miFormulario").addEventListener("submit", function (event) {
-    event.preventDefault();
-    validarFormulario();
-  });
+  event.preventDefault();
+  validarFormulario();
+});
 
 function validarFormulario() {
   // Deshabilitar temporalmente las validaciones predeterminadas
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
   // Validar Campo 1
-  var campo1 = document.getElementById("campo1");
-  if (campo1.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 1");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo1.checkValidity()) {
-    mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
-    return false;
+  var motivo = document.getElementById("motivoRegistro");
+  if (motivo.value.trim() === "") {
+      mostrarAlerta("Por favor, completa el campo motivo");
+      return false;
+  } else if (!motivo.checkValidity()) {
+      mostrarAlerta("Motivo: Por favor, ingrese solo letras.");
+      return false;
   }
 
-  // Validar Campo 2
-  var campo2 = document.getElementById("campo2");
-  if (campo2.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 2");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo2.checkValidity()) {
-    mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
-    return false;
-  }
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idMotivo = btnConfirmar.getAttribute("data-idhmotivo");
 
-  // Validar Campo 3
-  var campo3 = document.getElementById("campo3");
-  if (campo3.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 3");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo3.checkValidity()) {
-    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
-    return false;
+  if (idMotivo) {
+      editarMotivo(idMotivo);
+  } else {
+      mostrarAlertaExitosa("Validación exitosa. Creando nuevo motivo...");
+      guardarMotivo();
   }
-
-  // Validar Campo 4
-  var campo4 = document.getElementById("campo4");
-  if (campo4.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 4");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo4.checkValidity()) {
-    mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
-    return false;
-  }
-
-  // Validar Campo 5 (estadoSelect)
-  var estadoSelect = document.getElementById("estadoSelect");
-  var selectedOption = estadoSelect.options[estadoSelect.selectedIndex];
-  if (selectedOption.value === "") {                    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Campo 5: Por favor, selecciona un estado válido.");
-    return false;
-  }
-
-  // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  mostrarAlertaExitosa("Validación exitosa. Todos los campos fueron registrados correctamente.");
 }
 
 function mostrarAlertaExitosa(mensaje) {
-    Swal.fire({
-        imageUrl: "../../images/logoAlexa.jpg",
-        imageWidth: 200,
-        imageHeight: 100,
-        imageAlt: "Alexa Soft",
-        title: "Cargando...", 
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        willOpen: function () {
+  Swal.fire({
+      imageUrl: "../../images/logoAlexa.jpg",
+      imageWidth: 200,
+      imageHeight: 100,
+      imageAlt: "Alexa Soft",
+      title: "Cargando...",
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      willOpen: function () {
           Swal.showLoading();
-        },
-        customClass: {
+      },
+      customClass: {
           popup: 'custom-alert-class'
-        },
-      });
-    setTimeout(() => {
+      },
+  });
+  setTimeout(() => {
       $("#staticBackdrop").modal("hide");
-  
+
       Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: mensaje,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        timer: 2000,
+          icon: "success",
+          title: "Éxito",
+          text: mensaje,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          timer: 2000,
       }).then(() => {
-        document.getElementById("miFormulario").submit();
+          document.getElementById("miFormulario").submit();
       });
-    }, 3000);
-  }
+  }, 3000);
+}
 
 function mostrarAlerta(mensaje) {
   Swal.fire({
-    icon: "error",
-    title: "Error",
-    text: mensaje,
+      icon: "error",
+      title: "Error",
+      text: mensaje,
   });
 }
 
-const confirmDelete = (index) => {
+const confirmDelete = (idMotivo) => {
   Swal.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar",
+      title: "¿Estás seguro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
   }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Borrado",
-        text: "El registro ha sido eliminado (simulación).",
-        icon: "success",
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Confirmar",
-      });
-    }
+      if (result.isConfirmed) {
+          Swal.fire({
+              title: "Borrado",
+              text: "El registro ha sido eliminado (simulación).",
+              icon: "success",
+              confirmButtonColor: "#198754",
+              confirmButtonText: "Confirmar",
+          }).then(() => {
+              eliminarMotivo(idMotivo).then((eliminado) => {
+                  if (eliminado) {
+                      location.reload();
+                  }
+              });
+          });
+      }
   });
+};
+
+function guardarMotivo() {
+  const motivo = document.getElementById("motivoRegistro");
+
+  const urlM = "http://localhost:4000/motivoscancelacion/registro/";
+
+  fetch(urlM, {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          motivo: motivo.value,
+      }),
+  })
+      .then((response) => response.json())
+      .then((data) => {
+          const nuevoMotivo = [];
+          nuevoMotivo.push(data);
+          mostrarm(nuevoMotivo);
+      })
+      .then(() => location.reload())
+      .catch((error) => {
+          console.error(error.message);
+      });
+}
+
+function eliminarMotivo(idMotivo) {
+  var url = `http://localhost:4000/motivoscancelacion/eliminar/${idMotivo}`;
+
+  return fetch(url, {
+      method: "DELETE",
+  })
+      .then((response) => {
+          if (response.status === 204) {
+              console.log("Registro borrado exitosamente");
+              return true;
+          } else {
+              return false;
+          }
+      })
+      .catch((error) => {
+          console.error("Error al enviar solicitud de borrado:", error);
+          return false;
+      });
+}
+
+const editarMotivo = async(idMotivo) => {
+  const motivo = users.find((user) => user.idMotivo === idMotivo);
+
+  $("#motivoRegistro").val(motivo.motivo);
+  $("#btnConfirmar").attr("data-idhmotivo", idMotivo);
+
+  $("#staticBackdrop").modal("show");
+
+  // Agregar un event listener al botón confirmar
+  $("#btnConfirmar").on("click", function() {
+    guardarCambios(idMotivo);
+  });
+};
+
+
+const guardarCambios = async (motivoIdSeleccionado) => {
+  if (motivoIdSeleccionado) {
+    const idMotivo = motivoIdSeleccionado;
+    const motivo = $("#motivoRegistro").val();
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/motivoscancelacion/editar/${idMotivo}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            motivo,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // La solicitud PUT fue exitosa
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        // La solicitud PUT no fue exitosa
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud PUT", error);
+    } finally {
+      motivoIdSeleccionado = null;
+    }
+  }
 };

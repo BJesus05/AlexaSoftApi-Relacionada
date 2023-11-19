@@ -131,18 +131,18 @@
     <!-- Inicio DataTable -->
     <div class="container my-5">
         <div class="row">
-            <table id="example" class="table table-striped" style="width: 100%">
+            <table id="examplee" class="table table-striped" style="width: 100%">
                 <caption>
                     Copyright © AlexaSoft
                 </caption>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Motivo</th>
+                        <th>motivo</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
-                <tbody id="table_users"></tbody>
+                <tbody id="motivo_list"></tbody>
             </table>
         </div>
     </div> <!-- Fin DataTable -->
@@ -153,20 +153,19 @@
         <div class="modal-dialog modal-dialog-centered min-vh-100">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Crear Motivo</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-auto">
                     <form id="miFormulario">
                         <div class="mb-3">
-                            <label for="campo1" class="col-form-label">Motivo:</label>
+                            <label for="motivo" class="col-form-label">Motivo:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo1" required>
+                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="motivoRegistro" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary"
-                                onclick="validarFormulario(event)">Confirmar</button>
+                            <button type="submit" class="btn btn-primary" id="btnConfirmar">Confirmar</button>
                         </div>
                     </form>
                 </div>
@@ -193,16 +192,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <!-- DataTable JS -->
-<script src="dataTable/JSZip-3.10.1/jszip.min.js"></script>
-<script src="dataTable/pdfmake-0.2.7/pdfmake.min.js"></script>
-<script src="dataTable/pdfmake-0.2.7/vfs_fonts.js"></script>
-<script src="dataTable/DataTables-1.13.8/js/jquery.dataTables.min.js"></script>
-<script src="dataTable/DataTables-1.13.8/js/dataTables.bootstrap5.min.js"></script>
-<script src="dataTable/Buttons-2.4.2/js/dataTables.buttons.min.js"></script>
-<script src="dataTable/Buttons-2.4.2/js/buttons.bootstrap5.min.js"></script>
-<script src="dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
-<script src="dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
-<script src="dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
+<script src="../dataTable/JSZip-3.10.1/jszip.min.js"></script>
+<script src="../dataTable/pdfmake-0.2.7/pdfmake.min.js"></script>
+<script src="../dataTable/pdfmake-0.2.7/vfs_fonts.js"></script>
+<script src="../dataTable/DataTables-1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="../dataTable/DataTables-1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
 <script src="visualizarMCancelamiento.js"></script>
 
 </html>
