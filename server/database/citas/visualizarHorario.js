@@ -357,20 +357,20 @@ const listUsers = async () => {
     console.log(users);
 
     let content = ``;
-    users.forEach((user, idHorario) => {
+    users.forEach((user) => {
       content += `
-              <tr>
-                  <td> ${idHorario + 1} </td>
-                  <td> ${user.numeroDia} </td>
-                  <td> ${user.incioJornada} </td>
-                  <td> ${user.finJornada} </td>
-                  <td class="campo4"> ${user.estado} </td>
-                  <td><i class="fa-solid fa-circle-check"></i></td>
-                  <td>
-                      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
-                      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${idHorario})"><i class="fa-solid fa-trash-can"></i></button>
-                  </td>
-              </tr>`;
+        <tr>
+          <td> ${user.idHorario} </td>
+          <td> ${user.numeroDia} </td>
+          <td> ${user.inicioJornada} </td>
+          <td> ${user.finJornada} </td>
+          <td class="campo4"> ${user.estado} </td>
+          <td><i class="fa-solid fa-circle-check"></i></td>
+          <td>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idHorario})"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>`;
     });
     $("#horario").html(content);
   } catch (error) {

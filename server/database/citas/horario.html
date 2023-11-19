@@ -163,33 +163,23 @@
                 <div class="modal-body mt-auto">
                     <form id="miFormulario">
                         <div class="mb-3">
-                            <label for="campo1" class="col-form-label">Campo 1:</label>
+                            <label for="numeroDia" class="col-form-label">numeroDia:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo1" required>
+                            <input type="text" class="form-control" id="numeroDia" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo2" class="col-form-label">Campo 2:</label>
+                            <label for="inicioJornada" class="col-form-label">inicioJornada:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo2" required>
+                            <input type="time" class="form-control" id="inicioJornada" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo3" class="col-form-label">Campo 3:</label>
+                            <label for="finJornada" class="col-form-label">finJornada:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo3" required>
+                            <input type="time"  class="form-control" id="finJornada" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo4" class="col-form-label">Campo 4 (Buscar Opcional):</label>
-                            <input type="text" class="form-control campo4" id="campo4">
-                            <ul id="resultadoBusquedaCampo4" class="list-group"></ul>
-                        </div>
-                        <div class="mb-3">
-                            <label for="estadoSelect" class="col-form-label">Campo 5: (Opcional)</label>
-                            <select class="form-select" aria-label="Default select example" id="estadoSelect" required>
-                                <option value="" selected disabled>Selecciona un estado</option>
-                                <option value="Estado_1">Estado 1</option>
-                                <option value="Estado_2">Estado 2</option>
-                                <option value="Estado_3">Estado 3</option>
-                            </select>
+                            <label for="estado" class="col-form-label">estado</label>
+                            <input type="text" class="form-control" id="estado">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

@@ -32,19 +32,20 @@ router.get('/horario/:idHorario' , async (req,res) => {
 
 });
 router.post('/horario/registro', async (req,res) => {
-    try{
-        const {numeroDia, inicioJornada, finJornada, estado} =req.body;
-        const [result] =  await Pool.query ("INSERT INTO horario(numeroDia, inicioJornada, finJornada, estado) VALUES (?,?,?,?)", [numeroDia, inicioJornada, finJornada,estado]);
+    try {
+        const { numeroDia, inicioJornada, finJornada, estado } = req.body;
+        const [result] = await Pool.query("INSERT INTO horario(numeroDia, inicioJornada, finJornada, estado) VALUES (?,?,?,?)", [numeroDia, inicioJornada, finJornada, estado]);
         res.json({
             idHorario: result.insertId,
             numeroDia,
             inicioJornada,
             finJornada,
             estado
-        })
-    }catch(error){
-        return res.status(500).json({ message: error.message})
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
+
 });
 router.put('/horario/:idHorario', async(req,res) => {
     try {
@@ -55,7 +56,7 @@ router.put('/horario/:idHorario', async(req,res) => {
         return res.status(500).json({ message: error.message})
     }
 });
-router.delete('/horario/:idHorario', async(req,res) => {
+router.delete('/horario/eliminar/:idHorario', async(req,res) => {
     try {
             const [result] = await Pool.query("delete FROM horario where idHorario = ?", [req.params.idHorario]);
         
