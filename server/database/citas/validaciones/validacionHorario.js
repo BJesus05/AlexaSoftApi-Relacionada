@@ -1,4 +1,6 @@
-document.getElementById("miFormulario").addEventListener("submit", function (event) {
+document
+  .getElementById("miFormulario")
+  .addEventListener("submit", function (event) {
     event.preventDefault();
     validarFormulario();
   });
@@ -11,7 +13,7 @@ function validarFormulario() {
   var numeroDia = document.getElementById("numeroDia");
   if (numeroDia.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 1");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!numeroDia.checkValidity()) {
     mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
     return false;
@@ -21,7 +23,7 @@ function validarFormulario() {
   var inicioJornada = document.getElementById("inicioJornada");
   if (inicioJornada.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 2");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!inicioJornada.checkValidity()) {
     mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
     return false;
@@ -31,7 +33,7 @@ function validarFormulario() {
   var finJornada = document.getElementById("finJornada");
   if (finJornada.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 3");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!finJornada.checkValidity()) {
     mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
     return false;
@@ -41,51 +43,52 @@ function validarFormulario() {
   var estado = document.getElementById("estado");
   if (estado.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 4");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!estado.checkValidity()) {
     mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
     return false;
   }
 
   // Validar Campo 5 (estadoSelect)
- 
 
   // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  mostrarAlertaExitosa("Validación exitosa. Todos los campos fueron registrados correctamente.");
+  mostrarAlertaExitosa(
+    "Validación exitosa. Todos los campos fueron registrados correctamente."
+  );
   guardarHorario();
 }
 
 function mostrarAlertaExitosa(mensaje) {
+  Swal.fire({
+    imageUrl: "../../../images/logoAlexa.jpg",
+    imageWidth: 200,
+    imageHeight: 100,
+    imageAlt: "Alexa Soft",
+    title: "Cargando...",
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    willOpen: function () {
+      Swal.showLoading();
+    },
+    customClass: {
+      popup: "custom-alert-class",
+    },
+  });
+  setTimeout(() => {
+    $("#staticBackdrop").modal("hide");
+
     Swal.fire({
-        imageUrl: "../../images/logoAlexa.jpg",
-        imageWidth: 200,
-        imageHeight: 100,
-        imageAlt: "Alexa Soft",
-        title: "Cargando...", 
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        willOpen: function () {
-          Swal.showLoading();
-        },
-        customClass: {
-          popup: 'custom-alert-class'
-        },
-      });
-    setTimeout(() => {
-      $("#staticBackdrop").modal("hide");
-  
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: mensaje,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        timer: 2000,
-      }).then(() => {
-        document.getElementById("miFormulario").submit();
-      });
-    }, 3000);
-  }
+      icon: "success",
+      title: "Éxito",
+      text: mensaje,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      timer: 2000,
+    }).then(() => {
+      document.getElementById("miFormulario").submit();
+    });
+  }, 3000);
+}
 
 function mostrarAlerta(mensaje) {
   Swal.fire({
@@ -95,7 +98,7 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (index) => {
+const confirmDelete = (idHorario) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -113,23 +116,30 @@ const confirmDelete = (index) => {
         icon: "success",
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
+      }).then(() => {
+        eliminarHorario(idHorario)
+          .then((eliminado) => {
+            if (eliminado) {
+              location.reload();
+            }
+          });
       });
     }
   });
 };
 
 function guardarHorario() {
-  const numeroDia = document.getElementById('numeroDia');
-  const inicioJornada = document.getElementById('inicioJornada');
-  const finJornada = document.getElementById('finJornada');
-  const estado = document.getElementById('estado');
+  const numeroDia = document.getElementById("numeroDia");
+  const inicioJornada = document.getElementById("inicioJornada");
+  const finJornada = document.getElementById("finJornada");
+  const estado = document.getElementById("estado");
 
   const url = "http://localhost:4000/horario/registro";
 
   fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       numeroDia: numeroDia.value,
@@ -138,12 +148,39 @@ function guardarHorario() {
       estado: estado.value,
     }),
   })
-    .then(response => response.json())
-    .then(data => {
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al guardar en la base de datos");
+      }
+      return response.json();
+    })
+    .then((data) => {
       const nuevaHorario = [];
       nuevaHorario.push(data);
       mostrar(nuevaHorario);
+      location.reload();
     })
-    .then(() => location.reload())
-    .catch(error => console.error('Error al guardar en la base de datos:', error));
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
+
+function eliminarHorario(idHorario) {
+  var url = `http://localhost:4000/horario/eliminar/`;
+
+  return fetch(url + idHorario, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        console.log("Registro borrado exitosamente");
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.error("Error al enviar solicitud de borrado:", error);
+      return false;
+    });
 }
