@@ -95,7 +95,7 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (index) => {
+const confirmDelete = (idHorario) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -113,7 +113,9 @@ const confirmDelete = (index) => {
         icon: "success",
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
+        
       });
+      eliminarHorario(idHorario);
     }
   });
 };
@@ -146,4 +148,20 @@ function guardarHorario() {
     })
     .then(() => location.reload())
     .catch(error => console.error('Error al guardar en la base de datos:', error));
+}
+
+function eliminarHorario(idHorario) {
+  var url = `http://localhost:4000/horario/eliminar/ `;
+
+  fetch(url+idHorario, {
+      method: 'DELETE',
+  })
+  .then(response => {
+      if (response.status === 204) {
+          // El servidor respondió con éxito
+          console.log('Registro borrado exitosamente');
+          location.reload(); // O cualquier acción adicional que desees realizar después del borrado
+      } 
+  })
+  .catch(error => console.error('Error al enviar solicitud de borrado:', error));
 }

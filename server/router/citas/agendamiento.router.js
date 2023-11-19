@@ -56,7 +56,7 @@ router.put('/horario/:idHorario', async(req,res) => {
         return res.status(500).json({ message: error.message})
     }
 });
-router.delete('/horario/:idHorario', async(req,res) => {
+router.delete('/horario/eliminar/:idHorario', async(req,res) => {
     try {
             const [result] = await Pool.query("delete FROM horario where idHorario = ?", [req.params.idHorario]);
         
