@@ -147,6 +147,7 @@ const eliminarCotizacion = async (idCotizacion) => {
 const editarCotizacion = (cotizacion) => {
   $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
 
+  //ABRE EL MODAL (.SHOW)
   openCreateModal()
 };
 /*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/

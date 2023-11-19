@@ -41,7 +41,7 @@ let dataTableOptions = {
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+  lengthMenu: [5, 10, 15, 20],
   columnDefs: [
     { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
     { orderable: false, targets: [2] },
