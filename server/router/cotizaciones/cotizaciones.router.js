@@ -14,7 +14,7 @@ router.get('/cotizaciones', async(req,res) => {
     cli.nombre AS nombreCliente,
     c.fechaCreacion AS cotizacion_fechaCreacion,
     c.fechaFinalizacion AS cotizacion_fechaFinalizacion,
-    c.estado AS cotizacion_estado,
+    c.estado,
     CONCAT(GROUP_CONCAT(DISTINCT CONCAT(p.nombre, ' - ', d.unidadesXproducto) ORDER BY p.idProducto SEPARATOR ', ')) AS productos,
     SUM(d.subtotal) AS total
     FROM cliente cli JOIN cotizaciones c ON cli.idCliente = c.idCliente JOIN detallescotizacion d ON c.idCotizacion = d.idCotizacion JOIN productos p ON d.idProducto = p.idProducto
@@ -42,6 +42,20 @@ router.get('/cotizaciones/:id' , async (req,res) => {
     }
 
 });
+
+router.patch("/cotizaciones/:id", async (req, res) => {
+    try {
+      const {estado} = req.body
+      console.log("Estado para guardar    "+estado)
+      const [result] = await Pool.query(
+        "UPDATE cotizaciones set estado = ? where idCotizacion = ?",
+        [estado, req.params.id]
+      );
+      res.json(result);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
 
 router.delete('/cotizaciones/:id', async(req,res) => {
     try {

@@ -1,4 +1,6 @@
-document.getElementById("miFormulario").addEventListener("submit", function (event) {
+document
+  .getElementById("miFormulario")
+  .addEventListener("submit", function (event) {
     event.preventDefault();
     validarFormulario();
   });
@@ -7,89 +9,52 @@ function validarFormulario() {
   // Deshabilitar temporalmente las validaciones predeterminadas
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-  // Validar Campo 1
-  var campo1 = document.getElementById("campo1");
-  if (campo1.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 1");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo1.checkValidity()) {
-    mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
-    return false;
-  }
-
-  // Validar Campo 2
-  var campo2 = document.getElementById("campo2");
-  if (campo2.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 2");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo2.checkValidity()) {
-    mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
-    return false;
-  }
-
-  // Validar Campo 3
-  var campo3 = document.getElementById("campo3");
-  if (campo3.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 3");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo3.checkValidity()) {
-    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
-    return false;
-  }
-
+  
   // Validar Campo 4
-  var campo4 = document.getElementById("campo4");
-  if (campo4.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 4");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo4.checkValidity()) {
-    mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
-    return false;
-  }
+  var estado = document.getElementById("estado");
+  if (estado.value.trim() === "") {
+    mostrarAlerta("Por favor, selecciona una opcion");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
 
-  // Validar Campo 5 (estadoSelect)
-  var estadoSelect = document.getElementById("estadoSelect");
-  var selectedOption = estadoSelect.options[estadoSelect.selectedIndex];
-  if (selectedOption.value === "") {                    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Campo 5: Por favor, selecciona un estado válido.");
-    return false;
-  }
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
 
-  // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  mostrarAlertaExitosa("Validación exitosa. Todos los campos fueron registrados correctamente.");
+ 
+  guardarCambios(idCotizacion);
+
 }
 
 function mostrarAlertaExitosa(mensaje) {
+  Swal.fire({
+    imageUrl: "../../../images/logoAlexa.jpg",
+    imageWidth: 200,
+    imageHeight: 100,
+    imageAlt: "Alexa Soft",
+    title: "Cargando...",
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    willOpen: function () {
+      Swal.showLoading();
+    },
+    customClass: {
+      popup: "custom-alert-class",
+    },
+  });
+  setTimeout(() => {
+    $("#staticBackdrop").modal("hide");
     Swal.fire({
-        imageUrl: "../../images/logoAlexa.jpg",
-        imageWidth: 200,
-        imageHeight: 100,
-        imageAlt: "Alexa Soft",
-        title: "Cargando...", 
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        willOpen: function () {
-          Swal.showLoading();
-        },
-        customClass: {
-          popup: 'custom-alert-class'
-        },
-      });
-    setTimeout(() => {
-      $("#staticBackdrop").modal("hide");
-  
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: mensaje,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        timer: 2000,
-      }).then(() => {
-        document.getElementById("miFormulario").submit();
-      });
-    }, 3000);
-  }
+      icon: "success",
+      title: "Éxito",
+      text: mensaje,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      timer: 3000,
+    }).then(() => {
+      location.reload();
+    });
+  }, 3000);
+}
 
 function mostrarAlerta(mensaje) {
   Swal.fire({
@@ -99,7 +64,7 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (index) => {
+const confirmDelete = (idHorario) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -113,11 +78,113 @@ const confirmDelete = (index) => {
     if (result.isConfirmed) {
       Swal.fire({
         title: "Borrado",
-        text: "El registro ha sido eliminado (simulación).",
+        text: "El registro ha sido eliminado.",
         icon: "success",
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
+      }).then(() => {
+        eliminarHorario(idHorario).then((eliminado) => {
+          if (eliminado) {
+            location.reload();
+          }
+        });
       });
     }
   });
+};
+
+/*function guardarHorario() {
+  
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
+
+  const url = "http://localhost:4000/horario/registro";
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      estado: estado,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al guardar en la base de datos");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const nuevaHorario = [];
+      nuevaHorario.push(data);
+      mostrar(nuevaHorario);
+      location.reload();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+}*/
+
+function eliminarHorario(idHorario) {
+  var url = `http://localhost:4000/horario/eliminar/`;
+
+  return fetch(url + idHorario, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.status === 204) {
+        console.log("Registro borrado exitosamente");
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .catch((error) => {
+      console.error("Error al enviar solicitud de borrado:", error);
+      return false;
+    });
+}
+
+const editarCotizacion = (cotizacion) => {
+  $("#estado").val(cotizacion.estado);
+  $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
+
+  $("#staticBackdrop").modal("show");
+};
+
+const guardarCambios = async (idCotizacionSeleccionado) => {
+  if (idCotizacionSeleccionado) {
+    const estado = $("#estado").val();
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/cotizaciones/${idCotizacionSeleccionado}`,
+        {
+          method: "PATCH", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            estado,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud PATCH", error);
+    }
+  }
 };

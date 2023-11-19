@@ -164,14 +164,16 @@
                         <div class="mb-3">
                             <label for="estado" class="col-form-label">Estado</label>
                             <select class="form-control" id="estado" name="estado">
-                                <option value=""></option>
+                                <option value="" disabled selected>Selecciona un estado</option>
+                                <option value="2">Aceptado</option>
+                                <option value="3">Cancelado</option>
                             </select>
                                 
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary"
-                                onclick="validarFormulario(event)">Confirmar</button>
+                            <button type="submit" class="btn btn-primary" id="btnConfirmar"
+                                >Confirmar</button>
                         </div>
                     </form>
                 </div>

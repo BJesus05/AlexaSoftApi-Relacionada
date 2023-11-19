@@ -298,6 +298,8 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
+
+/* 
 let users = [];
 const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
@@ -330,7 +332,7 @@ const updateFilteredList = () => {
       .addClass("list-group-item");
     listResultados.append(listItem);
   }
-};
+}; */
 
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
@@ -353,24 +355,27 @@ const listCotizaciones = async () => {
   try {
     const response = await fetch("http://localhost:4000/cotizaciones");
     const cotizaciones = await response.json();
-    console.log(cotizaciones);
 
     let content = ``;
     cotizaciones.forEach((cotizacion) => {
+      console.log("cotizacion   ", JSON.stringify(cotizacion))
       content += `
-        <tr>
-          <td> ${cotizacion.idCotizacion} </td>
-          <td> ${cotizacion.nombreCliente} </td>
-          <td> ${cotizacion.cotizacion_fechaCreacion} </td>
-          <td> ${cotizacion.cotizacion_fechaFinalizacion} </td>
-          <td> ${cotizacion.cotizacion_estado} </td>
-          <td> ${cotizacion.productos} </td>
-          <td> ${cotizacion.total} </td>
-          <td>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>
-          </td>
-        </tr>`;
+  <tr>
+    <td> ${cotizacion.idCotizacion} </td>
+    <td> ${cotizacion.nombreCliente} </td>
+    <td> ${cotizacion.cotizacion_fechaCreacion} </td>
+    <td> ${cotizacion.cotizacion_fechaFinalizacion} </td>
+    <td> ${cotizacion.estado} </td>
+    <td> ${cotizacion.productos} </td>
+    <td> ${cotizacion.total} </td>
+    <td>
+      ${cotizacion.estado === "espera" ? `
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarCotizacion(${JSON.stringify(cotizacion).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-pencil"></i>
+        </button>` : ''}
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>
+    </td>
+  </tr>`;
     });
     $("#cotizaciones").html(content);
   } catch (error) {
