@@ -5,14 +5,6 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
-      text: 'Crear <i class="fa-solid fa-folder-plus"></i>',
-      titleAttr: "Crear",
-      className: "btn btn-warning",
-      action: function (e, dt, node, config) {
-        openCreateModal();
-      },
-    },
-    {
       extend: "excelHtml5",
       text: ' Excel <i class="fas fa-file-excel"></i>',
       titleAttr: "Exportar a Excel",
