@@ -8,55 +8,51 @@ function validarFormulario() {
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
   // Validar Campo 1
-  var campo1 = document.getElementById("campo1");
-  if (campo1.value.trim() === "") {
+  var numeroDia = document.getElementById("numeroDia");
+  if (numeroDia.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 1");
     return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo1.checkValidity()) {
+  } else if (!numeroDia.checkValidity()) {
     mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
     return false;
   }
 
   // Validar Campo 2
-  var campo2 = document.getElementById("campo2");
-  if (campo2.value.trim() === "") {
+  var inicioJornada = document.getElementById("inicioJornada");
+  if (inicioJornada.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 2");
     return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo2.checkValidity()) {
+  } else if (!inicioJornada.checkValidity()) {
     mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
     return false;
   }
 
   // Validar Campo 3
-  var campo3 = document.getElementById("campo3");
-  if (campo3.value.trim() === "") {
+  var finJornada = document.getElementById("finJornada");
+  if (finJornada.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 3");
     return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo3.checkValidity()) {
+  } else if (!finJornada.checkValidity()) {
     mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
     return false;
   }
 
   // Validar Campo 4
-  var campo4 = document.getElementById("campo4");
-  if (campo4.value.trim() === "") {
+  var estado = document.getElementById("estado");
+  if (estado.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 4");
     return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo4.checkValidity()) {
+  } else if (!estado.checkValidity()) {
     mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
     return false;
   }
 
   // Validar Campo 5 (estadoSelect)
-  var estadoSelect = document.getElementById("estadoSelect");
-  var selectedOption = estadoSelect.options[estadoSelect.selectedIndex];
-  if (selectedOption.value === "") {                    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Campo 5: Por favor, selecciona un estado válido.");
-    return false;
-  }
+ 
 
   // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
   mostrarAlertaExitosa("Validación exitosa. Todos los campos fueron registrados correctamente.");
+  guardarHorario();
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -121,3 +117,33 @@ const confirmDelete = (index) => {
     }
   });
 };
+
+function guardarHorario() {
+  const numeroDia = document.getElementById('numeroDia');
+  const inicioJornada = document.getElementById('inicioJornada');
+  const finJornada = document.getElementById('finJornada');
+  const estado = document.getElementById('estado');
+
+  const url = "http://localhost:4000/horario/registro";
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      numeroDia: numeroDia.value,
+      inicioJornada: inicioJornada.value,
+      finJornada: finJornada.value,
+      estado: estado.value,
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      const nuevaHorario = [];
+      nuevaHorario.push(data);
+      mostrar(nuevaHorario);
+    })
+    .then(() => location.reload())
+    .catch(error => console.error('Error al guardar en la base de datos:', error));
+}
