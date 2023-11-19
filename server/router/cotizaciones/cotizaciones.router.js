@@ -8,20 +8,18 @@ router.use(cors());
 //Cotizaciones
 router.get('/cotizaciones', async(req,res) => {
     try {
-        const queryBuscar=`
+        const [result] = await Pool.query(`
         SELECT 
-    cli.idCliente AS id,
+        c.idCotizacion,
     cli.nombre AS nombreCliente,
-    c.idCotizacion,
     c.fechaCreacion AS cotizacion_fechaCreacion,
     c.fechaFinalizacion AS cotizacion_fechaFinalizacion,
-    c.estado AS cotizacion_estado,
-    SUM(d.subtotal) AS total,
-    CONCAT(GROUP_CONCAT(DISTINCT CONCAT(p.nombre, ' - ', d.unidadesXproducto) ORDER BY p.idProducto SEPARATOR ', ')) AS productos
+    c.estado,
+    CONCAT(GROUP_CONCAT(DISTINCT CONCAT(p.nombre, ' - ', d.unidadesXproducto) ORDER BY p.idProducto SEPARATOR ', ')) AS productos,
+    SUM(d.subtotal) AS total
     FROM cliente cli JOIN cotizaciones c ON cli.idCliente = c.idCliente JOIN detallescotizacion d ON c.idCotizacion = d.idCotizacion JOIN productos p ON d.idProducto = p.idProducto
     GROUP BY c.idCotizacion;
-        `;
-        const [result] = await Pool.query(queryBuscar);
+        `);
         console.log(result)
         res.json(result)
     } catch (error) {
@@ -33,7 +31,7 @@ router.get('/cotizaciones', async(req,res) => {
 router.get('/cotizaciones/:id' , async (req,res) => {
 
     try{
-        const [result] = await Pool.query("SELECT * FROM cotizaciones where idCotizacion = ?", [req.params.id]);
+        const [result] = await Pool.query("SELECT estado FROM cotizaciones where idCotizacion = ?", [req.params.id]);
         console.log(result)
         if (result.length === 0) {
             res.status(404).json({mensaje: "Cotizacion no encontrada"})
@@ -44,6 +42,20 @@ router.get('/cotizaciones/:id' , async (req,res) => {
     }
 
 });
+
+router.patch("/cotizaciones/:id", async (req, res) => {
+    try {
+      const {estado} = req.body
+      console.log("Estado para guardar    "+estado)
+      const [result] = await Pool.query(
+        "UPDATE cotizaciones set estado = ? where idCotizacion = ?",
+        [estado, req.params.id]
+      );
+      res.json(result);
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  });
 
 router.delete('/cotizaciones/:id', async(req,res) => {
     try {
