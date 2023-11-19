@@ -360,7 +360,7 @@ const listUsers = async () => {
     users.forEach((user, idHorario) => {
       content += `
               <tr>
-                  <td> ${idHorario } </td>
+                  <td> ${idHorario + 1} </td>
                   <td> ${user.numeroDia} </td>
                   <td> ${user.incioJornada} </td>
                   <td> ${user.finJornada} </td>

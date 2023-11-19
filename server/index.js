@@ -11,4 +11,4 @@ app.use(agendamientoRouter)
 
 
 app.listen(PORT)
-console.log('server is runnning  on port 4000')
+console.log('Servidor inicio con exito: 4000')
