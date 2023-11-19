@@ -59,12 +59,12 @@ router.patch("/cotizaciones/:id", async (req, res) => {
 
 router.delete('/cotizaciones/:id', async(req,res) => {
     try {
-            const [result] = await Pool.query("delete FROM cotizacion where idCotizacion = ?", [req.params.id]);
+            const [result] = await Pool.query("delete FROM cotizaciones where idCotizacion = ?", [req.params.id]);
         
         if (result.affectedRows === 0) {
              res.sendStatus(404).json({mensaje: "tarea no encontrada"})
         }else{
-            Pool.query("delete from destallescotizacion where idCotizacion = ?", [req.params.id])
+            //Pool.query("delete from destallescotizacion where idCotizacion = ?", [req.params.id])
          res.sendStatus(204) 
     }
     } catch (error) {

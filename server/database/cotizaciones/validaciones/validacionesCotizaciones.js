@@ -1,30 +1,37 @@
-document
-  .getElementById("miFormulario")
-  .addEventListener("submit", function (event) {
+//CADA VEZ QUE SE SUBA EL FORMULARIO SE VA A ACTIVAR
+document.getElementById("miFormulario").addEventListener("submit", function (event) {
     event.preventDefault();
+    //FUNCION VALIDAR REGISTRO (PARA QUE LOS CAMPOS NO SE VAYAN VACIOS)
     validarFormulario();
   });
 
 function validarFormulario() {
-  // Deshabilitar temporalmente las validaciones predeterminadas
+  // DESABILITAR TEMPORALMENTE LAS VALIDACIONES PREDETERMINADAS PARA DARLE PASO A LAS VALIDACIONES PERSONALIZADAS
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
   
-  // Validar Campo 4
+  //VALIDAR CAMPO ESTADO (EL UNICO QUE HAY JAJAJAJAJ)
   var estado = document.getElementById("estado");
+  
   if (estado.value.trim() === "") {
     mostrarAlerta("Por favor, selecciona una opcion");
-    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; 
   } 
 
+  //SI EL CAMPO ESTA VACIO NO EJECUTARA EL GUARDADO DE LA ACTUALIZACION
+
+  //OBTIENE EL ELEMENTO BOTON
   var btnConfirmar = document.getElementById("btnConfirmar");
+
+  //OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
   var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
 
- 
+ //EJECUTA EL GUARDADO JUNTO CON EL ID
   guardarCambios(idCotizacion);
 
 }
 
+/*ALERTA ACTUALIZACION EXITOSA*/
 function mostrarAlertaExitosa(mensaje) {
   Swal.fire({
     imageUrl: "../../../images/logoAlexa.jpg",
@@ -42,6 +49,7 @@ function mostrarAlertaExitosa(mensaje) {
     },
   });
   setTimeout(() => {
+    //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
       icon: "success",
@@ -55,7 +63,11 @@ function mostrarAlertaExitosa(mensaje) {
     });
   }, 3000);
 }
+/*ALERTA ACTUALIZACION EXITOSA*/
 
+
+
+/*ALERTA DE ERROR GENERICA */
 function mostrarAlerta(mensaje) {
   Swal.fire({
     icon: "error",
@@ -63,8 +75,12 @@ function mostrarAlerta(mensaje) {
     text: mensaje,
   });
 }
+/*ALERTA DE ERROR GENERICA */
 
-const confirmDelete = (idHorario) => {
+
+
+/*ALERTA CONFIRMAR ELIMINACION */
+const confirmDelete = (idCotizacion) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -83,7 +99,7 @@ const confirmDelete = (idHorario) => {
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
       }).then(() => {
-        eliminarHorario(idHorario).then((eliminado) => {
+        eliminarCotizacion(idCotizacion).then((eliminado) => {
           if (eliminado) {
             location.reload();
           }
@@ -92,68 +108,51 @@ const confirmDelete = (idHorario) => {
     }
   });
 };
+/*ALERTA CONFIRMAR ELIMINACION */
 
-/*function guardarHorario() {
-  
-  const estadoSelect = document.getElementById("estado");
-  const estadoSeleccionado = estadoSelect.value;
-  const estado = estadoSeleccionado;
 
-  const url = "http://localhost:4000/horario/registro";
 
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      estado: estado,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al guardar en la base de datos");
+/*FUNCION ELIMINAR COTIZACION*/
+const eliminarCotizacion = async (idCotizacion) => {
+  var url = `http://localhost:4000/cotizaciones/${idCotizacion}`;
+
+  try {
+    const response = await fetch(
+      url,
+      {
+        method: "DELETE",      
       }
-      return response.json();
-    })
-    .then((data) => {
-      const nuevaHorario = [];
-      nuevaHorario.push(data);
-      mostrar(nuevaHorario);
-      location.reload();
-    })
-    .catch((error) => {
-      console.error(error.message);
-    });
-}*/
+    );
 
-function eliminarHorario(idHorario) {
-  var url = `http://localhost:4000/horario/eliminar/`;
+    if (response.ok) {
+      //Refresca la pagina
+      await listCotizaciones();
 
-  return fetch(url + idHorario, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (response.status === 204) {
-        console.log("Registro borrado exitosamente");
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.error("Error al enviar solicitud de borrado:", error);
-      return false;
-    });
+    } else {
+      
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al borrar los datos.",
+      });
+    }
+  } catch (error) {
+    console.error("Error en la solicitud DELETE", error);
+  }
 }
+/*FUNCION ELIMINAR COTIZACION*/
 
+
+/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 const editarCotizacion = (cotizacion) => {
-  $("#estado").val(cotizacion.estado);
   $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
 
-  $("#staticBackdrop").modal("show");
+  openCreateModal()
 };
+/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 
+
+/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
 const guardarCambios = async (idCotizacionSeleccionado) => {
   if (idCotizacionSeleccionado) {
     const estado = $("#estado").val();
@@ -188,3 +187,4 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
     }
   }
 };
+/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
