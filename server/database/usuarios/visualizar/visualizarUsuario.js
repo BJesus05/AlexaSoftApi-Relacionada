@@ -41,7 +41,7 @@ let dataTableOptions = {
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20],
+  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
     { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
     { orderable: false, targets: [2] },
@@ -290,10 +290,8 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
-
-/* 
 let users = [];
-const updateFilteredList = () => {
+/* const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
 
   const listResultados = $("#resultadoBusquedaCampo4");
@@ -315,7 +313,9 @@ const updateFilteredList = () => {
 
   if (filteredData.length > 0) {
     filteredData.forEach((result) => {
-      const listItem = $("<li>").text("Resultado: " + result.id).addClass("list-group-item");
+      const listItem = $("<li>")
+        .text("Resultado: " + result.id)
+        .addClass("list-group-item");
       listResultados.append(listItem);
     });
   } else {
@@ -331,9 +331,9 @@ const initDataTable = async () => {
     dataTable.destroy();
   }
 
-  await listCotizaciones();
+  await listUsuarios();
 
-  dataTable = $("#example").DataTable(dataTableOptions);
+  dataTable = $("#usuario").DataTable(dataTableOptions);
 
   $("#campo4").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
@@ -343,33 +343,34 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listCotizaciones = async () => {
+const listUsuarios = async () => {
   try {
-    const response = await fetch("http://localhost:4000/cotizaciones");
-    const cotizaciones = await response.json();
+    const response = await fetch("http://localhost:4000/usuarios");
+    const usuarios = await response.json();
 
     let content = ``;
-    cotizaciones.forEach((cotizacion) => {
-      console.log("cotizacion   ", JSON.stringify(cotizacion))
+    usuarios.forEach((usuario) => {
+      console.log("usuario   ", JSON.stringify(usuario));
       content += `
   <tr>
-    <td> ${cotizacion.idCotizacion} </td>
-    <td> ${cotizacion.nombreCliente} </td>
-    <td> ${cotizacion.cotizacion_fechaCreacion} </td>
-    <td> ${cotizacion.cotizacion_fechaFinalizacion} </td>
-    <td> ${cotizacion.estado} </td>
-    <td> ${cotizacion.productos} </td>
-    <td> ${cotizacion.total} </td>
+    <td> ${usuario.idUsuario} </td>
+    <td> ${usuario.nombre} </td>
+    <td> ${usuario.cedula} </td>
+    <td> ${usuario.correo} </td>
+    <td> ${usuario.telefono} </td>
+    <td> ${usuario.instagram} </td>
+    <td> ${usuario.contrasena} </td>
+    <td> ${usuario.estado} </td>
+    <td> ${usuario.fechaInteraccion} </td>
+    <td> ${usuario.idRol} </td>
     <td>
-      ${cotizacion.estado === "espera" ? `
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarCotizacion(${JSON.stringify(cotizacion).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-pencil"></i>
-        </button>` : ''}
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${usuario.idUsuario})">
+        <i class="fa-solid fa-pencil"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${usuario.idUsuario})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });
-    $("#cotizaciones").html(content);
+    $("#usuarios").html(content);
   } catch (error) {
     alert(error);
   }
