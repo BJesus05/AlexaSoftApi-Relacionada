@@ -51,7 +51,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7,8] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -341,7 +341,7 @@ const initDataTable = async () => {
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
-  $("#campo4").on("input", function () {
+  $("#usuario").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
     updateFilteredList();
   });
@@ -351,22 +351,26 @@ const initDataTable = async () => {
 
 const listUsers = async () => {
   try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+    const response = await fetch("http://localhost:4000/citas");
     users = await response.json();
+    console.log(users)
 
     let content = ``;
-    users.forEach((user, index) => {
+    users.forEach((citas) => {
       content += `
               <tr>
-                  <td> ${index + 1} </td>
-                  <td> ${user.name} </td>
-                  <td> ${user.email} </td>
-                  <td> ${user.address.city} </td>
-                  <td class="campo4"> ${user.company.name} </td>
-                  <td><i class="fa-solid fa-circle-check"></i></td>
+                  <td> ${citas.idCita} </td>
+                  <td> ${citas.fecha} </td>
+                  <td> ${citas.hora} </td>
+                  <td> ${citas.detalles} </td>
+                  <td> ${citas.estado} </td>
+                  <td> ${citas.motivoCancelacion} </td>
+                  <td  ${citas.idUsuario} </td>
+                  <td> ${citas.idPaquete} </td>
+                  <td> ${citas.idHorario} </td>
                   <td>
                       <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
-                      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${index})"><i class="fa-solid fa-trash-can"></i></button>
+                      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>
                   </td>
               </tr>`;
     });
