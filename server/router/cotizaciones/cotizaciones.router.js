@@ -20,7 +20,7 @@ router.get('/cotizaciones', async (req, res) => {
     FROM cliente cli JOIN cotizaciones c ON cli.idCliente = c.idCliente JOIN detallescotizacion d ON c.idCotizacion = d.idCotizacion JOIN productos p ON d.idProducto = p.idProducto
     GROUP BY c.idCotizacion;
         `);
-        console.log(result)
+        //console.log(result)
         res.json(result)
     } catch (error) {
         return res.status(500).json({ message: error.message })
