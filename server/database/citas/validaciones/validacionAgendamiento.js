@@ -87,29 +87,34 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (index) => {
+const confirmDelete = (idCita) => {
   Swal.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar",
+      title: "¿Estás seguro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Eliminar",
+      cancelButtonText: "Cancelar",
   }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Borrado",
-        text: "El registro ha sido eliminado (simulación).",
-        icon: "success",
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Confirmar",
-      });
-    }
+      if (result.isConfirmed) {
+          Swal.fire({
+              title: "Borrado",
+              text: "El registro ha sido eliminado (simulación).",
+              icon: "success",
+              confirmButtonColor: "#198754",
+              confirmButtonText: "Confirmar",
+          }).then(() => {
+              eliminarCitas(idCita).then((eliminado) => {
+                  if (eliminado) {
+                      location.reload();
+                  }
+              });
+          });
+      }
   });
 };
-
 
 function guardarCitas() {
   var fecha = document.getElementById("fechaCita");
@@ -149,4 +154,24 @@ function guardarCitas() {
     .catch((error) => {
       console.error(error.message);
     });
+}
+
+function eliminarCitas(idCita) {
+  var url = `http://localhost:4000/citas/eliminar/${idCita}`;
+
+  return fetch(url, {
+      method: "DELETE",
+  })
+      .then((response) => {
+          if (response.status === 204) {
+              console.log("Registro borrado exitosamente");
+              return true;
+          } else {
+              return false;
+          }
+      })
+      .catch((error) => {
+          console.error("Error al enviar solicitud de borrado:", error);
+          return false;
+      });
 }
