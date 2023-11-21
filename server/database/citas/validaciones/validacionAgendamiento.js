@@ -8,27 +8,14 @@ function validarFormulario() {
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
   // Validar Campo 1
-  var campo1 = document.getElementById("campo1");
-  if (campo1.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 1");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo1.checkValidity()) {
-    mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
-    return false;
-  }
+  var fecha = document.getElementById("fechaCita");
+
 
   // Validar Campo 2
-  var campo2 = document.getElementById("campo2");
-  if (campo2.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 2");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo2.checkValidity()) {
-    mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
-    return false;
-  }
-
+  var hora = document.getElementById("horaCita");
+ 
   // Validar Campo 3
-  var campo3 = document.getElementById("campo3");
+  var campo3 = document.getElementById("detalleCita");
   if (campo3.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 3");
     return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
@@ -38,25 +25,26 @@ function validarFormulario() {
   }
 
   // Validar Campo 4
-  var campo4 = document.getElementById("campo4");
-  if (campo4.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 4");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!campo4.checkValidity()) {
-    mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
-    return false;
-  }
+  var campo4 = document.getElementById("estadoCita");
 
-  // Validar Campo 5 (estadoSelect)
-  var estadoSelect = document.getElementById("estadoSelect");
-  var selectedOption = estadoSelect.options[estadoSelect.selectedIndex];
-  if (selectedOption.value === "") {                    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Campo 5: Por favor, selecciona un estado válido.");
-    return false;
-  }
+
+  // Validar Campo 5 
+  var estadoSelect = document.getElementById("motivoCancelacion");
+  
+    // Validar Campo 6
+  var campo4 = document.getElementById("usuarioCita");
+
+    // Validar Campo 7
+  var campo4 = document.getElementById("paqueteCita");
+
+
+    // Validar Campo 8
+  var campo4 = document.getElementById("horarioCita");
+
+ 
 
   // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  mostrarAlertaExitosa("Validación exitosa. Todos los campos fueron registrados correctamente.");
+  guardarCitas();
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -121,3 +109,44 @@ const confirmDelete = (index) => {
     }
   });
 };
+
+
+function guardarCitas() {
+  var fecha = document.getElementById("fechaCita");
+  var hora = document.getElementById("horaCita");
+  var detalles = document.getElementById("detalleCita");
+  var estado = document.getElementById("estadoCita").value;
+  var motivoCancelacion = document.getElementById("motivoCancelacion").value;
+  var idUsuario = document.getElementById("usuarioCita").value;
+  var idPaquete = document.getElementById("paqueteCita").value;
+  var idHorario = document.getElementById("horarioCita").value;
+
+  const url = "http://localhost:4000/citas/registro/";
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fecha: fecha.value,
+      hora: hora.value,
+      detalles: detalles.value,
+      estado: estado,
+      motivoCancelacion: motivoCancelacion,
+      idUsuario: idUsuario,
+      idPaquete: idPaquete,
+      idHorario: idHorario,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const nuevoCitas = [];
+      nuevoCitas.push(data);
+      mostrarm(nuevoCitas);
+    })
+    .then(() => location.reload())
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
