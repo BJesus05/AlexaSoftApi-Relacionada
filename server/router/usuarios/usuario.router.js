@@ -63,5 +63,45 @@ router.delete("/usuarios/eliminar/:idUsuario", async (req, res) => {
   }
 });
 
+// Roles
+router.get("/roles", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM roles");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/roles/:idRol", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM roles WHERE idRol = ?", [
+      req.params.idRol,
+    ]);
+    console.log(result);
+    if (result.length === 0) {
+      res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.patch("/roles/:idRol", async (req, res) => {
+  try {
+    const { estado } = req.body;
+    console.log("IdRol para guardar: " + idRol);
+    const [result] = await Pool.query(
+      "UPDATE roles set estado = ? where idRol = ?",
+      [estado, req.params.idUsuario]
+    );
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 export { router as usuarioRouter };
 export default router;
