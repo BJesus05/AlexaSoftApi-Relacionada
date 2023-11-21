@@ -1,37 +1,26 @@
-document
-  .getElementById("miFormulario")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-    validarFormulario();
-  });
+document.getElementById("miFormulario").addEventListener("submit", function (event) {
+  event.preventDefault();
+  validarFormulario();
+});
 
-async function validarFormulario() {
-  // Deshabilitar temporalmente las validaciones predeterminadas
-  document.getElementById("miFormulario").setAttribute("novalidate", "true");
+function validarFormulario() {
+document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-  // Validar Campo 1
-  var idRolSelect = document.getElementById("idRol");
-  var selectedOption = idRolSelect.options[idRolSelect.selectedIndex];
-  if (selectedOption.value === "") {
-    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Por favor, selecciona un estado válido.");
-    return false;
-  }
+var idRol = document.getElementById("idRol");
 
-  var btnConfirmar = document.getElementById("btnConfirmar");
-  var idUsuario = btnConfirmar.getAttribute("data-idusuario");
+if (idRol.value.trim() === "") {
+  mostrarAlerta("Por favor, selecciona una opcion");
+  return false; 
+} else if (estado.value.trim() === ""){
+  mostrarAlerta("Por favor, selecciona una opcion");
+  return false; 
+}
 
-  try {
-    await guardarCambios(idUsuario);
-    mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
-  } catch (error) {
-    console.error("Error al guardar cambios:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Hubo un problema al guardar los cambios.",
-    });
-  }
+var btnConfirmar = document.getElementById("btnConfirmar");
+var idUsuario = btnConfirmar.getAttribute("data-idusuario");
+
+guardarCambios(idUsuario);
+
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -51,7 +40,7 @@ function mostrarAlertaExitosa(mensaje) {
     },
   });
   setTimeout(() => {
-    location.reload();
+    //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
       icon: "success",
@@ -63,7 +52,7 @@ function mostrarAlertaExitosa(mensaje) {
     }).then(() => {
       location.reload();
     });
-  }, 1000);
+  }, 3000);
 }
 
 function mostrarAlerta(mensaje) {
@@ -93,7 +82,7 @@ const confirmDelete = (idUsuario) => {
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
       }).then(() => {
-        eliminarHorario(idUsuario).then((eliminado) => {
+        eliminarUsuario(idUsuario).then((eliminado) => {
           if (eliminado) {
             location.reload();
           }
@@ -103,90 +92,66 @@ const confirmDelete = (idUsuario) => {
   });
 };
 
-/*function guardarHorario() {
-  
-  const estadoSelect = document.getElementById("estado");
-  const estadoSeleccionado = estadoSelect.value;
-  const estado = estadoSeleccionado;
+const eliminarUsuario = async (idUsuario) => {
+  var url = `http://localhost:4000/usuarios/${idUsuario}`;
 
-  const url = "http://localhost:4000/horario/registro";
-
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      estado: estado,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al guardar en la base de datos");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const nuevaHorario = [];
-      nuevaHorario.push(data);
-      mostrar(nuevaHorario);
-      location.reload();
-    })
-    .catch((error) => {
-      console.error(error.message);
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
     });
-}*/
 
-function eliminarHorario(idUsuario) {
-  var url = `http://localhost:4000/horario/eliminar/`;
-
-  return fetch(url + idUsuario, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (response.status === 204) {
-        console.log("Registro borrado exitosamente");
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.error("Error al enviar solicitud de borrado:", error);
-      return false;
-    });
-}
+    if (response.ok) {
+      //Refresca la pagina
+      await listUsuarios();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al borrar los datos.",
+      });
+    }
+  } catch (error) {
+    console.error("Error en la solicitud DELETE", error);
+  }
+};
 
 const editarUsuario = (usuario) => {
-  $("#idRol").val(usuario.idRol);
   $("#btnConfirmar").attr("data-idusuario", usuario.idUsuario);
-  $("#staticBackdrop").modal("show");
+  openCreateModal();
 };
 
 const guardarCambios = async (idUsuarioSeleccionado) => {
   if (idUsuarioSeleccionado) {
+    const idUsuario = idUsuarioSeleccionado;
     const idRol = $("#idRol").val();
-    console.log("Valor de idRol enviado: " + idRol);
-    console.log("Valor de idUsuarioSeleccionado: " + idUsuarioSeleccionado);
+    const estado = $("#estado").val();
 
-    const response = await fetch(
-      `http://localhost:4000/usuarios/${idUsuarioSeleccionado}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idRol,
-        }),
+    try {
+      const response = await fetch(
+        `http://localhost:4000/usuarios/${idUsuario}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idRol,
+            estado,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
       }
-    );
-
-    const result = await response.json();
-    console.log("Respuesta del servidor:", result);
-
-    if (!response.ok) {
-      throw new Error("Hubo un problema al guardar los cambios.");
+    } catch (error) {
+      console.error("Error en la solicitud PATCH", error);
     }
   }
 };

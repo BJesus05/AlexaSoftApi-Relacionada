@@ -41,14 +41,14 @@ let dataTableOptions = {
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+  lengthMenu: [5, 10, 15, 20],
   columnDefs: [
     { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 5,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -290,8 +290,10 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
+
+/* 
 let users = [];
-/* const updateFilteredList = () => {
+const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
 
   const listResultados = $("#resultadoBusquedaCampo4");
@@ -313,9 +315,7 @@ let users = [];
 
   if (filteredData.length > 0) {
     filteredData.forEach((result) => {
-      const listItem = $("<li>")
-        .text("Resultado: " + result.id)
-        .addClass("list-group-item");
+      const listItem = $("<li>").text("Resultado: " + result.id).addClass("list-group-item");
       listResultados.append(listItem);
     });
   } else {
@@ -333,7 +333,7 @@ const initDataTable = async () => {
 
   await listUsuarios();
 
-  dataTable = $("#usuario").DataTable(dataTableOptions);
+  dataTable = $("#example").DataTable(dataTableOptions);
 
   $("#campo4").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
@@ -350,7 +350,7 @@ const listUsuarios = async () => {
 
     let content = ``;
     usuarios.forEach((usuario) => {
-      console.log("usuario   ", JSON.stringify(usuario));
+      console.log("usuario   ", JSON.stringify(usuario))
       content += `
   <tr>
     <td> ${usuario.idUsuario} </td>
@@ -364,9 +364,11 @@ const listUsuarios = async () => {
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
     <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${usuario.idUsuario})">
-        <i class="fa-solid fa-pencil"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${usuario.idUsuario})"><i class="fa-solid fa-trash-can"></i></button>
+      ${usuario.idRol !== 1 ? `
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(usuario).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-pencil"></i>
+        </button>` : ''}
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${usuario.idUsuario})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });
