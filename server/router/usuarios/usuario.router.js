@@ -16,7 +16,7 @@ router.get("/usuarios", async (req, res) => {
   }
 });
 
-router.get("/usuarios/:id", async (req, res) => {
+router.get("/usuarios/:idUsuario", async (req, res) => {
   try {
     const [result] = await Pool.query(
       "SELECT * FROM usuario WHERE idUsuario = ?",
@@ -32,13 +32,13 @@ router.get("/usuarios/:id", async (req, res) => {
   }
 });
 
-router.patch("/usuarios/:id", async (req, res) => {
+router.patch("/usuarios/:idUsuario", async (req, res) => {
   try {
-    const { idRol } = req.body;
+    const { idRol, estado } = req.body;
     console.log("IdRol para guardar: " + idRol);
     const [result] = await Pool.query(
-      "UPDATE usuario SET idRol = ? WHERE idUsuario = ?",
-      [idRol, req.params.idUsuario]
+      "UPDATE usuario set idRol = ?, estado = ? where idUsuario = ?",
+      [idRol, estado, req.params.idUsuario]
     );
     res.json(result);
   } catch (error) {
@@ -46,11 +46,11 @@ router.patch("/usuarios/:id", async (req, res) => {
   }
 });
 
-router.delete("/usuarios/eliminar/:id", async (req, res) => {
+router.delete("/usuarios/eliminar/:idUsuario", async (req, res) => {
   try {
     const [result] = await Pool.query(
-      "DELETE FROM horario WHERE idHorario = ?",
-      [req.params.idHorario]
+      "DELETE FROM usuario WHERE idUsuario = ?",
+      [req.params.idUsuario]
     );
 
     if (result.affectedRows === 0) {
@@ -58,6 +58,46 @@ router.delete("/usuarios/eliminar/:id", async (req, res) => {
     } else {
       res.sendStatus(204);
     }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+// Roles
+router.get("/roles", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM roles");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/roles/:idRol", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM roles WHERE idRol = ?", [
+      req.params.idRol,
+    ]);
+    console.log(result);
+    if (result.length === 0) {
+      res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.patch("/roles/:idRol", async (req, res) => {
+  try {
+    const { estado } = req.body;
+    console.log("IdRol para guardar: " + idRol);
+    const [result] = await Pool.query(
+      "UPDATE roles set estado = ? where idRol = ?",
+      [estado, req.params.idUsuario]
+    );
+    res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

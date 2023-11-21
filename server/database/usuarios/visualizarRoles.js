@@ -41,14 +41,14 @@ let dataTableOptions = {
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+  lengthMenu: [5, 10, 15, 20],
   columnDefs: [
     { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 5,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -290,8 +290,10 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
+
+/* 
 let users = [];
-/* const updateFilteredList = () => {
+const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
 
   const listResultados = $("#resultadoBusquedaCampo4");
@@ -313,9 +315,7 @@ let users = [];
 
   if (filteredData.length > 0) {
     filteredData.forEach((result) => {
-      const listItem = $("<li>")
-        .text("Resultado: " + result.id)
-        .addClass("list-group-item");
+      const listItem = $("<li>").text("Resultado: " + result.id).addClass("list-group-item");
       listResultados.append(listItem);
     });
   } else {
@@ -331,9 +331,9 @@ const initDataTable = async () => {
     dataTable.destroy();
   }
 
-  await listUsuarios();
+  await listRoles();
 
-  dataTable = $("#usuario").DataTable(dataTableOptions);
+  dataTable = $("#example").DataTable(dataTableOptions);
 
   $("#campo4").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
@@ -343,34 +343,28 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listUsuarios = async () => {
+const listRoles = async () => {
   try {
-    const response = await fetch("http://localhost:4000/usuarios");
-    const usuarios = await response.json();
+    const response = await fetch("http://localhost:4000/roles");
+    const roles = await response.json();
 
     let content = ``;
-    usuarios.forEach((usuario) => {
-      console.log("usuario   ", JSON.stringify(usuario));
+    roles.forEach((rol) => {
+      console.log("rol   ", JSON.stringify(rol))
       content += `
   <tr>
-    <td> ${usuario.idUsuario} </td>
-    <td> ${usuario.nombre} </td>
-    <td> ${usuario.cedula} </td>
-    <td> ${usuario.correo} </td>
-    <td> ${usuario.telefono} </td>
-    <td> ${usuario.instagram} </td>
-    <td> ${usuario.contrasena} </td>
-    <td> ${usuario.estado} </td>
-    <td> ${usuario.fechaInteraccion} </td>
-    <td> ${usuario.idRol} </td>
+    <td> ${rol.idRol} </td>
+    <td> ${rol.nombre} </td>
+    <td> ${rol.estado} </td>
     <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${usuario.idUsuario})">
-        <i class="fa-solid fa-pencil"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${usuario.idUsuario})"><i class="fa-solid fa-trash-can"></i></button>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${rol.idRol})">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${rol.idRol})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });
-    $("#usuarios").html(content);
+    $("#roles").html(content);
   } catch (error) {
     alert(error);
   }
