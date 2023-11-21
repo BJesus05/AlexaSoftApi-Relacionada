@@ -1,33 +1,68 @@
+
+
+document.getElementById("btnConfirmarColaborador").addEventListener("click", async () => {
+  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
+  // OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
+  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
+  // GUARDA LA VENTA
+  await guardarVenta(idCotizacion);
+});
+
+function cargarModal() {
+  const colaboradores = buscarColaborador();
+
+  let content = ``;
+  colaboradores.forEach((colaborador) => {
+    content += `<option value="${colaborador.idColaborador}">${colaborador.nombre}</option>`;
+  });
+
+  $("#colaboradores").html(content);
+  $("#elegirColaborador").modal("show");
+}
+
+/*
 //CADA VEZ QUE SE SUBA EL FORMULARIO SE VA A ACTIVAR
 document.getElementById("miFormulario").addEventListener("submit", function (event) {
     event.preventDefault();
     //FUNCION VALIDAR REGISTRO (PARA QUE LOS CAMPOS NO SE VAYAN VACIOS)
     validarFormulario();
-  });
+  });*/
 
-function validarFormulario() {
+const validarFormulario = async () => {
   // DESABILITAR TEMPORALMENTE LAS VALIDACIONES PREDETERMINADAS PARA DARLE PASO A LAS VALIDACIONES PERSONALIZADAS
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-  
-  //VALIDAR CAMPO ESTADO (EL UNICO QUE HAY JAJAJAJAJ)
+
+  //VALIDAR CAMPO ESTADO 
   var estado = document.getElementById("estado");
-  
+
   if (estado.value.trim() === "") {
     mostrarAlerta("Por favor, selecciona una opcion");
-    return false; 
+    return false;
+  } else if (estado.value == 2) {
+    cargarModal()
+    //OBTIENE EL ELEMENTO BOTON
+
   } 
+    document.getElementById("miFormulario").submit();
+    var btnConfirmar = document.getElementById("btnConfirmar");
 
-  //SI EL CAMPO ESTA VACIO NO EJECUTARA EL GUARDADO DE LA ACTUALIZACION
+    //OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
+    var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
 
-  //OBTIENE EL ELEMENTO BOTON
-  var btnConfirmar = document.getElementById("btnConfirmar");
+    //EJECUTA EL GUARDADO JUNTO CON EL ID
 
-  //OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
-  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
+    await guardarCambios(idCotizacion);
 
- //EJECUTA EL GUARDADO JUNTO CON EL ID
-  guardarCambios(idCotizacion);
+    document.getElementById("btnConfirmar").addEventListener("click", async (event) =>{
+      event.preventDefault
+
+    });
+  
+
+
+
+
 
 }
 
@@ -120,7 +155,7 @@ const eliminarCotizacion = async (idCotizacion) => {
     const response = await fetch(
       url,
       {
-        method: "DELETE",      
+        method: "DELETE",
       }
     );
 
@@ -129,7 +164,7 @@ const eliminarCotizacion = async (idCotizacion) => {
       await listCotizaciones();
 
     } else {
-      
+
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -146,6 +181,7 @@ const eliminarCotizacion = async (idCotizacion) => {
 /*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 const editarCotizacion = (cotizacion) => {
   $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
+  $("#btnConfirmarColaborador").attr("data-idcotizacion", cotizacion.idCotizacion);
 
   //ABRE EL MODAL (.SHOW)
   openCreateModal()
@@ -162,7 +198,7 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
       const response = await fetch(
         `http://localhost:4000/cotizaciones/${idCotizacionSeleccionado}`,
         {
-          method: "PATCH", 
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -173,10 +209,10 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
       );
 
       if (response.ok) {
-        
+        console.log("Cambios guardados correctamente"); // Agrega este log
         mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
       } else {
-        
+        console.log("Hubo un problema al guardar los cambios"); // Agrega este log
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -188,4 +224,74 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
     }
   }
 };
+
 /*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
+
+
+/*BUSCAR COLABORADORES */
+const buscarColaborador = async (req, res) => {
+  var url = `http://localhost:4000/ventas/c`;
+
+  try {
+    const response = await fetch(
+      url,
+      {
+        method: "GET",
+      }
+    );
+
+    if (response.ok) {
+      return response.json()
+
+    } else {
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al buscar los colaboradores.",
+      });
+    }
+  } catch (error) {
+    console.error("Error en la solicitud GET", error);
+  }
+}
+/*BUSCAR COLABORADORES */
+
+
+
+/*GUARDAR VENTA*/
+const guardarVenta = async (idCotizacion) => {
+  if (idCotizacion) {
+    const idColaborador = $("#colaborador").val();
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/ventas`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idColaborador,
+            idCotizacion
+          }),
+        }
+      );
+
+      if (response.ok) {
+        mostrarAlertaExitosa("La venta fue registrada correctamente.");
+        // Otra acción si es necesario después de guardar la venta
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar la venta.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud POST", error);
+    }
+  }
+};
+/*GUARDAR VENTA*/
