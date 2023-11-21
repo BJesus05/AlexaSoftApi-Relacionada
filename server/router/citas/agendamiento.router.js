@@ -215,14 +215,14 @@ router.post("/citas/registro", async (req, res) => {
 router.put("/citas/editar/:idCita", async (req, res) => {
   try {
     const {
-      fecha,
-      hora,
-      detalles,
-      estado,
-      motivoCancelacion,
-      idUsuario,
-      idPaquete,
-      idHoario,
+    fecha,
+    hora,
+    detalles,
+    estado,
+    motivoCancelacion,
+    idUsuario,
+    idPaquete,
+    idHoario,
     } = req.body;
     const [result] = await Pool.query("UPDATE citas SET ? WHERE idCita = ?", [
       req.body,
