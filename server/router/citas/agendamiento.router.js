@@ -151,10 +151,10 @@ router.delete("/motivoscancelacion/eliminar/:idMotivo", async (req, res) => {
   }
 });
 
-//Motivo citas
+// citas
 router.get("/citas", async (req, res) => {
   try {
-    const [result] = await Pool.query("SELECT * from citas");
+    const [result] = await Pool.query("SELECT citas.idCita, citas.fecha, citas.hora, citas.detalles, citas.estado, motivoscancelacion.motivo, usuario.nombre AS nombreUsuario, paquete.nombre, citas.idhorario FROM citas INNER JOIN motivoscancelacion ON citas.motivocancelacion = motivoscancelacion.idmotivo INNER JOIN usuario ON citas.idusuario = usuario.idusuario INNER JOIN paquete ON citas.idPaquete = paquete.idPaquete");
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -175,7 +175,7 @@ router.get("/citas/:idCita", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-router.post("/citas", async (req, res) => {
+router.post("/citas/registro", async (req, res) => {
   try {
     const {
       fecha,
@@ -185,9 +185,9 @@ router.post("/citas", async (req, res) => {
       motivoCancelacion,
       idUsuario,
       idPaquete,
-      idHoario,
+      idHorario,
     } = req.body;
-    const [result] = await Pool.query("INSERT INTO citas(motivo) VALUES (?)", [
+    const [result] = await Pool.query("INSERT INTO citas(fecha,hora,detalles,estado,motivoCancelacion,idUsuario,idPaquete,idHorario) VALUES (?,?,?,?,?,?,?,?)", [
       fecha,
       hora,
       detalles,
@@ -195,7 +195,7 @@ router.post("/citas", async (req, res) => {
       motivoCancelacion,
       idUsuario,
       idPaquete,
-      idHoario,
+      idHorario,
     ]);
     res.json({
       idMotivo: result.insertId,
@@ -206,13 +206,13 @@ router.post("/citas", async (req, res) => {
       motivoCancelacion,
       idUsuario,
       idPaquete,
-      idHoario,
+      idHorario,
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
-router.put("/citas/:idCita", async (req, res) => {
+router.put("/citas/editar/:idCita", async (req, res) => {
   try {
     const {
       fecha,
@@ -233,7 +233,7 @@ router.put("/citas/:idCita", async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-router.delete("/citas/:idCita", async (req, res) => {
+router.delete("/citas/eliminar/:idCita", async (req, res) => {
   try {
     const [result] = await Pool.query("DELETE FROM citas WHERE idCita = ?", [
       req.params.idCita,

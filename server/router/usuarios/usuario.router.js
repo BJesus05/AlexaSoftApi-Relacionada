@@ -16,7 +16,7 @@ router.get("/usuarios", async (req, res) => {
   }
 });
 
-router.get("/usuarios/:id", async (req, res) => {
+router.get("/usuarios/:idUsuario", async (req, res) => {
   try {
     const [result] = await Pool.query(
       "SELECT * FROM usuario WHERE idUsuario = ?",
@@ -32,13 +32,13 @@ router.get("/usuarios/:id", async (req, res) => {
   }
 });
 
-router.patch("/usuarios/:id", async (req, res) => {
+router.patch("/usuarios/:idUsuario", async (req, res) => {
   try {
-    const { idRol } = req.body;
+    const { idRol, estado } = req.body;
     console.log("IdRol para guardar: " + idRol);
     const [result] = await Pool.query(
-      "UPDATE usuario SET idRol = ? WHERE idUsuario = ?",
-      [idRol, req.params.idUsuario]
+      "UPDATE usuario set idRol = ?, estado = ? where idUsuario = ?",
+      [idRol, estado, req.params.idUsuario]
     );
     res.json(result);
   } catch (error) {
@@ -46,11 +46,11 @@ router.patch("/usuarios/:id", async (req, res) => {
   }
 });
 
-router.delete("/usuarios/eliminar/:id", async (req, res) => {
+router.delete("/usuarios/eliminar/:idUsuario", async (req, res) => {
   try {
     const [result] = await Pool.query(
-      "DELETE FROM horario WHERE idHorario = ?",
-      [req.params.idHorario]
+      "DELETE FROM usuario WHERE idUsuario = ?",
+      [req.params.idUsuario]
     );
 
     if (result.affectedRows === 0) {

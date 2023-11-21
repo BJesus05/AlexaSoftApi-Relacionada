@@ -364,10 +364,10 @@ const listUsers = async () => {
                   <td> ${citas.hora} </td>
                   <td> ${citas.detalles} </td>
                   <td> ${citas.estado} </td>
-                  <td> ${citas.motivoCancelacion} </td>
-                  <td  ${citas.idUsuario} </td>
-                  <td> ${citas.idPaquete} </td>
-                  <td> ${citas.idHorario} </td>
+                  <td> ${citas.motivo} </td>
+                  <td> ${citas.nombreUsuario} </td>
+                  <td> ${citas.nombre} </td>
+                  <td> ${citas.idhorario} </td>
                   <td>
                       <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
                       <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>
