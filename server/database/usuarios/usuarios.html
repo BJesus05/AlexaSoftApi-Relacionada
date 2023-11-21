@@ -141,9 +141,9 @@
                         <th>Nombre</th>
                         <th>Cedula</th>
                         <th>Correo</th>
-                        <th>Estado</th>
                         <th>Celular</th>
                         <th>Instragram</th>
+                        <th>Contraseña</th>
                         <th>Estado</th>
                         <th>Fecha Interacción</th>
                         <th>idRol</th>
@@ -167,20 +167,44 @@
                 <div class="modal-body mt-auto">
                     <form id="miFormulario">
                         <div class="mb-3">
+                            <label for="nombre" class="col-form-label">Nombre:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cedula" class="col-form-label">Cedula:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="number" pattern="^[0-9]+" class="form-control" id="cedula" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="correo" class="col-form-label">Correo:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="email" class="form-control" id="campo1" required> 
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="col-form-label">Teléfono:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="number" pattern="^[0-9]+" class="form-control" id="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contrasena" class="col-form-label">Contraseña:</label>
+                            <input type="password" class="form-control" id="contrasena" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estado" class="col-form-label">Estado</label>
+                            <select class="form-select" aria-label="Default select example" id="estado" required>
+                                <option value="" selected disabled>Selecciona un estado</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Desactivado</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="idRol" class="col-form-label">Rol</label>
                             <select class="form-select" aria-label="Default select example" id="idRol" required>
                                 <option value="" selected disabled>Selecciona un estado</option>
                                 <option value="1" disabled>Administrador</option>
                                 <option value="2">Colaborador</option>
                                 <option value="3">Cliente</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="estado" class="col-form-label">Estado</label>
-                            <select class="form-select" aria-label="Default select example" id="estado" required>
-                                <option value="" selected disabled>Selecciona un estado</option>
-                                <option value="1">Habilitado</option>
-                                <option value="2">Deshabilitado</option>
                             </select>
                         </div>
                         <div class="modal-footer">

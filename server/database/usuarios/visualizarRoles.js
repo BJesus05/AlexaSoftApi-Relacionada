@@ -5,36 +5,6 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
-      extend: "excelHtml5",
-      text: ' Excel <i class="fas fa-file-excel"></i>',
-      titleAttr: "Exportar a Excel",
-      className: "btn btn-success",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "pdfHtml5",
-      text: ' PDF <i class="fas fa-file-pdf"></i> ',
-      titleAttr: "Exportar a PDF",
-      className: "btn btn-danger",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "print",
-      text: ' Imprimir <i class="fa fa-print"></i>',
-      titleAttr: "Imprimir",
-      className: "btn btn-info",
-      customize: function (win) {
-        let table = $(win.document.body).find("table").DataTable();
-        table.columns().every(function (index) {
-          if (!table.column(index).visible()) {
-            table.column(index).visible(false);
-          }
-        });
-      },
       exportOptions: {
         columns: ":visible",
       },
@@ -43,7 +13,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -357,9 +327,10 @@ const listRoles = async () => {
     <td> ${rol.nombre} </td>
     <td> ${rol.estado} </td>
     <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${rol.idRol})">
+        ${rol .estado !== 2 ? `
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(rol).replace(/"/g, "&quot;")})">
           <i class="fa-solid fa-pencil"></i>
-        </button>
+        </button>` : ''}
       <button class="btn btn-sm btn-danger" onclick="confirmDelete(${rol.idRol})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;

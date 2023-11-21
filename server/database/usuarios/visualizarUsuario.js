@@ -5,6 +5,14 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
+      text: 'Crear <i class="fa-regular fa-plus fa-beat-fade"></i>',
+      titleAttr: "Crear",
+      className: "btn btn-warning",
+      action: function (e, dt, node, config) {
+        openCreateModal();
+      },
+    },
+    {
       extend: "excelHtml5",
       text: ' Excel <i class="fas fa-file-excel"></i>',
       titleAttr: "Exportar a Excel",
@@ -179,7 +187,7 @@ let dataTableOptions = {
       countFiltered: "{shown} ({total})",
       emptyPanes: "Sin paneles de búsqueda",
       loadMessage: "Cargando paneles de búsqueda",
-      title: "Filtros Activos - %d",
+      title: "Filtros Activos - d%",
       showMessage: "Mostrar Todo",
       collapseMessage: "Colapsar Todo",
     },

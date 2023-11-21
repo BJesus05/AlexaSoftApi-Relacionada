@@ -92,8 +92,60 @@ const confirmDelete = (idUsuario) => {
   });
 };
 
+function guardarUsuario() {
+  const nombre = document.getElementById("nombre");
+  const cedula = document.getElementById("cedula");
+  const correo = document.getElementById("correo");
+  const telefono = document.getElementById("telefono");
+  const instagram = document.getElementById("instagram");
+  const contrasena = document.getElementById("contrasena");
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
+  const fechaInteraccion = new Date();
+  const idRolSelect = document.getElementById("idRol");
+  const idRolSeleccionado = idRolSelect.value;
+  const idRol = idRolSeleccionado;
+
+  const url = "http://localhost:4000/usuarios/registrar";
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nombre: nombre.value,
+      cedula: cedula.value,
+      correo: correo.value,
+      telefono: telefono.value,
+      instagram: instagram.value,
+      contrasena: contrasena.value,
+      fechaInteraccion: fechaInteraccion.value,
+      estado: estado,
+      idRol: idRol
+    }),
+  })
+    .then((response) => {
+      mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      if (!response.ok) {
+        throw new Error("Error al guardar en la base de datos");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const nuevoUsuario = [];
+      nuevoUsuario.push(data);
+      mostrar(nuevoUsuario);
+      location.reload();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
+
 const eliminarUsuario = async (idUsuario) => {
-  var url = `http://localhost:4000/usuarios/${idUsuario}`;
+  var url = `http://localhost:4000/usuarios/eliminar/${idUsuario}`;
 
   try {
     const response = await fetch(url, {

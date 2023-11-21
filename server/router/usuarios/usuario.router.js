@@ -32,6 +32,20 @@ router.get("/usuarios/:idUsuario", async (req, res) => {
   }
 });
 
+router.post('/usuarios/registrar', async (req, res) => {
+  try {
+    const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
+    const [result] = await Pool.query("INSERT INTO usuario(nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol) VALUES (?,?,?,?,?,?,?,?,?)", [nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol]);
+    res.json({
+      idUsuario: result.insertId,
+      nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+
+  }
+});
+
 router.patch("/usuarios/:idUsuario", async (req, res) => {
   try {
     const { idRol, estado } = req.body;
