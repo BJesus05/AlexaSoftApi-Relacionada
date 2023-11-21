@@ -71,7 +71,7 @@ router.get('/cotizaciones/:id', async (req, res) => {
 router.patch("/cotizaciones/:id", async (req, res) => {
     try {
         const { estado } = req.body
-        console.log("Estado para guardar    " + estado)
+        //console.log("Estado para guardar    " + estado)
         const [result] = await Pool.query(
             "UPDATE cotizaciones set estado = ? where idCotizacion = ?",
             [estado, req.params.id]
