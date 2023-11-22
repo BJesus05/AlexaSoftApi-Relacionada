@@ -5,6 +5,14 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
+      text: 'Crear <i class="fa-regular fa-plus fa-beat-fade"></i>',
+      titleAttr: "Crear",
+      className: "btn btn-warning",
+      action: function (e, dt, node, config) {
+        openCreateModal();
+      },
+    },
+    {
       exportOptions: {
         columns: ":visible",
       },
@@ -260,7 +268,6 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
-
 /* 
 let users = [];
 const updateFilteredList = () => {
@@ -320,18 +327,26 @@ const listRoles = async () => {
 
     let content = ``;
     roles.forEach((rol) => {
-      console.log("rol   ", JSON.stringify(rol))
+      console.log("rol   ", JSON.stringify(rol));
       content += `
   <tr>
     <td> ${rol.idRol} </td>
     <td> ${rol.nombre} </td>
     <td> ${rol.estado} </td>
     <td>
-        ${rol .estado !== 2 ? `
-          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(rol).replace(/"/g, "&quot;")})">
+        ${
+          rol.estado !== 1
+            ? `
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarRol(${JSON.stringify(
+            rol
+          ).replace(/"/g, "&quot;")})">
           <i class="fa-solid fa-pencil"></i>
-        </button>` : ''}
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${rol.idRol})"><i class="fa-solid fa-trash-can"></i></button>
+        </button>`
+            : ""
+        }
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${
+        rol.idRol
+      })"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });

@@ -119,7 +119,7 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item textoNav" href="#">Roles</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item textoNav" href="usuarios.html">Usuarios</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -154,11 +154,16 @@
         <div class="modal-dialog modal-dialog-centered min-vh-100">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar Usuario</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Rol</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-auto">
                     <form id="miFormulario">
+                        <div class="mb-3">
+                            <label for="nombre" class="col-form-label">Nombre:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="nombre" required>
+                        </div>
                         <div class="mb-3">
                             <label for="estado" class="col-form-label">Estado</label>
                             <select class="form-select" aria-label="Default select example" id="estado" required>
