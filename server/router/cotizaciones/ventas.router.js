@@ -38,12 +38,12 @@ router.post("/ventas", async (req, res) => {
 
         const [ultimoNumero] = await Pool.query("SELECT MAX(numeroFactura) as ultimoNumero FROM ventas");
         let nuevoNumero = 1;
-        if (ultimoNumero[0].ultimoNumero) {
-            nuevoNumero = parseInt(ultimoNumero[0].ultimoNumero.split('VEN')[1]) + 1;
+        const ultimoN = ultimoNumero[0].ultimoNumero
+        if (ultimoN) {
+            nuevoNumero = parseInt(ultimoN.substring(ultimoN.length - 3)) + 1;
         }
 
-        const numFac = "VEN" + fechaFormateada + nuevoNumero.toString().padStart(3, '0');
-
+        const numFac = "VEN" + fechaFormateada + nuevoNumero.toString();
         const { idColaborador,idCotizacion } = req.body
       const [result] = await Pool.query(
         "INSERT INTO ventas(numeroFactura, idCotizacion, idColaborador, fecha) VALUES (?,?,?,CURRENT_TIMESTAMP)",
