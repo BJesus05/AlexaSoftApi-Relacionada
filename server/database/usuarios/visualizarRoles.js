@@ -5,46 +5,6 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
-      text: 'Crear <i class="fa-regular fa-plus fa-beat-fade"></i>',
-      titleAttr: "Crear",
-      className: "btn btn-warning",
-      action: function (e, dt, node, config) {
-        openCreateModal();
-      },
-    },
-    {
-      extend: "excelHtml5",
-      text: ' Excel <i class="fas fa-file-excel"></i>',
-      titleAttr: "Exportar a Excel",
-      className: "btn btn-success",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "pdfHtml5",
-      text: ' PDF <i class="fas fa-file-pdf"></i> ',
-      titleAttr: "Exportar a PDF",
-      className: "btn btn-danger",
-      pageLength: 100,
-      orientation: "landscape",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "print",
-      text: ' Imprimir <i class="fa fa-print"></i>',
-      titleAttr: "Imprimir",
-      className: "btn btn-info",
-      customize: function (win) {
-        let table = $(win.document.body).find("table").DataTable();
-        table.columns().every(function (index) {
-          if (!table.column(index).visible()) {
-            table.column(index).visible(false);
-          }
-        });
-      },
       exportOptions: {
         columns: ":visible",
       },
@@ -53,12 +13,12 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 10,
+  pageLength: 5,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -189,7 +149,7 @@ let dataTableOptions = {
       countFiltered: "{shown} ({total})",
       emptyPanes: "Sin paneles de búsqueda",
       loadMessage: "Cargando paneles de búsqueda",
-      title: "Filtros Activos - d%",
+      title: "Filtros Activos - %d",
       showMessage: "Mostrar Todo",
       collapseMessage: "Colapsar Todo",
     },
@@ -296,40 +256,10 @@ let dataTableOptions = {
   },
 };
 
-function openCreateModal() {
-  const btnConfirmar = document.getElementById("btnConfirmar");
-  const idUsuario = btnConfirmar.getAttribute("data-idusuario");
+const openCreateModal = () => {
+  $("#staticBackdrop").modal("show");
+};
 
-  if (idUsuario) {
-    // If there is a user ID, open the modal with the user's data
-    editarUsuario(usuario);
-  } else {
-    // If there is no user ID, open the modal with blank fields
-    $("#staticBackdrop").modal("show");
-
-    // Set the `data-idusuario` attribute to `null`
-    btnConfirmar.setAttribute("data-idusuario", null);
-
-    // Reset the form fields
-    const nombre = document.getElementById("nombre");
-    const cedula = document.getElementById("cedula");
-    const correo = document.getElementById("correo");
-    const telefono = document.getElementById("telefono");
-    const instagram = document.getElementById("instagram");
-    const contrasena = document.getElementById("contrasena");
-    const estadoSelect = document.getElementById("estado");
-    const idRolSelect = document.getElementById("idRol");
-
-    nombre.value = "";
-    cedula.value = "";
-    correo.value = "";
-    telefono.value = "";
-    instagram.value = "";
-    contrasena.value = "";
-    estadoSelect.value = "";
-    idRolSelect.value = "";
-  }
-}
 
 /* 
 let users = [];
@@ -371,7 +301,7 @@ const initDataTable = async () => {
     dataTable.destroy();
   }
 
-  await listUsuarios();
+  await listRoles();
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
@@ -383,44 +313,29 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listUsuarios = async () => {
+const listRoles = async () => {
   try {
-    const response = await fetch("http://localhost:4000/usuarios");
-    const usuarios = await response.json();
+    const response = await fetch("http://localhost:4000/roles");
+    const roles = await response.json();
 
     let content = ``;
-    usuarios.forEach((usuario) => {
-      console.log("usuario   ", JSON.stringify(usuario));
+    roles.forEach((rol) => {
+      console.log("rol   ", JSON.stringify(rol))
       content += `
   <tr>
-    <td> ${usuario.idUsuario} </td>
-    <td> ${usuario.nombre} </td>
-    <td> ${usuario.cedula} </td>
-    <td> ${usuario.correo} </td>
-    <td> ${usuario.telefono} </td>
-    <td> ${usuario.instagram} </td>
-    <td> ${usuario.contrasena} </td>
-    <td> ${usuario.estado} </td>
-    <td> ${usuario.fechaInteraccion} </td>
-    <td> ${usuario.idRol} </td>
+    <td> ${rol.idRol} </td>
+    <td> ${rol.nombre} </td>
+    <td> ${rol.estado} </td>
     <td>
-      ${
-        usuario.idRol !== 1
-          ? `
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(
-          usuario
-        ).replace(/"/g, "&quot;")})">
+        ${rol .estado !== 2 ? `
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(rol).replace(/"/g, "&quot;")})">
           <i class="fa-solid fa-pencil"></i>
-        </button>`
-          : ""
-      }
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${
-        usuario.idUsuario
-      })"><i class="fa-solid fa-trash-can"></i></button>
+        </button>` : ''}
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${rol.idRol})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });
-    $("#usuarios").html(content);
+    $("#roles").html(content);
   } catch (error) {
     alert(error);
   }

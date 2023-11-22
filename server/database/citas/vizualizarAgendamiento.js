@@ -353,10 +353,9 @@ const listUsers = async () => {
   try {
     const response = await fetch("http://localhost:4000/citas");
     users = await response.json();
-    console.log(users)
 
     let content = ``;
-    users.forEach((citas) => {
+    users.forEach((citas) => {  
       content += `
               <tr>
                   <td> ${citas.idCita} </td>
@@ -369,7 +368,7 @@ const listUsers = async () => {
                   <td> ${citas.nombre} </td>
                   <td> ${citas.idhorario} </td>
                   <td>
-                      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="fa-solid fa-pencil"></i></button>
+                  <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editaCitas(${citas.idCita})"><i class="fa-solid fa-pencil"></i></button>
                       <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>
                   </td>
               </tr>`;

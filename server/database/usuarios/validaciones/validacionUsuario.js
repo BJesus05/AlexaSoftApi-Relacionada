@@ -1,26 +1,32 @@
-document.getElementById("miFormulario").addEventListener("submit", function (event) {
-  event.preventDefault();
-  validarFormulario();
-});
+document
+  .getElementById("miFormulario")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+    validarFormulario();
+  });
 
 function validarFormulario() {
-document.getElementById("miFormulario").setAttribute("novalidate", "true");
+  document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-var idRol = document.getElementById("idRol");
+  var idRol = document.getElementById("idRol");
 
-if (idRol.value.trim() === "") {
-  mostrarAlerta("Por favor, selecciona una opcion");
-  return false; 
-} else if (estado.value.trim() === ""){
-  mostrarAlerta("Por favor, selecciona una opcion");
-  return false; 
-}
+  if (idRol.value.trim() === "") {
+    mostrarAlerta("Por favor, selecciona una opcion");
+    return false;
+  } else if (estado.value.trim() === "") {
+    mostrarAlerta("Por favor, selecciona una opcion");
+    return false;
+  }
 
-var btnConfirmar = document.getElementById("btnConfirmar");
-var idUsuario = btnConfirmar.getAttribute("data-idusuario");
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idUsuario = btnConfirmar.getAttribute("data-idusuario");
 
-guardarCambios(idUsuario);
-
+  if (idUsuario) {
+    guardarCambios(idUsuario);
+  } else {
+    mostrarAlertaExitosa("Validación exitosa. Creando nuevo usuario");
+    guardarUsuario();
+  }
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -92,8 +98,59 @@ const confirmDelete = (idUsuario) => {
   });
 };
 
+function guardarUsuario() {
+  const nombre = document.getElementById("nombre");
+  const cedula = document.getElementById("cedula");
+  const correo = document.getElementById("correo");
+  const telefono = document.getElementById("telefono");
+  const instagram = document.getElementById("instagram");
+  const contrasena = document.getElementById("contrasena");
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
+  const fechaInteraccion = new Date();
+  const idRolSelect = document.getElementById("idRol");
+  const idRolSeleccionado = idRolSelect.value;
+  const idRol = idRolSeleccionado;
+
+  const url = "http://localhost:4000/usuarios/registrar";
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nombre: nombre.value,
+      cedula: cedula.value,
+      correo: correo.value,
+      telefono: telefono.value,
+      instagram: instagram.value,
+      contrasena: contrasena.value,
+      fechaInteraccion: fechaInteraccion,
+      estado: estado,
+      idRol: idRol,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al guardar en la base de datos");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const nuevoUsuario = [];
+      nuevoUsuario.push(data);
+      mostrar(nuevoUsuario);
+      location.reload();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
+
 const eliminarUsuario = async (idUsuario) => {
-  var url = `http://localhost:4000/usuarios/${idUsuario}`;
+  var url = `http://localhost:4000/usuarios/eliminar/${idUsuario}`;
 
   try {
     const response = await fetch(url, {
@@ -115,26 +172,64 @@ const eliminarUsuario = async (idUsuario) => {
   }
 };
 
-const editarUsuario = (usuario) => {
-  $("#btnConfirmar").attr("data-idusuario", usuario.idUsuario);
+function editarUsuario(usuario) {
+  const idUsuario = usuario.idUsuario;
+  const nombre = usuario.nombre;
+  const cedula = usuario.cedula;
+  const correo = usuario.correo;
+  const telefono = usuario.telefono;
+  const instagram = usuario.instagram;
+  const contrasena = usuario.contrasena;
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
+  const idRolSelect = document.getElementById("idRol");
+  const idRolSeleccionado = idRolSelect.value;
+  const idRol = idRolSeleccionado;
+
+  $("#nombre").val(nombre);
+  $("#cedula").val(cedula);
+  $("#correo").val(correo);
+  $("#telefono").val(telefono);
+  $("#instagram").val(instagram);
+  $("#contrasena").val(contrasena);
+  $("#estado").val(estado);
+  $("#idRol").val(idRol);
+
+  $("#btnConfirmar").attr("data-idusuario", idUsuario);
+
   openCreateModal();
-};
+}
 
 const guardarCambios = async (idUsuarioSeleccionado) => {
   if (idUsuarioSeleccionado) {
     const idUsuario = idUsuarioSeleccionado;
+    const nombre = $("#nombre").val();
+    const cedula = $("#cedula").val();
+    const correo = $("#correo").val();
+    const telefono = $("#telefono").val();
+    const instagram = $("#instagram").val();
+    const contrasena = $("#contrasena").val();
+    const fechaInteraccion = $("#fechaInteraccion").val();
     const idRol = $("#idRol").val();
     const estado = $("#estado").val();
 
     try {
       const response = await fetch(
-        `http://localhost:4000/usuarios/${idUsuario}`,
+        `http://localhost:4000/usuarios/editar/${idUsuario}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            nombre,
+            cedula,
+            correo,
+            telefono,
+            instagram,
+            contrasena,
+            fechaInteraccion,
             idRol,
             estado,
           }),

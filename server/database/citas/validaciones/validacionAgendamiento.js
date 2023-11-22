@@ -44,8 +44,17 @@ function validarFormulario() {
  
 
   // Si todos los campos son válidos, mostrar la alerta exitosa y enviar el formulario
-  guardarCitas();
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idCita = btnConfirmar.getAttribute("data-idcitas");
+
+  if (idCita) {
+    editaCitas(idCita);
+  } else {
+    mostrarAlertaExitosa("Validación exitosa. Creando nuevo motivo...");
+  }
 }
+
+
 
 function mostrarAlertaExitosa(mensaje) {
     Swal.fire({
@@ -75,6 +84,7 @@ function mostrarAlertaExitosa(mensaje) {
         timer: 2000,
       }).then(() => {
         document.getElementById("miFormulario").submit();
+        guardarCitas();
       });
     }, 3000);
   }
@@ -175,3 +185,87 @@ function eliminarCitas(idCita) {
           return false;
       });
 }
+
+
+const editaCitas = async (idCita) => {
+  console.log("Entrando en editaCitas");
+  const citas = users.find((citas) => citas.idCita === idCita);
+  if (citas) {
+    // Resto del código
+    console.log(idCita)
+  $("#fechaRegistro").val(citas.fecha);
+  $("#horaRegistro").val(citas.hora);
+  $("#detallesRegistro").val(citas.detalles);
+  $("#estadoRegistro").val(citas.estado);
+  $("#motivoCancelacionRegistro").val(citas.motivoCancelacion);
+  $("#idUsuarioRegistro").val(citas.idUsuario);
+  $("#idPaqueteRegistro").val(citas.idPaquete);
+  $("#idHorarioRegistro").val(citas.idHorario);
+
+  $("#btnConfirmar").attr("data-idcitas", idCita);
+
+  $("#staticBackdrop").modal("show");
+
+  // Agregar un event listener al botón confirmar
+  $("#btnConfirmar").on("click", function () {
+    guardarCambios(idCita);
+  });
+  } else {
+    console.error("La cita no fue encontrada");
+  }
+  
+};
+
+
+const guardarCambios = async (motivoIdSeleccionado) => {
+  if (motivoIdSeleccionado) {
+    const idCita = motivoIdSeleccionado;
+    const fecha = $("#fechaRegistro").val();
+    const hora = $("#horaRegistro").val();
+    const detalles = $("#detallesRegistro").val();
+    const estado = $("#estadoRegistro").val();
+    const motivoCancelacion = $("#motivoCancelacionRegistro").val();
+    const idUsuario = $("#idUsuarioRegistro").val();
+    const idPaquete = $("#idPaqueteRegistro").val();
+    const idHoario = $("#idHorarioRegistro").val();
+
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/citas/editar/${idCita}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fecha,
+            hora,
+            detalles,
+            estado,
+            motivoCancelacion,
+            idUsuario,
+            idPaquete,
+            idHoario,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        // La solicitud PUT fue exitosa
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        // La solicitud PUT no fue exitosa
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
+      }
+    } catch (error) {
+      console.error("Error en la solicitud PUT", error);
+    } finally {
+      motivoIdSeleccionado = null;
+    }
+  }
+};
