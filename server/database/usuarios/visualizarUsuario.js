@@ -26,6 +26,8 @@ let dataTableOptions = {
       text: ' PDF <i class="fas fa-file-pdf"></i> ',
       titleAttr: "Exportar a PDF",
       className: "btn btn-danger",
+      pageLength: 100,
+      orientation: "landscape",
       exportOptions: {
         columns: ":visible",
       },
@@ -56,7 +58,7 @@ let dataTableOptions = {
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 5,
+  pageLength: 10,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -294,10 +296,40 @@ let dataTableOptions = {
   },
 };
 
-const openCreateModal = () => {
-  $("#staticBackdrop").modal("show");
-};
+function openCreateModal() {
+  const btnConfirmar = document.getElementById("btnConfirmar");
+  const idUsuario = btnConfirmar.getAttribute("data-idusuario");
 
+  if (idUsuario) {
+    // If there is a user ID, open the modal with the user's data
+    editarUsuario(usuario);
+  } else {
+    // If there is no user ID, open the modal with blank fields
+    $("#staticBackdrop").modal("show");
+
+    // Set the `data-idusuario` attribute to `null`
+    btnConfirmar.setAttribute("data-idusuario", null);
+
+    // Reset the form fields
+    const nombre = document.getElementById("nombre");
+    const cedula = document.getElementById("cedula");
+    const correo = document.getElementById("correo");
+    const telefono = document.getElementById("telefono");
+    const instagram = document.getElementById("instagram");
+    const contrasena = document.getElementById("contrasena");
+    const estadoSelect = document.getElementById("estado");
+    const idRolSelect = document.getElementById("idRol");
+
+    nombre.value = "";
+    cedula.value = "";
+    correo.value = "";
+    telefono.value = "";
+    instagram.value = "";
+    contrasena.value = "";
+    estadoSelect.value = "";
+    idRolSelect.value = "";
+  }
+}
 
 /* 
 let users = [];
@@ -358,7 +390,7 @@ const listUsuarios = async () => {
 
     let content = ``;
     usuarios.forEach((usuario) => {
-      console.log("usuario   ", JSON.stringify(usuario))
+      console.log("usuario   ", JSON.stringify(usuario));
       content += `
   <tr>
     <td> ${usuario.idUsuario} </td>
@@ -372,11 +404,19 @@ const listUsuarios = async () => {
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
     <td>
-      ${usuario.idRol !== 1 ? `
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(usuario).replace(/"/g, "&quot;")})">
+      ${
+        usuario.idRol !== 1
+          ? `
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(
+          usuario
+        ).replace(/"/g, "&quot;")})">
           <i class="fa-solid fa-pencil"></i>
-        </button>` : ''}
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${usuario.idUsuario})"><i class="fa-solid fa-trash-can"></i></button>
+        </button>`
+          : ""
+      }
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${
+        usuario.idUsuario
+      })"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });

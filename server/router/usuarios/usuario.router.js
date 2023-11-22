@@ -46,13 +46,13 @@ router.post('/usuarios/registrar', async (req, res) => {
   }
 });
 
-router.patch("/usuarios/:idUsuario", async (req, res) => {
+router.patch("/usuarios/editar/:idUsuario", async (req, res) => {
   try {
-    const { idRol, estado } = req.body;
+    const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
     console.log("IdRol para guardar: " + idRol);
     const [result] = await Pool.query(
-      "UPDATE usuario set idRol = ?, estado = ? where idUsuario = ?",
-      [idRol, estado, req.params.idUsuario]
+      "UPDATE usuario set nombre = ?, cedula = ?, correo = ?, telefono = ?, instagram = ?, contrasena = ?, estado = ?, fechaInteraccion = ?, idRol = ? where idUsuario = ?",
+      [nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol, req.params.idUsuario]
     );
     res.json(result);
   } catch (error) {

@@ -141,8 +141,8 @@
                         <th>Nombre</th>
                         <th>Cedula</th>
                         <th>Correo</th>
-                        <th>Celular</th>
-                        <th>Instragram</th>
+                        <th>Teléfono</th>
+                        <th>Instagram</th>
                         <th>Contraseña</th>
                         <th>Estado</th>
                         <th>Fecha Interacción</th>
@@ -161,7 +161,7 @@
         <div class="modal-dialog modal-dialog-centered min-vh-100">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar Usuario</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuario</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-auto">
@@ -179,12 +179,17 @@
                         <div class="mb-3">
                             <label for="correo" class="col-form-label">Correo:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="email" class="form-control" id="campo1" required> 
+                            <input type="email" class="form-control" id="correo" required> 
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="col-form-label">Teléfono:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
                             <input type="number" pattern="^[0-9]+" class="form-control" id="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="instagram" class="col-form-label">Instagram:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="text" class="form-control" id="instagram" required>
                         </div>
                         <div class="mb-3">
                             <label for="contrasena" class="col-form-label">Contraseña:</label>
@@ -201,8 +206,8 @@
                         <div class="mb-3">
                             <label for="idRol" class="col-form-label">Rol</label>
                             <select class="form-select" aria-label="Default select example" id="idRol" required>
-                                <option value="" selected disabled>Selecciona un estado</option>
-                                <option value="1" disabled>Administrador</option>
+                                <option value="" selected disabled>Selecciona un rol</option>
+                                <option value="1">Administrador</option>
                                 <option value="2">Colaborador</option>
                                 <option value="3">Cliente</option>
                             </select>
