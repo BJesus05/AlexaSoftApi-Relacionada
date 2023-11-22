@@ -350,7 +350,7 @@ const listCotizaciones = async () => {
 
     let content = ``;
     cotizaciones.forEach((cotizacion) => {
-      console.log("cotizacion   ", JSON.stringify(cotizacion))
+      //console.log("cotizacion   ", JSON.stringify(cotizacion))
       content += `
   <tr>
     <td> ${cotizacion.idCotizacion} </td>
