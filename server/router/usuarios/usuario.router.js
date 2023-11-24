@@ -46,7 +46,7 @@ router.post('/usuarios/registrar', async (req, res) => {
   }
 });
 
-router.patch("/usuarios/editar/:idUsuario", async (req, res) => {
+router.put("/usuarios/editar/:idUsuario", async (req, res) => {
   try {
     const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
     console.log("IdRol para guardar: " + idRol);
@@ -95,7 +95,7 @@ router.get("/roles/:idRol", async (req, res) => {
     ]);
     console.log(result);
     if (result.length === 0) {
-      res.status(404).json({ mensaje: "Usuario no encontrado" });
+      res.status(404).json({ mensaje: "Rol no encontrado" });
     }
     res.json(result);
   } catch (error) {
@@ -103,15 +103,45 @@ router.get("/roles/:idRol", async (req, res) => {
   }
 });
 
-router.patch("/roles/:idRol", async (req, res) => {
+router.post('/roles/registrar', async (req, res) => {
   try {
-    const { estado } = req.body;
-    console.log("IdRol para guardar: " + idRol);
+    const { nombre, estado } = req.body;
+    const [result] = await Pool.query("INSERT INTO roles(nombre, estado) VALUES (?,?)", [nombre, estado]);
+    res.json({
+      idRol: result.insertId,
+      nombre, estado 
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+
+  }
+});
+
+router.put("/roles/editar/:idRol", async (req, res) => {
+  try {
+    const { nombre, estado } = req.body;
     const [result] = await Pool.query(
-      "UPDATE roles set estado = ? where idRol = ?",
-      [estado, req.params.idUsuario]
+      "UPDATE roles set nombre = ?, estado = ? where idRol = ?",
+      [nombre, estado, req.params.idRol]
     );
     res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete("/roles/eliminar/:idRol", async (req, res) => {
+  try {
+    const [result] = await Pool.query(
+      "DELETE FROM roles WHERE idRol = ?",
+      [req.params.idRol]
+    );
+
+    if (result.affectedRows === 0) {
+      res.sendStatus(404).json({ mensaje: "Tarea no encontrada" });
+    } else {
+      res.sendStatus(204);
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

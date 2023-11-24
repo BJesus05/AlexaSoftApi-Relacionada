@@ -8,13 +8,59 @@ document
 function validarFormulario() {
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-  var idRol = document.getElementById("idRol");
-
-  if (idRol.value.trim() === "") {
-    mostrarAlerta("Por favor, selecciona una opcion");
+  var nombre = document.getElementById("nombre");
+  if (nombre.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el nombre");
     return false;
-  } else if (estado.value.trim() === "") {
-    mostrarAlerta("Por favor, selecciona una opcion");
+  } else if (!nombre.checkValidity()) {
+    mostrarAlerta("Nombre: Por favor, ingrese solo letras.");
+    return false;
+  }
+
+  var cedula = document.getElementById("cedula");
+  if (cedula.value.trim() === "") {
+    mostrarAlerta("Por favor, completa la cedula");
+    return false;
+  }
+
+  var correo = document.getElementById("correo");
+  if (correo.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el correo");
+    return false;
+  } else if (!validarCorreo(correo.value.trim())) {
+    mostrarAlerta("Correo: Por favor, ingrese un correo electrónico válido.");
+    return false;
+  }
+
+  var telefono = document.getElementById("telefono");
+  if (telefono.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el telefono");
+    return false;
+  }
+
+  var instagram = document.getElementById("instagram");
+  if (instagram.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el instagram");
+    return false;
+  }
+
+  var contrasena = document.getElementById("contrasena");
+  if (contrasena.value.trim() === "") {
+    mostrarAlerta("Por favor, completa la contraseña");
+    return false;
+  }
+
+  var estado = document.getElementById("estado");
+  var estadoSeleccionado = estado.options[estado.selectedIndex];
+  if (estadoSeleccionado.value === "") {
+    mostrarAlerta("Estado: Por favor, selecciona un estado válido.");
+    return false;
+  }
+
+  var idRol = document.getElementById("idRol");
+  var idRolSeleccionado = idRol.options[idRol.selectedIndex];
+  if (idRolSeleccionado.value === "") {
+    mostrarAlerta("Rol: Por favor, selecciona un rol válido.");
     return false;
   }
 
@@ -27,6 +73,12 @@ function validarFormulario() {
     mostrarAlertaExitosa("Validación exitosa. Creando nuevo usuario");
     guardarUsuario();
   }
+}
+
+function validarCorreo(correo) {
+  // Expresión regular para validar un correo electrónico con dominios específicos
+  var regexCorreo = /^[^\s@]+@[^\s@]+\.(com|co)$/i;
+  return regexCorreo.test(correo);
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -46,7 +98,6 @@ function mostrarAlertaExitosa(mensaje) {
     },
   });
   setTimeout(() => {
-    //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
       icon: "success",
@@ -68,35 +119,6 @@ function mostrarAlerta(mensaje) {
     text: mensaje,
   });
 }
-
-const confirmDelete = (idUsuario) => {
-  Swal.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Borrado",
-        text: "El registro ha sido eliminado.",
-        icon: "success",
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Confirmar",
-      }).then(() => {
-        eliminarUsuario(idUsuario).then((eliminado) => {
-          if (eliminado) {
-            location.reload();
-          }
-        });
-      });
-    }
-  });
-};
 
 function guardarUsuario() {
   const nombre = document.getElementById("nombre");
@@ -149,6 +171,35 @@ function guardarUsuario() {
     });
 }
 
+const confirmDelete = (usuario) => {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Borrado",
+        text: "El registro ha sido eliminado.",
+        icon: "success",
+        confirmButtonColor: "#198754",
+        confirmButtonText: "Confirmar",
+      }).then(() => {
+        eliminarUsuario(usuario).then((eliminado) => {
+          if (eliminado) {
+            location.reload();
+          }
+        });
+      });
+    }
+  });
+};
+
 const eliminarUsuario = async (idUsuario) => {
   var url = `http://localhost:4000/usuarios/eliminar/${idUsuario}`;
 
@@ -158,7 +209,6 @@ const eliminarUsuario = async (idUsuario) => {
     });
 
     if (response.ok) {
-      //Refresca la pagina
       await listUsuarios();
     } else {
       Swal.fire({
@@ -218,7 +268,7 @@ const guardarCambios = async (idUsuarioSeleccionado) => {
       const response = await fetch(
         `http://localhost:4000/usuarios/editar/${idUsuario}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },

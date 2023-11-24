@@ -211,21 +211,16 @@ router.post("/citas/registro", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-});
+}); 
 router.put("/citas/editar/:idCita", async (req, res) => {
   try {
     const {
-    fecha,
-    hora,
-    detalles,
     estado,
     motivoCancelacion,
-    idUsuario,
-    idPaquete,
-    idHoario,
     } = req.body;
-    const [result] = await Pool.query("UPDATE citas SET ? WHERE idCita = ?", [
-      req.body,
+    const [result] = await Pool.query("UPDATE citas SET estado=?, motivoCancelacion=? WHERE idCita = ?", [
+      estado,
+      motivoCancelacion,
       req.params.idCita,
     ]);
     res.json(result);
