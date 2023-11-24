@@ -367,10 +367,16 @@ const listUsers = async () => {
                   <td> ${citas.nombreUsuario} </td>
                   <td> ${citas.nombre} </td>
                   <td> ${citas.idhorario} </td>
-                  <td>
+                  <td>`;
+                  
+      // Agrega los botones solo si el estado no es 2
+      if (citas.estado !== "aceptado") {
+        content += `
                   <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editaCitas(${citas.idCita})"><i class="fa-solid fa-pencil"></i></button>
-                      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>
-                  </td>
+                  <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>`;
+      }
+      
+      content += `</td>
               </tr>`;
     });
     $("#table_users").html(content);
@@ -378,6 +384,7 @@ const listUsers = async () => {
     alert(error);
   }
 };
+
 
 $(document).ready(async () => {
   await initDataTable();
