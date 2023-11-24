@@ -1,32 +1,9 @@
+document.getElementById("btnConfirmar").addEventListener("click", async (event) => {
+  event.preventDefault();
 
-
-document.getElementById("btnConfirmarColaborador").addEventListener("click", async () => {
-  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
-  // OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
-  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
-  // GUARDA LA VENTA
-  await guardarVenta(idCotizacion);
+  validarFormulario()
 });
 
-function cargarModal() {
-  const colaboradores = buscarColaborador();
-
-  let content = ``;
-  colaboradores.forEach((colaborador) => {
-    content += `<option value="${colaborador.idColaborador}">${colaborador.nombre}</option>`;
-  });
-
-  $("#colaboradores").html(content);
-  $("#elegirColaborador").modal("show");
-}
-
-/*
-//CADA VEZ QUE SE SUBA EL FORMULARIO SE VA A ACTIVAR
-document.getElementById("miFormulario").addEventListener("submit", function (event) {
-    event.preventDefault();
-    //FUNCION VALIDAR REGISTRO (PARA QUE LOS CAMPOS NO SE VAYAN VACIOS)
-    validarFormulario();
-  });*/
 
 const validarFormulario = async () => {
   // DESABILITAR TEMPORALMENTE LAS VALIDACIONES PREDETERMINADAS PARA DARLE PASO A LAS VALIDACIONES PERSONALIZADAS
@@ -37,37 +14,24 @@ const validarFormulario = async () => {
   var estado = document.getElementById("estado");
 
   if (estado.value.trim() === "") {
-    mostrarAlerta("Por favor, selecciona una opcion");
-    return false;
-  } else if (estado.value == 2) {
-    cargarModal()
-    //OBTIENE EL ELEMENTO BOTON
-
-  } 
-    document.getElementById("miFormulario").submit();
+    await mostrarAlerta("Por favor, selecciona una opcion");
+  }else if(estado.value == 2){
+    await cargarModal()
+  }else{
     var btnConfirmar = document.getElementById("btnConfirmar");
 
     //OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
     var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
-
-    //EJECUTA EL GUARDADO JUNTO CON EL ID
-
-    await guardarCambios(idCotizacion);
-
-    document.getElementById("btnConfirmar").addEventListener("click", async (event) =>{
-      event.preventDefault
-
-    });
   
-
-
-
-
+    //EJECUTA EL GUARDADO JUNTO CON EL ID
+  
+    await guardarCambios(idCotizacion);
+  }
 
 }
 
 /*ALERTA ACTUALIZACION EXITOSA*/
-function mostrarAlertaExitosa(mensaje) {
+const  mostrarAlertaExitosa= async(mensaje)=> {
   Swal.fire({
     imageUrl: "../../../images/logoAlexa.jpg",
     imageWidth: 200,
@@ -103,47 +67,14 @@ function mostrarAlertaExitosa(mensaje) {
 
 
 /*ALERTA DE ERROR GENERICA */
-function mostrarAlerta(mensaje) {
-  Swal.fire({
+const mostrarAlerta = async (mensaje) => {
+  await Swal.fire({
     icon: "error",
     title: "Error",
     text: mensaje,
   });
 }
 /*ALERTA DE ERROR GENERICA */
-
-
-
-/*ALERTA CONFIRMAR ELIMINACION */
-const confirmDelete = (idCotizacion) => {
-  Swal.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Borrado",
-        text: "El registro ha sido eliminado.",
-        icon: "success",
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Confirmar",
-      }).then(() => {
-        eliminarCotizacion(idCotizacion).then((eliminado) => {
-          if (eliminado) {
-            location.reload();
-          }
-        });
-      });
-    }
-  });
-};
-/*ALERTA CONFIRMAR ELIMINACION */
 
 
 
@@ -176,17 +107,6 @@ const eliminarCotizacion = async (idCotizacion) => {
   }
 }
 /*FUNCION ELIMINAR COTIZACION*/
-
-
-/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
-const editarCotizacion = (cotizacion) => {
-  $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
-  $("#btnConfirmarColaborador").attr("data-idcotizacion", cotizacion.idCotizacion);
-
-  //ABRE EL MODAL (.SHOW)
-  openCreateModal()
-};
-/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 
 
 /*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
@@ -228,23 +148,32 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
 /*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
 
 
+
+/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
+const editarCotizacion = (cotizacion) => {
+  $("#btnConfirmar").attr("data-idcotizacion", cotizacion.idCotizacion);
+  $("#btnConfirmarColaborador").attr("data-idcotizacion", cotizacion.idCotizacion);
+
+};
+/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
+
+
+
+
 /*BUSCAR COLABORADORES */
 const buscarColaborador = async (req, res) => {
   var url = `http://localhost:4000/ventas/c`;
 
   try {
-    const response = await fetch(
-      url,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(url, {
+      method: "GET",
+    });
 
     if (response.ok) {
-      return response.json()
-
+      const data = await response.json(); // Espera a que la promesa se resuelva
+      console.log(data);
+      return data;
     } else {
-
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -254,7 +183,7 @@ const buscarColaborador = async (req, res) => {
   } catch (error) {
     console.error("Error en la solicitud GET", error);
   }
-}
+};
 /*BUSCAR COLABORADORES */
 
 
@@ -280,8 +209,8 @@ const guardarVenta = async (idCotizacion) => {
       );
 
       if (response.ok) {
-        mostrarAlertaExitosa("La venta fue registrada correctamente.");
-        // Otra acción si es necesario después de guardar la venta
+        await mostrarAlertaExitosa("La venta fue registrada correctamente.");
+        await guardarCambios(idCotizacion);
       } else {
         Swal.fire({
           icon: "error",
@@ -295,3 +224,49 @@ const guardarVenta = async (idCotizacion) => {
   }
 };
 /*GUARDAR VENTA*/
+
+
+
+/*CARGAR MODAL DE COLABORADORES */
+const cargarModal = async () => {
+  const colaboradores = await buscarColaborador(); 
+
+  let content = ``;
+  colaboradores.forEach((colaborador) => {
+    content += `
+      <select class="form-control" id="colaborador" name="colaborador">
+        <option value="" disabled selected>Selecciona un estado</option>
+        <option value="${colaborador.idColaborador}">${colaborador.nombre}</option>
+      </select>
+    `;
+  });
+
+  $("#colaboradores").html(content);
+
+  const boton = document.getElementById("btnConfirmar");
+  const miModal = new bootstrap.Modal(document.getElementById("elegirColaborador"));
+
+  // Agregar un evento al botón para abrir el modal
+  boton.addEventListener("click", () => {
+    miModal.show();
+  });
+}
+/*CARGAR MODAL DE COLABORADORES */
+
+
+
+/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
+document.getElementById("btnConfirmarColaborador").addEventListener("click", async () => {
+  //OBTIENE EL ELEMENTO POR ID
+  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
+  // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
+  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
+  // GUARDA LA VENTA
+  await guardarVenta(idCotizacion);
+  
+  window.location.href = "../cotizaciones.html";
+});
+/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
+
+
+

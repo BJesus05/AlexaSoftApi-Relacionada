@@ -53,7 +53,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -297,38 +297,7 @@ let dataTableOptions = {
 };
 
 function openCreateModal() {
-  const btnConfirmar = document.getElementById("btnConfirmar");
-  const idUsuario = btnConfirmar.getAttribute("data-idusuario");
-
-  if (idUsuario) {
-    // If there is a user ID, open the modal with the user's data
-    editarUsuario(usuario);
-  } else {
-    // If there is no user ID, open the modal with blank fields
     $("#staticBackdrop").modal("show");
-
-    // Set the `data-idusuario` attribute to `null`
-    btnConfirmar.setAttribute("data-idusuario", null);
-
-    // Reset the form fields
-    const nombre = document.getElementById("nombre");
-    const cedula = document.getElementById("cedula");
-    const correo = document.getElementById("correo");
-    const telefono = document.getElementById("telefono");
-    const instagram = document.getElementById("instagram");
-    const contrasena = document.getElementById("contrasena");
-    const estadoSelect = document.getElementById("estado");
-    const idRolSelect = document.getElementById("idRol");
-
-    nombre.value = "";
-    cedula.value = "";
-    correo.value = "";
-    telefono.value = "";
-    instagram.value = "";
-    contrasena.value = "";
-    estadoSelect.value = "";
-    idRolSelect.value = "";
-  }
 }
 
 /* 
@@ -399,8 +368,13 @@ const listUsuarios = async () => {
     <td> ${usuario.correo} </td>
     <td> ${usuario.telefono} </td>
     <td> ${usuario.instagram} </td>
-    <td> ${usuario.contrasena} </td>
-    <td> ${usuario.estado} </td>
+    <td class="contrasena-cell">
+  <span class="password-value">${usuario.contrasena.replace(/./g, '*')}</span>
+  <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(usuario).replace(/"/g, "&quot;")})">
+    <i class="fa-solid fa-eye-slash"></i>
+  </button>
+</td>
+    </td>    <td> ${usuario.estado} </td>
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
     <td>
@@ -425,6 +399,22 @@ const listUsuarios = async () => {
     alert(error);
   }
 };
+
+// Función para alternar la visibilidad de la contraseña
+function togglePasswordVisibility(button, usuario) {
+  const passwordValue = button.previousElementSibling;
+  const isVisible = passwordValue.classList.toggle("visible");
+
+  if (isVisible) {
+    // Si es visible, mostrar la contraseña real
+    passwordValue.textContent = usuario.contrasena;
+    button.innerHTML = '<i class="fa-solid fa-eye"></i>';
+  } else {
+    // Si no es visible, mostrar asteriscos
+    passwordValue.textContent = usuario.contrasena.replace(/./g, '*');
+    button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+  }
+}
 
 $(document).ready(async () => {
   await initDataTable();
