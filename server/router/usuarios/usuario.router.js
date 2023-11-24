@@ -46,7 +46,7 @@ router.post('/usuarios/registrar', async (req, res) => {
   }
 });
 
-router.patch("/usuarios/editar/:idUsuario", async (req, res) => {
+router.put("/usuarios/editar/:idUsuario", async (req, res) => {
   try {
     const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
     console.log("IdRol para guardar: " + idRol);

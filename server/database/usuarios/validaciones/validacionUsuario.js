@@ -268,7 +268,7 @@ const guardarCambios = async (idUsuarioSeleccionado) => {
       const response = await fetch(
         `http://localhost:4000/usuarios/editar/${idUsuario}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
