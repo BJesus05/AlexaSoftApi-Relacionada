@@ -47,7 +47,7 @@ const  mostrarAlertaExitosa= async(mensaje)=> {
       popup: "custom-alert-class",
     },
   });
-  setTimeout(() => {
+  setTimeout( () => {
     //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
@@ -56,11 +56,11 @@ const  mostrarAlertaExitosa= async(mensaje)=> {
       text: mensaje,
       showConfirmButton: false,
       allowOutsideClick: false,
-      timer: 3000,
-    }).then(() => {
-      location.reload();
+      timer: 1500,
+    }).then(async() => {
+      await listCotizaciones();
     });
-  }, 3000);
+  }, 1500);
 }
 /*ALERTA ACTUALIZACION EXITOSA*/
 
@@ -109,6 +109,34 @@ const eliminarCotizacion = async (idCotizacion) => {
 /*FUNCION ELIMINAR COTIZACION*/
 
 
+
+/*ALERTA CONFIRMAR ELIMINAR*/
+const confirmDelete = async (idCotizacion) => {
+ await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
+  }).then( async(result) => {
+    if (result.isConfirmed) {
+      await eliminarCotizacion(idCotizacion);
+      await Swal.fire({
+        title: "Borrado",
+        text: "El registro ha sido eliminado.",
+        icon: "success",
+        confirmButtonColor: "#198754",
+        confirmButtonText: "Confirmar",
+      });
+    }
+  });
+};
+/*ALERTA CONFIRMAR ELIMINAR*/
+
+
 /*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
 const guardarCambios = async (idCotizacionSeleccionado) => {
   if (idCotizacionSeleccionado) {
@@ -144,7 +172,6 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
     }
   }
 };
-
 /*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
 
 
@@ -156,7 +183,6 @@ const editarCotizacion = (cotizacion) => {
 
 };
 /*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
-
 
 
 
@@ -209,8 +235,7 @@ const guardarVenta = async (idCotizacion) => {
       );
 
       if (response.ok) {
-        await mostrarAlertaExitosa("La venta fue registrada correctamente.");
-        await guardarCambios(idCotizacion);
+        console.log("Venta guardada correctamente"); 
       } else {
         Swal.fire({
           icon: "error",
@@ -227,7 +252,29 @@ const guardarVenta = async (idCotizacion) => {
 
 
 
+/*VALIDAR COLABORADORES */
+const validarColaborador = async ()=>{
+  const idColaborador = $("#colaborador");
+  console.log(idColaborador)
+  if (idColaborador.value.trim() === "" || idColaborador.value === null || idColaborador.value === undefined) {
+    await mostrarAlerta("Por favor, selecciona una opcion");
+  }else if (idColaborador){
+    //OBTIENE EL ELEMENTO POR ID
+  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
+  // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
+  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
+  // VALIDAR CAMPO Y GUARDAR VENTA
+
+  await guardarVenta(idCotizacion);
+  await guardarCambios(idCotizacion)
+  }
+}
+/*VALIDAR COLABORADORES */
+
+
+
 /*CARGAR MODAL DE COLABORADORES */
+const miModal = new bootstrap.Modal(document.getElementById("elegirColaborador"));
 const cargarModal = async () => {
   const colaboradores = await buscarColaborador(); 
 
@@ -235,20 +282,19 @@ const cargarModal = async () => {
   colaboradores.forEach((colaborador) => {
     content += `
       <select class="form-control" id="colaborador" name="colaborador">
-        <option value="" disabled selected>Selecciona un estado</option>
+        <option value="" disabled selected>Selecciona un colaborador</option>
         <option value="${colaborador.idColaborador}">${colaborador.nombre}</option>
       </select>
     `;
   });
 
-  $("#colaboradores").html(content);
+  await $("#colaboradores").html(content);
 
   const boton = document.getElementById("btnConfirmar");
-  const miModal = new bootstrap.Modal(document.getElementById("elegirColaborador"));
-
+  
   // Agregar un evento al botón para abrir el modal
-  boton.addEventListener("click", () => {
-    miModal.show();
+  boton.addEventListener("click",async () => {
+    await miModal.show();
   });
 }
 /*CARGAR MODAL DE COLABORADORES */
@@ -256,17 +302,12 @@ const cargarModal = async () => {
 
 
 /*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
-document.getElementById("btnConfirmarColaborador").addEventListener("click", async () => {
-  //OBTIENE EL ELEMENTO POR ID
-  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
-  // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
-  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
-  // GUARDA LA VENTA
-  await guardarVenta(idCotizacion);
-  
-  window.location.href = "../cotizaciones.html";
+
+document.getElementById("btnConfirmarColaborador").addEventListener("click", async (e) => {
+  e.preventDefault()
+ validarColaborador()
+ 
 });
 /*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
-
 
 

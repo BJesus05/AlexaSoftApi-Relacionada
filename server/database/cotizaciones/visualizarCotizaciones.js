@@ -291,40 +291,6 @@ const openCreateModal = () => {
 };
 
 
-/* 
-let users = [];
-const updateFilteredList = () => {
-  const inputValue = $("#campo4").val().toLowerCase();
-
-  const listResultados = $("#resultadoBusquedaCampo4");
-  listResultados.empty();
-
-  if (inputValue.trim() === "") {
-    return;
-  }
-
-  const filteredData = users.filter((user) =>
-    Object.values(user).some((value, key) => {
-      if (key === 1 && user.name.toLowerCase().includes(inputValue)) {
-        // Si la búsqueda es por "nombre", mostrar el "ID" (Cambiar según solicitud si no se va usar, coloquen este codigo en bloque de comentario)
-        return true;
-      }
-      return String(value).toLowerCase().includes(inputValue);
-    })
-  );
-
-  if (filteredData.length > 0) {
-    filteredData.forEach((result) => {
-      const listItem = $("<li>").text("Resultado: " + result.id).addClass("list-group-item");
-      listResultados.append(listItem);
-    });
-  } else {
-    const listItem = $("<li>")
-      .text("No se encontraron resultados.")
-      .addClass("list-group-item");
-    listResultados.append(listItem);
-  }
-}; */
 
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
