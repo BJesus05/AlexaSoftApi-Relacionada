@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="../../../images/letter-a.png">
 
     <!-- personalizados CSS -->
-    <link rel="stylesheet" href="dataTable/estiloGeneral.css">
+    <link rel="stylesheet" href="../dataTable/estiloGeneral.css">
 
     <!-- Font-Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -184,8 +184,7 @@
                         <div class="mb-3">
                             <label for="estadoCita" class="col-form-label">Estado</label>
                             <select class="form-select" aria-label="Default select example" id="estadoCita" required>
-                                <option value="" selected disabled>Selecciona un estado</option>
-                                <option value="1">Espera</option>
+                                <option value="1" selected>Espera</option>
                                 <option value="2">Aceptado</option>
                                 <option value="3">Cancelado</option>
                             </select>
@@ -219,6 +218,41 @@
             </div>
         </div>
     </div> <!-- Fin Modal -->
+
+     <!-- Inicio Modal editar -->
+     <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered min-vh-100">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+             <div class="modal-body mt-auto">
+                 <form id="EditarFormulario">
+                     <div class="mb-3">
+                         <label for="estadoCita" class="col-form-label">Estado</label>
+                         <select class="form-select" aria-label="Default select example" id="estadoCitaEditar" required>
+                             <option value="" selected disabled>Selecciona un estado</option>
+                             <option value="2">Aceptado</option>
+                             <option value="3">Cancelado</option>
+                         </select>
+                     </div>
+                     <div class="mb-3">
+                         <label for="motivoCancelacion" class="col-form-label">Motivo Cancelacion:</label>
+                         <!-- Quiten el pattern si no usarán el type="text" -->
+                         <input type="number"class="form-control" id="motivoCancelacionEditar" required>
+                     </div>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                         <button type="submit" class="btn btn-primary"
+                         id="btnConfirmarEditar" onclick="validarCambio(event)">Confirmar</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
+ </div> <!-- Fin Modal -->
 
 </body>
 
