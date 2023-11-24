@@ -98,9 +98,9 @@ function guardarRol() {
       return response.json();
     })
     .then((data) => {
-      const nuevoUsuario = [];
-      nuevoUsuario.push(data);
-      mostrar(nuevoUsuario);
+      const nuevoRol = [];
+      nuevoRol.push(data);
+      mostrar(nuevoRol);
       location.reload();
     })
     .catch((error) => {
@@ -138,7 +138,7 @@ const confirmDelete = (idRol) => {
 };
 
 const eliminarRol = async (idRol) => {
-  var url = `http:localhost:4000/roles/${idRol}`;
+  var url = `http://localhost:4000/roles/eliminar/${idRol}`;
 
   try {
     const response = await fetch(url, {
@@ -159,9 +159,9 @@ const eliminarRol = async (idRol) => {
   }
 };
 
-const editarRol = (rol) => {
-  $("#btnConfirmar").attr("data-idrol", rol.idRol);
-  openCreateModal();
+const editarRol = async (idRol) => {
+  $("#btnConfirmar").attr("data-idrol", idRol);
+  $("#staticBackdrop").modal("show");
 };
 
 const guardarCambios = async (idRolSeleccionado) => {
@@ -169,12 +169,15 @@ const guardarCambios = async (idRolSeleccionado) => {
     const idRol = idRolSeleccionado;
     const nombre = $("#nombre").val();
     const estado = $("#estado").val();
+    console.log(idRol)
+    console.log(nombre)
+    console.log(estado)
 
     try {
       const response = await fetch(
-        `http:localhost:4000/roles/editar/${idRol}`,
+        `http://localhost:4000/roles/editar/${idRol}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },

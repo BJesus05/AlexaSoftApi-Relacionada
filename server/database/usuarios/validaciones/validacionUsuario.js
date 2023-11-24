@@ -98,7 +98,6 @@ function mostrarAlertaExitosa(mensaje) {
     },
   });
   setTimeout(() => {
-    //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
       icon: "success",
@@ -120,35 +119,6 @@ function mostrarAlerta(mensaje) {
     text: mensaje,
   });
 }
-
-const confirmDelete = (idUsuario) => {
-  Swal.fire({
-    title: "¿Estás seguro?",
-    text: "¡No podrás revertir esto!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#3085d6",
-    confirmButtonText: "Eliminar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Borrado",
-        text: "El registro ha sido eliminado.",
-        icon: "success",
-        confirmButtonColor: "#198754",
-        confirmButtonText: "Confirmar",
-      }).then(() => {
-        eliminarUsuario(idUsuario).then((eliminado) => {
-          if (eliminado) {
-            location.reload();
-          }
-        });
-      });
-    }
-  });
-};
 
 function guardarUsuario() {
   const nombre = document.getElementById("nombre");
@@ -201,6 +171,35 @@ function guardarUsuario() {
     });
 }
 
+const confirmDelete = (usuario) => {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás revertir esto!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Eliminar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Borrado",
+        text: "El registro ha sido eliminado.",
+        icon: "success",
+        confirmButtonColor: "#198754",
+        confirmButtonText: "Confirmar",
+      }).then(() => {
+        eliminarUsuario(usuario).then((eliminado) => {
+          if (eliminado) {
+            location.reload();
+          }
+        });
+      });
+    }
+  });
+};
+
 const eliminarUsuario = async (idUsuario) => {
   var url = `http://localhost:4000/usuarios/eliminar/${idUsuario}`;
 
@@ -210,7 +209,6 @@ const eliminarUsuario = async (idUsuario) => {
     });
 
     if (response.ok) {
-      //Refresca la pagina
       await listUsuarios();
     } else {
       Swal.fire({

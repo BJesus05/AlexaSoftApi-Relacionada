@@ -297,7 +297,7 @@ let dataTableOptions = {
 };
 
 function openCreateModal() {
-    $("#staticBackdrop").modal("show");
+  $("#staticBackdrop").modal("show");
 }
 
 /* 
@@ -369,29 +369,37 @@ const listUsuarios = async () => {
     <td> ${usuario.telefono} </td>
     <td> ${usuario.instagram} </td>
     <td class="contrasena-cell">
-  <span class="password-value">${usuario.contrasena.replace(/./g, '*')}</span>
-  <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(usuario).replace(/"/g, "&quot;")})">
-    <i class="fa-solid fa-eye-slash"></i>
-  </button>
-</td>
-    </td>    <td> ${usuario.estado} </td>
+      <span class="password-value">${usuario.contrasena.replace(
+        /./g,
+        "*"
+      )}</span>
+        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
+          usuario
+        ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-eye-slash"></i>
+        </button>
+    </td>   
+    <td> ${usuario.estado} </td>
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
     <td>
-      ${
+    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ${
+      usuario.idRol !== 1
+        ? `onclick="editarUsuario(${JSON.stringify(usuario).replace(
+            /"/g,
+            "&quot;"
+          )})"`
+        : "disabled"
+    }><i class="fa-solid fa-pencil"></i></button>
+      <button class="btn btn-sm btn-danger" ${
         usuario.idRol !== 1
-          ? `
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarUsuario(${JSON.stringify(
-          usuario
-        ).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-pencil"></i>
-        </button>`
-          : ""
-      }
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${
-        usuario.idUsuario
-      })"><i class="fa-solid fa-trash-can"></i></button>
-    </td>
+          ? `onclick="confirmDelete(${JSON.stringify(usuario.idUsuario).replace(
+              /"/g,
+              "&quot;"
+            )})"`
+          : "disabled"
+      }><i class="fa-solid fa-trash-can"></i></button>    
+      </td>
   </tr>`;
     });
     $("#usuarios").html(content);
@@ -411,7 +419,7 @@ function togglePasswordVisibility(button, usuario) {
     button.innerHTML = '<i class="fa-solid fa-eye"></i>';
   } else {
     // Si no es visible, mostrar asteriscos
-    passwordValue.textContent = usuario.contrasena.replace(/./g, '*');
+    passwordValue.textContent = usuario.contrasena.replace(/./g, "*");
     button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
   }
 }
