@@ -331,7 +331,8 @@ const listCotizaciones = async () => {
         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarCotizacion(${JSON.stringify(cotizacion).replace(/"/g, "&quot;")})">
           <i class="fa-solid fa-pencil"></i>
         </button>` : ''}
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>
+        ${cotizacion.estado !== "aceptado" ? `
+      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
     </td>
   </tr>`;
     });

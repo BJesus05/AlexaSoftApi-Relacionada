@@ -4,6 +4,14 @@ document.getElementById("btnConfirmar").addEventListener("click", async (event) 
   validarFormulario()
 });
 
+/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
+
+document.getElementById("btnConfirmarColaborador").addEventListener("click", async (e) => {
+  e.preventDefault()
+ validarColaborador()
+ 
+});
+/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
 
 const validarFormulario = async () => {
   // DESABILITAR TEMPORALMENTE LAS VALIDACIONES PREDETERMINADAS PARA DARLE PASO A LAS VALIDACIONES PERSONALIZADAS
@@ -157,10 +165,11 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
       );
 
       if (response.ok) {
-        console.log("Cambios guardados correctamente"); // Agrega este log
+        console.log("Cambios guardados correctamente"); 
         mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+        miModal.hide();
       } else {
-        console.log("Hubo un problema al guardar los cambios"); // Agrega este log
+        console.log("Hubo un problema al guardar los cambios"); 
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -254,11 +263,12 @@ const guardarVenta = async (idCotizacion) => {
 
 /*VALIDAR COLABORADORES */
 const validarColaborador = async ()=>{
-  const idColaborador = $("#colaborador");
+  document.getElementById("elegirColaborador").setAttribute("novalidate", "true");
+  const idColaborador = document.getElementById("colaborador");
   console.log(idColaborador)
-  if (idColaborador.value.trim() === "" || idColaborador.value === null || idColaborador.value === undefined) {
+  if (idColaborador.value.trim() === "") {
     await mostrarAlerta("Por favor, selecciona una opcion");
-  }else if (idColaborador){
+  }else{
     //OBTIENE EL ELEMENTO POR ID
   var btnConfirmar = document.getElementById("btnConfirmarColaborador");
   // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
@@ -301,13 +311,6 @@ const cargarModal = async () => {
 
 
 
-/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
 
-document.getElementById("btnConfirmarColaborador").addEventListener("click", async (e) => {
-  e.preventDefault()
- validarColaborador()
- 
-});
-/*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
 
 
