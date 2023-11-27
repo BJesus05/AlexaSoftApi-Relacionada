@@ -147,5 +147,147 @@ router.delete("/roles/eliminar/:idRol", async (req, res) => {
   }
 });
 
+
+// Permisos
+router.get("/permisos", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM permisos");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/permisos/:idPermiso", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM permisos WHERE idPermiso = ?", [
+      req.params.idPermiso,
+    ]);
+    console.log(result);
+    if (result.length === 0) {
+      res.status(404).json({ mensaje: "Permiso no encontrado" });
+    }
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/permisos/registrar', async (req, res) => {
+  try {
+    const { nombre, descripcion, estado } = req.body;
+    const [result] = await Pool.query("INSERT INTO permisos(nombre, descripcion, estado) VALUES (?,?,?)", [nombre, descripcion, estado]);
+    res.json({
+      idPermiso: result.insertId,
+      nombre, descripcion, estado
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+
+  }
+});
+
+router.put("/permisos/editar/:idPermiso", async (req, res) => {
+  try {
+    const { nombre, descripcion, estado } = req.body;
+    const [result] = await Pool.query(
+      "UPDATE permisos set nombre = ?, descripcion = ?, estado = ? where idPermiso = ?",
+      [nombre, descripcion, estado, req.params.idPermiso]
+    );
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete("/permisos/eliminar/:idPermiso", async (req, res) => {
+  try {
+    const [result] = await Pool.query(
+      "DELETE FROM permisos WHERE idPermiso = ?",
+      [req.params.idPermiso]
+    );
+
+    if (result.affectedRows === 0) {
+      res.sendStatus(404).json({ mensaje: "Tarea no encontrada" });
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
+// Permisosx Por Rol
+router.get("/permisosxrol", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT roles_permisos.idPermisoXRol, roles.nombre AS idRol, permisos.nombre AS idPermiso FROM roles_permisos INNER JOIN permisos ON roles_permisos.idPermiso = permisos.idPermiso INNER JOIN roles ON roles_permisos.idrol = roles.idrol");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/permisosxrol/:idPermisoXRol ", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM roles_permisos WHERE idPermisoXRol = ?", [
+      req.params.idPermisoXRol,
+    ]);
+    console.log(result);
+    if (result.length === 0) {
+      res.status(404).json({ mensaje: "Permiso no encontrado" });
+    }
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/permisosxrol/registrar', async (req, res) => {
+  try {
+    const { idRol, idPermiso } = req.body;
+    const [result] = await Pool.query("INSERT INTO roles_permisos(idRol, idPermiso) VALUES (?,?)", [idRol, idPermiso]);
+    res.json({
+      idPermisoXRol: result.insertId,
+      idRol, idPermiso
+    })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+
+  }
+});
+
+router.put("/permisosxrol/editar/:idPermisoXRol", async (req, res) => {
+  try {
+    const { idRol, idPermiso } = req.body;
+    const [result] = await Pool.query(
+      "UPDATE roles_permisos set idRol = ?, idPermiso = ? where idPermisoXRol = ?",
+      [idRol, idPermiso, req.params.idPermisoXRol]
+    );
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete("/permisosxrol/eliminar/:idPermisoXRol", async (req, res) => {
+  try {
+    const [result] = await Pool.query(
+      "DELETE FROM roles_permisos WHERE idPermisoXRol = ?",
+      [req.params.idPermisoXRol]
+    );
+
+    if (result.affectedRows === 0) {
+      res.sendStatus(404).json({ mensaje: "Tarea no encontrada" });
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 export { router as usuarioRouter };
 export default router;

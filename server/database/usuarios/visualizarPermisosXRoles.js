@@ -308,7 +308,7 @@ const initDataTable = async () => {
     dataTable.destroy();
   }
 
-  await listRoles();
+  await listPermisosXRol();
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
@@ -320,39 +320,76 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listRoles = async () => {
+const listPermisosXRol = async () => {
   try {
-    const response = await fetch("http://localhost:4000/roles");
-    const roles = await response.json();
+    const response = await fetch("http://localhost:4000/permisosxrol");
+    const permisosxrol = await response.json();
 
     let content = ``;
-    roles.forEach((rol) => {
-      console.log("rol   ", JSON.stringify(rol));
+    permisosxrol.forEach((permisoxrol) => {
+      console.log("permisoxrol   ", JSON.stringify(permisoxrol));
       content += `
   <tr>
-    <td> ${rol.idRol} </td>
-    <td> ${rol.nombre} </td>
-    <td> ${rol.estado} </td>
+    <td> ${permisoxrol.idPermisoXRol} </td>
+    <td> ${permisoxrol.idRol} </td>
+    <td> ${permisoxrol.idPermiso} </td>
     <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarRol(${rol.idRol})">
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarPermisoXRol(${permisoxrol.idPermisoXRol})">
           <i class="fa-solid fa-pencil"></i>
         </button>
-        <button class="btn btn-sm btn-danger" ${
-          rol.idRol !== 1
-            ? `onclick="confirmDelete(${JSON.stringify(rol.idRol).replace(
-                /"/g,
-                "&quot;"
-              )})"`
-            : "disabled"
-        }><i class="fa-solid fa-trash-can"></i></button>      
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${permisoxrol.idPermisoXRol})"><i class="fa-solid fa-trash-can"></i></button>      
       </td>
   </tr>`;
     });
-    $("#roles").html(content);
+    $("#permisosxrol").html(content);
   } catch (error) {
     alert(error);
   }
 };
+
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/roles',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idRol').empty();
+
+          // Agregar la opción por defecto
+          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (rol) {
+              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener roles: ', error);
+      }
+  });
+});
+
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/permisos',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idPermiso').empty();
+
+          // Agregar la opción por defecto
+          $('#idPermiso').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (permiso) {
+              $('#idPermiso').append('<option value="' + permiso.idPermiso + '">' + permiso.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener permisos: ', error);
+      }
+  });
+});
 
 $(document).ready(async () => {
   await initDataTable();

@@ -308,7 +308,7 @@ const initDataTable = async () => {
     dataTable.destroy();
   }
 
-  await listRoles();
+  await listPermisos();
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
@@ -320,35 +320,30 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listRoles = async () => {
+const listPermisos = async () => {
   try {
-    const response = await fetch("http://localhost:4000/roles");
-    const roles = await response.json();
+    const response = await fetch("http://localhost:4000/permisos");
+    const permisos = await response.json();
 
     let content = ``;
-    roles.forEach((rol) => {
-      console.log("rol   ", JSON.stringify(rol));
+    permisos.forEach((permiso) => {
+      console.log("permiso   ", JSON.stringify(permiso));
       content += `
   <tr>
-    <td> ${rol.idRol} </td>
-    <td> ${rol.nombre} </td>
-    <td> ${rol.estado} </td>
+    <td> ${permiso.idPermiso} </td>
+    <td> ${permiso.nombre} </td>
+    <td> ${permiso.descripcion} </td>
+    <td> ${permiso.estado} </td>
     <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarRol(${rol.idRol})">
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarPermiso(${permiso.idPermiso})">
           <i class="fa-solid fa-pencil"></i>
         </button>
-        <button class="btn btn-sm btn-danger" ${
-          rol.idRol !== 1
-            ? `onclick="confirmDelete(${JSON.stringify(rol.idRol).replace(
-                /"/g,
-                "&quot;"
-              )})"`
-            : "disabled"
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${permiso.idPermiso})""disabled"
         }><i class="fa-solid fa-trash-can"></i></button>      
       </td>
   </tr>`;
     });
-    $("#roles").html(content);
+    $("#permisos").html(content);
   } catch (error) {
     alert(error);
   }

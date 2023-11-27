@@ -424,6 +424,28 @@ function togglePasswordVisibility(button, usuario) {
   }
 }
 
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/roles',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idRol').empty();
+
+          // Agregar la opción por defecto
+          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (rol) {
+              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener roles: ', error);
+      }
+  });
+});
+
 $(document).ready(async () => {
   await initDataTable();
 });

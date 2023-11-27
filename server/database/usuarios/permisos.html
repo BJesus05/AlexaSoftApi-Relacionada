@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Usuarios</title>
+    <title>Permisos</title>
 
     <!-- Icon Pestaña (Favicon)-->
     <link rel="icon" type="image/x-icon" href="../../../images/letter-a.png">
@@ -119,9 +119,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item textoNav" href="roles.html">Roles</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item textoNav" href="usuarios.html">Usuarios</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="permisos.html">Permisos</a></li>
+                                <li><a class="dropdown-item textoNav" href="#">Permisos</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -141,18 +141,12 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Cedula</th>
-                        <th>Correo</th>
-                        <th>Teléfono</th>
-                        <th>Instagram</th>
-                        <th>Contraseña</th>
+                        <th>Descripción</th>
                         <th>Estado</th>
-                        <th>Fecha Interacción</th>
-                        <th>idRol</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
-                <tbody id="usuarios"></tbody>
+                <tbody id="permisos"></tbody>
             </table>
         </div>
     </div> <!-- Fin DataTable -->
@@ -163,7 +157,7 @@
         <div class="modal-dialog modal-dialog-centered min-vh-100">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Usuario</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Rol</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mt-auto">
@@ -174,28 +168,9 @@
                             <input type="text" pattern="[A-Za-z]+" class="form-control" id="nombre" required>
                         </div>
                         <div class="mb-3">
-                            <label for="cedula" class="col-form-label">Cedula:</label>
+                            <label for="descripcion" class="col-form-label">Descripción:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="number" pattern="^[0-9]+" class="form-control" id="cedula" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="correo" class="col-form-label">Correo:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="email" class="form-control" id="correo" required> 
-                        </div>
-                        <div class="mb-3">
-                            <label for="telefono" class="col-form-label">Teléfono:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="number" pattern="^[0-9]+" class="form-control" id="telefono" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="instagram" class="col-form-label">Instagram:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" class="form-control" id="instagram" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="contrasena" class="col-form-label">Contraseña:</label>
-                            <input type="password" class="form-control" id="contrasena" required>
+                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="descripcion" required>
                         </div>
                         <div class="mb-3">
                             <label for="estado" class="col-form-label">Estado</label>
@@ -203,11 +178,6 @@
                                 <option value="" selected disabled>Selecciona un estado</option>
                                 <option value="1">Activo</option>
                                 <option value="2">Desactivado</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="idRol" class="col-form-label">Rol</label>
-                            <select class="form-select" aria-label="Default select example" id="idRol" required>
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -223,7 +193,7 @@
 </body>
 
 <!-- Personalizado JS -->
-<script src="validaciones/validacionUsuario.js"></script>
+<script src="validaciones/validacionPermiso.js"></script>
 
 <!-- JQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
@@ -249,6 +219,6 @@
 <script src="../dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
-<script src="visualizarUsuario.js"></script>
+<script src="visualizarPermisos.js"></script>
 
 </html>
