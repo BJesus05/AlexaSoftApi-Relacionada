@@ -5,33 +5,80 @@ document
     validarFormulario();
   });
 
-async function validarFormulario() {
-  // Deshabilitar temporalmente las validaciones predeterminadas
+function validarFormulario() {
   document.getElementById("miFormulario").setAttribute("novalidate", "true");
 
-  // Validar Campo 1
-  var idRolSelect = document.getElementById("idRol");
-  var selectedOption = idRolSelect.options[idRolSelect.selectedIndex];
-  if (selectedOption.value === "") {
-    // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-    mostrarAlerta("Por favor, selecciona un estado válido.");
+  var nombre = document.getElementById("nombre");
+  if (nombre.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el nombre");
+    return false;
+  } else if (!nombre.checkValidity()) {
+    mostrarAlerta("Nombre: Por favor, ingrese solo letras.");
+    return false;
+  }
+
+  var cedula = document.getElementById("cedula");
+  if (cedula.value.trim() === "") {
+    mostrarAlerta("Por favor, completa la cedula");
+    return false;
+  }
+
+  var correo = document.getElementById("correo");
+  if (correo.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el correo");
+    return false;
+  } else if (!validarCorreo(correo.value.trim())) {
+    mostrarAlerta("Correo: Por favor, ingrese un correo electrónico válido.");
+    return false;
+  }
+
+  var telefono = document.getElementById("telefono");
+  if (telefono.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el telefono");
+    return false;
+  }
+
+  var instagram = document.getElementById("instagram");
+  if (instagram.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el instagram");
+    return false;
+  }
+
+  var contrasena = document.getElementById("contrasena");
+  if (contrasena.value.trim() === "") {
+    mostrarAlerta("Por favor, completa la contraseña");
+    return false;
+  }
+
+  var estado = document.getElementById("estado");
+  var estadoSeleccionado = estado.options[estado.selectedIndex];
+  if (estadoSeleccionado.value === "") {
+    mostrarAlerta("Estado: Por favor, selecciona un estado válido.");
+    return false;
+  }
+
+  var idRol = document.getElementById("idRol");
+  var idRolSeleccionado = idRol.options[idRol.selectedIndex];
+  if (idRolSeleccionado.value === "") {
+    mostrarAlerta("Rol: Por favor, selecciona un rol válido.");
     return false;
   }
 
   var btnConfirmar = document.getElementById("btnConfirmar");
   var idUsuario = btnConfirmar.getAttribute("data-idusuario");
 
-  try {
-    await guardarCambios(idUsuario);
-    mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
-  } catch (error) {
-    console.error("Error al guardar cambios:", error);
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Hubo un problema al guardar los cambios.",
-    });
+  if (idUsuario) {
+    guardarCambios(idUsuario);
+  } else {
+    mostrarAlertaExitosa("Validación exitosa. Creando nuevo usuario");
+    guardarUsuario();
   }
+}
+
+function validarCorreo(correo) {
+  // Expresión regular para validar un correo electrónico con dominios específicos
+  var regexCorreo = /^[^\s@]+@[^\s@]+\.(com|co)$/i;
+  return regexCorreo.test(correo);
 }
 
 function mostrarAlertaExitosa(mensaje) {
@@ -51,7 +98,6 @@ function mostrarAlertaExitosa(mensaje) {
     },
   });
   setTimeout(() => {
-    location.reload();
     $("#staticBackdrop").modal("hide");
     Swal.fire({
       icon: "success",
@@ -63,7 +109,7 @@ function mostrarAlertaExitosa(mensaje) {
     }).then(() => {
       location.reload();
     });
-  }, 1000);
+  }, 3000);
 }
 
 function mostrarAlerta(mensaje) {
@@ -74,7 +120,58 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (idUsuario) => {
+function guardarUsuario() {
+  const nombre = document.getElementById("nombre");
+  const cedula = document.getElementById("cedula");
+  const correo = document.getElementById("correo");
+  const telefono = document.getElementById("telefono");
+  const instagram = document.getElementById("instagram");
+  const contrasena = document.getElementById("contrasena");
+  const estadoSelect = document.getElementById("estado");
+  const estadoSeleccionado = estadoSelect.value;
+  const estado = estadoSeleccionado;
+  const fechaInteraccion = new Date();
+  const idRolSelect = document.getElementById("idRol");
+  const idRolSeleccionado = idRolSelect.value;
+  const idRol = idRolSeleccionado;
+
+  const url = "http://localhost:4000/usuarios/registrar";
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      nombre: nombre.value,
+      cedula: cedula.value,
+      correo: correo.value,
+      telefono: telefono.value,
+      instagram: instagram.value,
+      contrasena: contrasena.value,
+      fechaInteraccion: fechaInteraccion,
+      estado: estado,
+      idRol: idRol,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error al guardar en la base de datos");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const nuevoUsuario = [];
+      nuevoUsuario.push(data);
+      mostrar(nuevoUsuario);
+      location.reload();
+    })
+    .catch((error) => {
+      console.error(error.message);
+    });
+}
+
+const confirmDelete = (usuario) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -93,7 +190,7 @@ const confirmDelete = (idUsuario) => {
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
       }).then(() => {
-        eliminarHorario(idUsuario).then((eliminado) => {
+        eliminarUsuario(usuario).then((eliminado) => {
           if (eliminado) {
             location.reload();
           }
@@ -103,90 +200,103 @@ const confirmDelete = (idUsuario) => {
   });
 };
 
-/*function guardarHorario() {
-  
+const eliminarUsuario = async (idUsuario) => {
+  var url = `http://localhost:4000/usuarios/eliminar/${idUsuario}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      await listUsuarios();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al borrar los datos.",
+      });
+    }
+  } catch (error) {
+    console.error("Error en la solicitud DELETE", error);
+  }
+};
+
+function editarUsuario(usuario) {
+  const idUsuario = usuario.idUsuario;
+  const nombre = usuario.nombre;
+  const cedula = usuario.cedula;
+  const correo = usuario.correo;
+  const telefono = usuario.telefono;
+  const instagram = usuario.instagram;
+  const contrasena = usuario.contrasena;
   const estadoSelect = document.getElementById("estado");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
+  const idRolSelect = document.getElementById("idRol");
+  const idRolSeleccionado = idRolSelect.value;
+  const idRol = idRolSeleccionado;
 
-  const url = "http://localhost:4000/horario/registro";
+  $("#nombre").val(nombre);
+  $("#cedula").val(cedula);
+  $("#correo").val(correo);
+  $("#telefono").val(telefono);
+  $("#instagram").val(instagram);
+  $("#contrasena").val(contrasena);
+  $("#estado").val(estado);
+  $("#idRol").val(idRol);
 
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      estado: estado,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Error al guardar en la base de datos");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const nuevaHorario = [];
-      nuevaHorario.push(data);
-      mostrar(nuevaHorario);
-      location.reload();
-    })
-    .catch((error) => {
-      console.error(error.message);
-    });
-}*/
+  $("#btnConfirmar").attr("data-idusuario", idUsuario);
 
-function eliminarHorario(idUsuario) {
-  var url = `http://localhost:4000/horario/eliminar/`;
-
-  return fetch(url + idUsuario, {
-    method: "DELETE",
-  })
-    .then((response) => {
-      if (response.status === 204) {
-        console.log("Registro borrado exitosamente");
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((error) => {
-      console.error("Error al enviar solicitud de borrado:", error);
-      return false;
-    });
+  openCreateModal();
 }
-
-const editarUsuario = (usuario) => {
-  $("#idRol").val(usuario.idRol);
-  $("#btnConfirmar").attr("data-idusuario", usuario.idUsuario);
-  $("#staticBackdrop").modal("show");
-};
 
 const guardarCambios = async (idUsuarioSeleccionado) => {
   if (idUsuarioSeleccionado) {
+    const idUsuario = idUsuarioSeleccionado;
+    const nombre = $("#nombre").val();
+    const cedula = $("#cedula").val();
+    const correo = $("#correo").val();
+    const telefono = $("#telefono").val();
+    const instagram = $("#instagram").val();
+    const contrasena = $("#contrasena").val();
+    const fechaInteraccion = $("#fechaInteraccion").val();
     const idRol = $("#idRol").val();
-    console.log("Valor de idRol enviado: " + idRol);
-    console.log("Valor de idUsuarioSeleccionado: " + idUsuarioSeleccionado);
+    const estado = $("#estado").val();
 
-    const response = await fetch(
-      `http://localhost:4000/usuarios/${idUsuarioSeleccionado}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idRol,
-        }),
+    try {
+      const response = await fetch(
+        `http://localhost:4000/usuarios/editar/${idUsuario}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre,
+            cedula,
+            correo,
+            telefono,
+            instagram,
+            contrasena,
+            fechaInteraccion,
+            idRol,
+            estado,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Hubo un problema al guardar los cambios.",
+        });
       }
-    );
-
-    const result = await response.json();
-    console.log("Respuesta del servidor:", result);
-
-    if (!response.ok) {
-      throw new Error("Hubo un problema al guardar los cambios.");
+    } catch (error) {
+      console.error("Error en la solicitud PATCH", error);
     }
   }
 };

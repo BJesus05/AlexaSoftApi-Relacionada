@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="../../../images/letter-a.png">
 
     <!-- personalizados CSS -->
-    <link rel="stylesheet" href="dataTable/estiloGeneral.css">
+    <link rel="stylesheet" href="../dataTable/estiloGeneral.css">
 
     <!-- Font-Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -55,13 +55,13 @@
                                 Agendamiento
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Citas</a></li>
+                                <li><a class="dropdown-item textoNav" href="#">Agendamiento</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Horario</a></li>
+                                <li><a class="dropdown-item textoNav" href="horario.html">Horario</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Colaboradores</a></li>
+                                <li><a class="dropdown-item textoNav" href="motivoscancelamiento.html">Motivo Cancelación</a></li>
                             </ul>
                         </li>
 
@@ -104,10 +104,10 @@
                                 Ventas
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Cotizaciones</a></li>
+                                <li><a class="dropdown-item textoNav" href="../cotizaciones/cotizaciones.html">Cotizaciones</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Ventas</a></li>
+                                <li><a class="dropdown-item textoNav" href="../ventas/ventas.html">Ventas</a></li>
                             </ul>
                         </li>
 
@@ -117,9 +117,11 @@
                                 Usuarios
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Roles</a></li>
+                                <li><a class="dropdown-item textoNav" href="../usuarios/roles.html">Roles</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item textoNav" href="../usuarios/usuarios.html">Usuarios</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="../usuarios/permisos.html">Permisos</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -166,44 +168,94 @@
                 <div class="modal-body mt-auto">
                     <form id="miFormulario">
                         <div class="mb-3">
-                            <label for="campo1" class="col-form-label">Campo 1:</label>
+                            <label for="fechaCita" class="col-form-label">Fecha:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo1" required>
+                            <input type="date" class="form-control" id="fechaCita" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo2" class="col-form-label">Campo 2:</label>
+                            <label for="horaCita" class="col-form-label">Hora:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo2" required>
+                            <input type="time" class="form-control" id="horaCita" required>
                         </div>
                         <div class="mb-3">
-                            <label for="campo3" class="col-form-label">Campo 3:</label>
+                            <label for="detalleCita" class="col-form-label">Detalle:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="campo3" required>
+                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="detalleCita" required>
                         </div>
+                        
                         <div class="mb-3">
-                            <label for="campo4" class="col-form-label">Campo 4 (Buscar Opcional):</label>
-                            <input type="text" class="form-control campo4" id="campo4">
-                            <ul id="resultadoBusquedaCampo4" class="list-group"></ul>
-                        </div>
-                        <div class="mb-3">
-                            <label for="estadoSelect" class="col-form-label">Campo 5: (Opcional)</label>
-                            <select class="form-select" aria-label="Default select example" id="estadoSelect" required>
-                                <option value="" selected disabled>Selecciona un estado</option>
-                                <option value="Estado_1">Estado 1</option>
-                                <option value="Estado_2">Estado 2</option>
-                                <option value="Estado_3">Estado 3</option>
+                            <label for="estadoCita" class="col-form-label">Estado</label>
+                            <select class="form-select" aria-label="Default select example" id="estadoCita" required>
+                                <option value="1" selected>Espera</option>
+                                <option value="2">Aceptado</option>
+                                <option value="3">Cancelado</option>
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                                <label for="motivoCancelacion" class="col-form-label">Motivo Cancelación:</label>
+                                <select id="motivoCancelacion">
+                                </select>
+                        </div> 
+                        <div class="mb-3">
+                            <label for="usuarioCita" class="col-form-label">Usuario:</label>
+                            <select id="usuarioCita">
+                            </select>
+                        </div> 
+                        <div class="mb-3">
+                            <label for="paqueteCita" class="col-form-label">Paquete:</label>
+                            <select id="paqueteCita">
+                            </select>
+                        </div> 
+                        <div class="mb-3">
+                            <label for="horarioCita" class="col-form-label">Horario:</label>
+                            <select id="horarioCita">
+                            </select>
+                        </div> 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary"
-                                onclick="validarFormulario(event)">Confirmar</button>
+                            id="btnConfirmar" onclick="validarFormulario(event)">Confirmar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div> <!-- Fin Modal -->
+
+     <!-- Inicio Modal editar -->
+     <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     <div class="modal-dialog modal-dialog-centered min-vh-100">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
+             </div>
+             <div class="modal-body mt-auto">
+                 <form id="EditarFormulario">
+                     <div class="mb-3">
+                         <label for="estadoCita" class="col-form-label">Estado</label>
+                         <select class="form-select" aria-label="Default select example" id="estadoCitaEditar" required>
+                             <option value="" selected disabled>Selecciona un estado</option>
+                             <option value="2">Aceptado</option>
+                             <option value="3">Cancelado</option>
+                         </select>
+                     </div>
+                     <div class="mb-3">
+                        <label for="motivoCancelacionEditar" class="col-form-label">Motivo Cancelación:</label>
+                        <select id="motivoCancelacionEditar">
+                        </select>
+                    </div> 
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                         <button type="submit" class="btn btn-primary"
+                         id="btnConfirmarEditar" onclick="validarCambio(event)">Confirmar</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
+ </div> <!-- Fin Modal -->
 
 </body>
 
@@ -235,5 +287,6 @@
 <script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
 <script src="vizualizarAgendamiento.js"></script>
+<script src="cargarDatos.js"></script>
 
 </html>

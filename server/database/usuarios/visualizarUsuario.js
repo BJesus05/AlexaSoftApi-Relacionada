@@ -5,7 +5,7 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
-      text: 'Crear <i class="fa-solid fa-folder-plus"></i>',
+      text: 'Crear <i class="fa-regular fa-plus fa-beat-fade"></i>',
       titleAttr: "Crear",
       className: "btn btn-warning",
       action: function (e, dt, node, config) {
@@ -26,6 +26,8 @@ let dataTableOptions = {
       text: ' PDF <i class="fas fa-file-pdf"></i> ',
       titleAttr: "Exportar a PDF",
       className: "btn btn-danger",
+      pageLength: 100,
+      orientation: "landscape",
       exportOptions: {
         columns: ":visible",
       },
@@ -49,14 +51,14 @@ let dataTableOptions = {
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+  lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7,8] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 10,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -187,7 +189,7 @@ let dataTableOptions = {
       countFiltered: "{shown} ({total})",
       emptyPanes: "Sin paneles de búsqueda",
       loadMessage: "Cargando paneles de búsqueda",
-      title: "Filtros Activos - %d",
+      title: "Filtros Activos - d%",
       showMessage: "Mostrar Todo",
       collapseMessage: "Colapsar Todo",
     },
@@ -294,10 +296,11 @@ let dataTableOptions = {
   },
 };
 
-const openCreateModal = () => {
+function openCreateModal() {
   $("#staticBackdrop").modal("show");
-};
+}
 
+/* 
 let users = [];
 const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
@@ -330,18 +333,18 @@ const updateFilteredList = () => {
       .addClass("list-group-item");
     listResultados.append(listItem);
   }
-};
+}; */
 
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTable.destroy();
   }
 
-  await listUsers();
+  await listUsuarios();
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
-  $("#usuario").on("input", function () {
+  $("#campo4").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
     updateFilteredList();
   });
@@ -349,42 +352,99 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listUsers = async () => {
+const listUsuarios = async () => {
   try {
-    const response = await fetch("http://localhost:4000/citas");
-    users = await response.json();
+    const response = await fetch("http://localhost:4000/usuarios");
+    const usuarios = await response.json();
 
     let content = ``;
-    users.forEach((citas) => {  
+    usuarios.forEach((usuario) => {
+      console.log("usuario   ", JSON.stringify(usuario));
       content += `
-              <tr>
-                  <td> ${citas.idCita} </td>
-                  <td> ${citas.fecha} </td>
-                  <td> ${citas.hora} </td>
-                  <td> ${citas.detalles} </td>
-                  <td> ${citas.estado} </td>
-                  <td> ${citas.motivo} </td>
-                  <td> ${citas.nombreUsuario} </td>
-                  <td> ${citas.nombre} </td>
-                  <td> ${citas.idhorario} </td>
-                  <td>`;
-                  
-      // Agrega los botones solo si el estado no es 2
-      if (citas.estado !== "aceptado") {
-        content += `
-                  <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editaCitas(${citas.idCita})"><i class="fa-solid fa-pencil"></i></button>
-                  <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>`;
-      }
-      
-      content += `</td>
-              </tr>`;
+  <tr>
+    <td> ${usuario.idUsuario} </td>
+    <td> ${usuario.nombre} </td>
+    <td> ${usuario.cedula} </td>
+    <td> ${usuario.correo} </td>
+    <td> ${usuario.telefono} </td>
+    <td> ${usuario.instagram} </td>
+    <td class="contrasena-cell">
+      <span class="password-value">${usuario.contrasena.replace(
+        /./g,
+        "*"
+      )}</span>
+        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
+          usuario
+        ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-eye-slash"></i>
+        </button>
+    </td>   
+    <td> ${usuario.estado} </td>
+    <td> ${usuario.fechaInteraccion} </td>
+    <td> ${usuario.idRol} </td>
+    <td>
+    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ${
+      usuario.idRol !== 1
+        ? `onclick="editarUsuario(${JSON.stringify(usuario).replace(
+            /"/g,
+            "&quot;"
+          )})"`
+        : "disabled"
+    }><i class="fa-solid fa-pencil"></i></button>
+      <button class="btn btn-sm btn-danger" ${
+        usuario.idRol !== 1
+          ? `onclick="confirmDelete(${JSON.stringify(usuario.idUsuario).replace(
+              /"/g,
+              "&quot;"
+            )})"`
+          : "disabled"
+      }><i class="fa-solid fa-trash-can"></i></button>    
+      </td>
+  </tr>`;
     });
-    $("#table_users").html(content);
+    $("#usuarios").html(content);
   } catch (error) {
     alert(error);
   }
 };
 
+// Función para alternar la visibilidad de la contraseña
+function togglePasswordVisibility(button, usuario) {
+  const passwordValue = button.previousElementSibling;
+  const isVisible = passwordValue.classList.toggle("visible");
+
+  if (isVisible) {
+    // Si es visible, mostrar la contraseña real
+    passwordValue.textContent = usuario.contrasena;
+    button.innerHTML = '<i class="fa-solid fa-eye"></i>';
+  } else {
+    // Si no es visible, mostrar asteriscos
+    passwordValue.textContent = usuario.contrasena.replace(/./g, "*");
+    button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+  }
+}
+
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/roles',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idRol').empty();
+
+          // Agregar la opción por defecto
+          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (rol) {
+              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener roles: ', error);
+      }
+  });
+});
 
 $(document).ready(async () => {
   await initDataTable();

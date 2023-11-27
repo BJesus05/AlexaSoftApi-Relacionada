@@ -38,41 +38,38 @@ let dataTableOptions = {
   destroy: true,
 };
 
-
 const initDataTable = async () => {
-  await listCotizaciones();
+
+  await listVentas();
+
   dataTable = $("#example").DataTable(dataTableOptions);
+
   dataTableIsInitialized = true;
 };
 
-const listCotizaciones = async () => {
+const listVentas = async () => {
   try {
-    const response = await fetch("http://localhost:4000/cotizaciones");
-    const cotizaciones = await response.json();
+    const response = await fetch("http://localhost:4000/ventas");
+    const ventas = await response.json();
 
     let content = ``;
-    cotizaciones.forEach((cotizacion) => {
-      //console.log("cotizacion   ", JSON.stringify(cotizacion))
+    ventas.forEach((venta) => {
+      console.log("venta   ", JSON.stringify(venta))
       content += `
   <tr>
-    <td> ${cotizacion.idCotizacion} </td>
-    <td> ${cotizacion.nombreCliente} </td>
-    <td> ${cotizacion.cotizacion_fechaCreacion} </td>
-    <td> ${cotizacion.cotizacion_fechaFinalizacion} </td>
-    <td> ${cotizacion.estado} </td>
-    <td> ${cotizacion.productos} </td>
-    <td> ${cotizacion.total} </td>
+    <td> ${venta.idVenta} </td>
+    <td> ${venta.numeroFactura} </td>
+    <td> ${venta.idCotizacion} </td>
+    <td> ${venta.nombreColaborador} </td>
+    <td> ${venta.fecha} </td>
     <td>
-      ${cotizacion.estado === "espera" ? `
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarCotizacion(${JSON.stringify(cotizacion).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-pencil"></i>
-        </button>` : ''}
-        ${cotizacion.estado !== "aceptado" ? `
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${cotizacion.idCotizacion})"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="verVenta(${JSON.stringify(venta).replace(/"/g, "&quot;")})" title="Ver Detalles de la Venta">
+  <i class="fa-solid fa-eye"></i>
+</button>
     </td>
   </tr>`;
     });
-    $("#cotizaciones").html(content);
+    $("#ventas").html(content);
   } catch (error) {
     alert(error);
   }

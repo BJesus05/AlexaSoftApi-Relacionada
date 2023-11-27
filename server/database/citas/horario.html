@@ -55,13 +55,13 @@
                                 Agendamiento
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Citas</a></li>
+                                <li><a class="dropdown-item textoNav" href="agendamiento.html">Agendamiento</a></li>
 
                                 <hr class="dropdown-divider">
                                 <li><a class="dropdown-item textoNav" href="#">Horario</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Colaboradores</a></li>
+                                <li><a class="dropdown-item textoNav" href="motivoscancelamiento.html">Motivo Cancelación</a></li>
                             </ul>
                         </li>
 
@@ -104,10 +104,10 @@
                                 Ventas
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Cotizaciones</a></li>
+                                <li><a class="dropdown-item textoNav" href="../cotizaciones/cotizaciones.html">Cotizaciones</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Ventas</a></li>
+                                <li><a class="dropdown-item textoNav" href="../ventas/ventas.html">Ventas</a></li>
                             </ul>
                         </li>
 
@@ -117,9 +117,11 @@
                                 Usuarios
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Roles</a></li>
+                                <li><a class="dropdown-item textoNav" href="../usuarios/roles.html">Roles</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item textoNav" href="../usuarios/usuarios.html">Usuarios</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="../usuarios/permisos.html">Permisos</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -142,7 +144,6 @@
                         <th>Campo 2</th>
                         <th>Campo 3</th>
                         <th>Campo 4</th>
-                        <th>Estado (Opcional)</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -165,7 +166,14 @@
                         <div class="mb-3">
                             <label for="numeroDia" class="col-form-label">numeroDia:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" class="form-control" id="numeroDia" required>
+                            <select name="" id="numeroDia">
+                                <option value="1">Lunes</option>
+                                <option value="2">Martes</option>
+                                <option value="3">Miercoles</option>
+                                <option value="4">Jueves</option>
+                                <option value="5">Viernes</option>
+                                <option value="6">Sabado</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="inicioJornada" class="col-form-label">inicioJornada:</label>

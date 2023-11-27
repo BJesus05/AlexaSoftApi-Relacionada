@@ -5,7 +5,7 @@ let dataTableOptions = {
   dom: "Bfrtilp",
   buttons: [
     {
-      text: 'Crear <i class="fa-solid fa-folder-plus"></i>',
+      text: 'Crear <i class="fa-regular fa-plus fa-beat-fade"></i>',
       titleAttr: "Crear",
       className: "btn btn-warning",
       action: function (e, dt, node, config) {
@@ -13,50 +13,20 @@ let dataTableOptions = {
       },
     },
     {
-      extend: "excelHtml5",
-      text: ' Excel <i class="fas fa-file-excel"></i>',
-      titleAttr: "Exportar a Excel",
-      className: "btn btn-success",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "pdfHtml5",
-      text: ' PDF <i class="fas fa-file-pdf"></i> ',
-      titleAttr: "Exportar a PDF",
-      className: "btn btn-danger",
-      exportOptions: {
-        columns: ":visible",
-      },
-    },
-    {
-      extend: "print",
-      text: ' Imprimir <i class="fa fa-print"></i>',
-      titleAttr: "Imprimir",
-      className: "btn btn-info",
-      customize: function (win) {
-        let table = $(win.document.body).find("table").DataTable();
-        table.columns().every(function (index) {
-          if (!table.column(index).visible()) {
-            table.column(index).visible(false);
-          }
-        });
-      },
       exportOptions: {
         columns: ":visible",
       },
     },
     "colvis",
   ],
-  lengthMenu: [5, 10, 15, 20, 100, 200, 500],
+  lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7,8] },
+    { className: "centered", targets: [0, 1, 2, 3] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 10,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -298,6 +268,7 @@ const openCreateModal = () => {
   $("#staticBackdrop").modal("show");
 };
 
+/* 
 let users = [];
 const updateFilteredList = () => {
   const inputValue = $("#campo4").val().toLowerCase();
@@ -330,18 +301,18 @@ const updateFilteredList = () => {
       .addClass("list-group-item");
     listResultados.append(listItem);
   }
-};
+}; */
 
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTable.destroy();
   }
 
-  await listUsers();
+  await listPermisosXRol();
 
   dataTable = $("#example").DataTable(dataTableOptions);
 
-  $("#usuario").on("input", function () {
+  $("#campo4").on("input", function () {
     dataTable.column(".campo4:name").search($(this).val()).draw();
     updateFilteredList();
   });
@@ -349,42 +320,76 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
-const listUsers = async () => {
+const listPermisosXRol = async () => {
   try {
-    const response = await fetch("http://localhost:4000/citas");
-    users = await response.json();
+    const response = await fetch("http://localhost:4000/permisosxrol");
+    const permisosxrol = await response.json();
 
     let content = ``;
-    users.forEach((citas) => {  
+    permisosxrol.forEach((permisoxrol) => {
+      console.log("permisoxrol   ", JSON.stringify(permisoxrol));
       content += `
-              <tr>
-                  <td> ${citas.idCita} </td>
-                  <td> ${citas.fecha} </td>
-                  <td> ${citas.hora} </td>
-                  <td> ${citas.detalles} </td>
-                  <td> ${citas.estado} </td>
-                  <td> ${citas.motivo} </td>
-                  <td> ${citas.nombreUsuario} </td>
-                  <td> ${citas.nombre} </td>
-                  <td> ${citas.idhorario} </td>
-                  <td>`;
-                  
-      // Agrega los botones solo si el estado no es 2
-      if (citas.estado !== "aceptado") {
-        content += `
-                  <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editaCitas(${citas.idCita})"><i class="fa-solid fa-pencil"></i></button>
-                  <button class="btn btn-sm btn-danger" onclick="confirmDelete(${citas.idCita})"><i class="fa-solid fa-trash-can"></i></button>`;
-      }
-      
-      content += `</td>
-              </tr>`;
+  <tr>
+    <td> ${permisoxrol.idPermisoXRol} </td>
+    <td> ${permisoxrol.idRol} </td>
+    <td> ${permisoxrol.idPermiso} </td>
+    <td>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarPermisoXRol(${permisoxrol.idPermisoXRol})">
+          <i class="fa-solid fa-pencil"></i>
+        </button>
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${permisoxrol.idPermisoXRol})"><i class="fa-solid fa-trash-can"></i></button>      
+      </td>
+  </tr>`;
     });
-    $("#table_users").html(content);
+    $("#permisosxrol").html(content);
   } catch (error) {
     alert(error);
   }
 };
 
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/roles',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idRol').empty();
+
+          // Agregar la opción por defecto
+          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (rol) {
+              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener roles: ', error);
+      }
+  });
+});
+
+$(document).ready(function () {
+  $.ajax({
+      url: 'http://localhost:4000/permisos',
+      method: 'GET',
+      success: function (data) {
+          // Limpiar opciones actuales del Select
+          $('#idPermiso').empty();
+
+          // Agregar la opción por defecto
+          $('#idPermiso').append('<option value="" selected disabled>Selecciona un rol</option>');
+
+          // Agregar opciones de roles desde la respuesta del servidor
+          data.forEach(function (permiso) {
+              $('#idPermiso').append('<option value="' + permiso.idPermiso + '">' + permiso.nombre + '</option>');
+          });
+      },
+      error: function (error) {
+          console.error('Error al obtener permisos: ', error);
+      }
+  });
+});
 
 $(document).ready(async () => {
   await initDataTable();
