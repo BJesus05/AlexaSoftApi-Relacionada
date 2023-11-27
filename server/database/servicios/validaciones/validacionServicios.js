@@ -47,6 +47,16 @@ function validarFormulario() {
     return false;
   }
 
+  // Validar Campo 5
+  var idCategoriaServicio = document.getElementById("idCategoriaServicio");
+  if (idCategoriaServicio.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el campo 5");
+    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } else if (!idCategoriaServicio.checkValidity()) {
+    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
+    return false;
+  }
+
 
   var btnConfirmar = document.getElementById("btnConfirmar");
   var idServicio = btnConfirmar.getAttribute("data-idservicio");
@@ -134,6 +144,7 @@ function guardarServicio() {
   const descripcion = document.getElementById("descripcion");
   const tiempoMinutos = document.getElementById("tiempoMinutos");
   const estadoSelect = document.getElementById("estado");
+  const idCategoriaServicio = document.getElementById("idCategoriaServicio");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
 
@@ -149,6 +160,7 @@ function guardarServicio() {
       descripcion: descripcion.value,
       tiempoMinutos: tiempoMinutos.value,
       estado: estado,
+      idCategoriaServicio : idCategoriaServicio,
     }),
   })
     .then((response) => {
@@ -188,30 +200,29 @@ function eliminarServicio(idServicio) {
     });
 }
 
-const editarServicio = (idServicio) => {
-  const servicios = users.find((user) => user.idServicio === idServicio);
+const editarServicio = (servicios) => {
+  $("#btnConfirmar").attr("data-idservicios", servicios.idServicio);
 
-  $("#nombre").val(servicios.nombre);
-  $("#descripcion").val(servicios.descripcion);
-  $("#tiempoMinutos").val(servicios.tiempoMinutos);
-  $("#estado").val(servicios.estado);
-  $("#btnConfirmar").attr("data-idservicio", idServicio);
-  $("#staticBackdrop").modal("show");
+  //ABRE EL MODAL (.SHOW)
+  openCreateModal()
 };
+/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 
-const guardarCambios = async (serviciosIdSeleccionado) => {
-  if (serviciosIdSeleccionado) {
-    const idServicio = serviciosIdSeleccionado;
+
+/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
+const guardarCambios = async (idServicioSeleccionado) => {
+  if (idServicioSeleccionado) {
     const nombre = $("#nombre").val();
     const descripcion = $("#descripcion").val();
     const tiempoMinutos = $("#tiempoMinutos").val();
     const estado = $("#estado").val();
+    const idCategoriaServicio = $("#idCategoriaServicio").val();
 
     try {
       const response = await fetch(
-        `http://localhost:4000/servicios/${idServicio}`,
+        `http://localhost:4000/servicios/${idServicioSeleccionado}`,
         {
-          method: "PUT",
+          method: "PATCH", 
           headers: {
             "Content-Type": "application/json",
           },
@@ -220,15 +231,16 @@ const guardarCambios = async (serviciosIdSeleccionado) => {
             descripcion,
             tiempoMinutos,
             estado,
+            idCategoriaServicio,
           }),
         }
       );
 
       if (response.ok) {
-        // La solicitud PUT fue exitosa
+        
         mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
       } else {
-        // La solicitud PUT no fue exitosa
+        
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -236,10 +248,9 @@ const guardarCambios = async (serviciosIdSeleccionado) => {
         });
       }
     } catch (error) {
-      console.error("Error en la solicitud PUT", error);
-    } finally {
-      serviciosIdSeleccionado = null;
+      console.error("Error en la solicitud PATCH", error);
     }
   }
 };
+/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
 
