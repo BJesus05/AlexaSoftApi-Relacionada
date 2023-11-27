@@ -244,5 +244,27 @@ router.delete("/citas/eliminar/:idCita", async (req, res) => {
   }
 });
 
+//Horario
+router.get("/usuario", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM usuario");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+//Horario
+router.get("/paquetes", async (req, res) => {
+  try {
+    const [result] = await Pool.query("SELECT * FROM paquete");
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 export { router as agendamientoRouter };
 export default router;
