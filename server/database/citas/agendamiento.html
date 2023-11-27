@@ -189,25 +189,27 @@
                                 <option value="3">Cancelado</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
-                            <label for="motivoCancelacion" class="col-form-label">Motivo Cancelacion:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="number"class="form-control" id="motivoCancelacion" required>
-                        </div>
+                                <label for="motivoCancelacion" class="col-form-label">Motivo Cancelación:</label>
+                                <select id="motivoCancelacion">
+                                </select>
+                        </div> 
                         <div class="mb-3">
-                            <label for="usuarioCita" class="col-form-label">Usuario</label>
-                            <input type="number" class="form-control campo4" id="usuarioCita">
-                        </div>
+                            <label for="usuarioCita" class="col-form-label">Usuario:</label>
+                            <select id="usuarioCita">
+                            </select>
+                        </div> 
                         <div class="mb-3">
                             <label for="paqueteCita" class="col-form-label">Paquete:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="number"  class="form-control" id="paqueteCita" required>
-                        </div>
+                            <select id="paqueteCita">
+                            </select>
+                        </div> 
                         <div class="mb-3">
                             <label for="horarioCita" class="col-form-label">Horario:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="number" class="form-control" id="horarioCita" required>
-                        </div>
+                            <select id="horarioCita">
+                            </select>
+                        </div> 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             <button type="submit" class="btn btn-primary"
@@ -226,7 +228,6 @@
          <div class="modal-content">
              <div class="modal-header">
                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
-                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
              <div class="modal-body mt-auto">
                  <form id="EditarFormulario">
@@ -239,10 +240,10 @@
                          </select>
                      </div>
                      <div class="mb-3">
-                         <label for="motivoCancelacion" class="col-form-label">Motivo Cancelacion:</label>
-                         <!-- Quiten el pattern si no usarán el type="text" -->
-                         <input type="number"class="form-control" id="motivoCancelacionEditar" required>
-                     </div>
+                        <label for="motivoCancelacionEditar" class="col-form-label">Motivo Cancelación:</label>
+                        <select id="motivoCancelacionEditar">
+                        </select>
+                    </div> 
                      <div class="modal-footer">
                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                          <button type="submit" class="btn btn-primary"
@@ -284,5 +285,6 @@
 <script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
 <script src="vizualizarAgendamiento.js"></script>
+<script src="cargarDatos.js"></script>
 
 </html>

@@ -52,7 +52,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3, 4] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -365,7 +365,7 @@ const listUsers = async () => {
           <td> ${user.inicioJornada} </td>
           <td> ${user.finJornada} </td>
           <td class="campo4"> ${user.estado} </td>
-          <td><i class="fa-solid fa-circle-check"></i></td>
+          
           <td>
             <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarHorario(${user.idHorario})"><i class="fa-solid fa-pencil"></i></button>
             <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idHorario})"><i class="fa-solid fa-trash-can"></i></button>

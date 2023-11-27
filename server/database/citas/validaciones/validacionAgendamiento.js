@@ -13,7 +13,6 @@ document.getElementById("miFormulario").addEventListener("submit", function (eve
 
 
     // Validar Campo 5 
-    var estadoSelect = document.getElementById("motivoCancelacion");
 
     var btnConfirmar = document.getElementById("btnConfirmarEditar");
     var idCita = btnConfirmar.getAttribute("data-idcitas");
