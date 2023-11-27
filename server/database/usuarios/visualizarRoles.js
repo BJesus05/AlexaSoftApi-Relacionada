@@ -334,20 +334,18 @@ const listRoles = async () => {
     <td> ${rol.nombre} </td>
     <td> ${rol.estado} </td>
     <td>
-        ${
-          rol.estado !== 1
-            ? `
-          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarRol(${JSON.stringify(
-            rol
-          ).replace(/"/g, "&quot;")})">
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarRol(${rol.idRol})">
           <i class="fa-solid fa-pencil"></i>
-        </button>`
-            : ""
-        }
-      <button class="btn btn-sm btn-danger" onclick="confirmDelete(${
-        rol.idRol
-      })"><i class="fa-solid fa-trash-can"></i></button>
-    </td>
+        </button>
+        <button class="btn btn-sm btn-danger" ${
+          rol.idRol !== 1
+            ? `onclick="confirmDelete(${JSON.stringify(rol.idRol).replace(
+                /"/g,
+                "&quot;"
+              )})"`
+            : "disabled"
+        }><i class="fa-solid fa-trash-can"></i></button>      
+      </td>
   </tr>`;
     });
     $("#roles").html(content);

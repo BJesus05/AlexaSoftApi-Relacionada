@@ -48,8 +48,7 @@ crossorigin="anonymous"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
-<script type="text/javascript" src="./visualizarVentas.js"></script>
-<script type="text/javascript" src="./validaciones/validacionesVentas.js"></script>
+
 
 
 </head>
@@ -157,9 +156,6 @@ crossorigin="anonymous"></script>
     <div class="container my-5">
         <div class="row">
             <table id="example" class="table table-striped" style="width: 100%">
-                <caption>
-                    Copyright © AlexaSoft
-                </caption>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -187,32 +183,32 @@ crossorigin="anonymous"></script>
                 <div class="modal-body mt-auto">
                     <table>
                         <tr>
-                            <th>ID</th>
-                            <td id="idCotizacion"></td>
+                            <th class="px-2">ID</th>
+                            <td class="px-2" id="idCotizacion"></td>
                         </tr>
                         <tr>
-                            <th>Cliente</th>
-                            <td id="nombreCliente"></td>
+                            <th class="px-2">Cliente</th>
+                            <td class="px-2" id="nombreCliente"></td>
                         </tr>
                         <tr>
-                            <th>Fecha Creacion</th>
-                            <td id="cotizacion_fechaCreacion"></td>
+                            <th class="px-2">Fecha Creacion</th>
+                            <td class="px-2" id="cotizacion_fechaCreacion"></td>
                         </tr>
                         <tr>
-                            <th>Fecha Finalización</th>
-                            <td id="cotizacion_fechaFinalizacion"></td>
+                            <th class="px-2">Fecha Finalización</th>
+                            <td class="px-2" id="cotizacion_fechaFinalizacion"></td>
                         </tr>
                         <tr>
-                            <th>Estado</th>
-                            <td id="estado"></td>
+                            <th class="px-2">Estado</th>
+                            <td class="px-2" id="estado"></td>
                         </tr>
                         <tr>
-                            <th>Productos</th>
-                            <td id="productos"></td>
+                            <th class="px-2">Productos</th>
+                            <td class="px-2" id="productos"></td>
                         </tr>
                         <tr>
-                            <th>Total</th>
-                            <td id="total"></td>
+                            <th class="px-2">Total</th>
+                            <td class="px-2" id="total"></td>
                         </tr>
                     </table>
 
@@ -223,10 +219,11 @@ crossorigin="anonymous"></script>
 
             </div>
         </div>
-    </div>
-    </div> <!-- Fin Modal -->
-
-
+    </div><!-- Fin Modal -->
+     
+<script type="text/javascript" src="./validaciones/validacionesVentas.js"></script>
+    <script type="text/javascript" src="./visualizarVentas.js"></script>
+    
 </body>
 
 </html>

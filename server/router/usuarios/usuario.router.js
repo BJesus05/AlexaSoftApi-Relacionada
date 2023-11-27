@@ -46,7 +46,7 @@ router.post('/usuarios/registrar', async (req, res) => {
   }
 });
 
-router.patch("/usuarios/editar/:idUsuario", async (req, res) => {
+router.put("/usuarios/editar/:idUsuario", async (req, res) => {
   try {
     const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
     console.log("IdRol para guardar: " + idRol);
@@ -117,13 +117,12 @@ router.post('/roles/registrar', async (req, res) => {
   }
 });
 
-router.patch("/roles/editar/:idRol", async (req, res) => {
+router.put("/roles/editar/:idRol", async (req, res) => {
   try {
     const { nombre, estado } = req.body;
-    console.log("IdRol para guardar: " + idRol);
     const [result] = await Pool.query(
       "UPDATE roles set nombre = ?, estado = ? where idRol = ?",
-      [nombre, estado, req.params.idUsuario]
+      [nombre, estado, req.params.idRol]
     );
     res.json(result);
   } catch (error) {
