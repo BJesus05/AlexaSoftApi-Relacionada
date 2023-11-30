@@ -28,10 +28,17 @@ function validarFormulario() {
 
   // Validar Campo 1
   var fecha = document.getElementById("fechaCita");
-
+  if (fecha.value.trim() === "") {
+    mostrarAlerta("Por favor, Ingrese la fecha");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
 
   // Validar Campo 2
   var hora = document.getElementById("horaCita");
+  if (hora.value.trim() === "") {
+    mostrarAlerta("Por favor, Ingrese la hora");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
  
   // Validar Campo 3
   var campo3 = document.getElementById("detalleCita");
@@ -43,22 +50,35 @@ function validarFormulario() {
     return false;
   }
 
+  var detalleCita = document.getElementById("detalleCita");
+  if (detalleCita.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el campo motivo");
+    return false;
+  } else if (!/^[a-zA-Z\s]+$/.test(detalleCita.value.trim())) {
+    mostrarAlerta("Motivo: Por favor, ingrese solo letras ");
+    return false;
+  }
+
   // Validar Campo 4
-  var campo4 = document.getElementById("estadoCita");
+  var estadoCita = document.getElementById("estadoCita");
+  if (hora.value.trim() === "") {
+    mostrarAlerta("Por favor, Ingrese la hora");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
 
 
   // Validar Campo 5 
-  var estadoSelect = document.getElementById("motivoCancelacion");
+  var motivoCancelacion = document.getElementById("motivoCancelacion");
   
     // Validar Campo 6
-  var campo4 = document.getElementById("usuarioCita");
+  var usuarioCita = document.getElementById("usuarioCita");
 
     // Validar Campo 7
-  var campo4 = document.getElementById("paqueteCita");
+  var paqueteCita = document.getElementById("paqueteCita");
 
 
     // Validar Campo 8
-  var campo4 = document.getElementById("horarioCita");
+  var horarioCita = document.getElementById("horarioCita");
 
  
 

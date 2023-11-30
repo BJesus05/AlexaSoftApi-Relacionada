@@ -22,27 +22,21 @@ function validarFormulario() {
   // Validar Campo 2
   var inicioJornada = document.getElementById("inicioJornada");
   if (inicioJornada.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 2");
+    mostrarAlerta("Por favor, Ingrese la hora de Incio");
     return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!inicioJornada.checkValidity()) {
-    mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
-    return false;
-  }
+  } 
 
   // Validar Campo 3
   var finJornada = document.getElementById("finJornada");
   if (finJornada.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 3");
+    mostrarAlerta("Por favor, Ingrese la hora de fin");
     return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!finJornada.checkValidity()) {
-    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
-    return false;
-  }
+  } 
 
   // Validar Campo 4
   var estado = document.getElementById("estado");
   if (estado.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 4");
+    mostrarAlerta("Por favor, Ingrese un estado");
     return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!estado.checkValidity()) {
     mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
