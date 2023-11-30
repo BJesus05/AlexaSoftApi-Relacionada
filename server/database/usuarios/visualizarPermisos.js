@@ -333,7 +333,6 @@ const listPermisos = async () => {
     <td> ${permiso.idPermiso} </td>
     <td> ${permiso.nombre} </td>
     <td> ${permiso.descripcion} </td>
-    <td> ${permiso.estado} </td>
     <td>
         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarPermiso(${permiso.idPermiso})">
           <i class="fa-solid fa-pencil"></i>

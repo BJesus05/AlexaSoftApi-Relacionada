@@ -44,12 +44,6 @@ function validarFormulario() {
     return false;
   }
 
-  var contrasena = document.getElementById("contrasena");
-  if (contrasena.value.trim() === "") {
-    mostrarAlerta("Por favor, completa la contraseña");
-    return false;
-  }
-
   var estado = document.getElementById("estado");
   var estadoSeleccionado = estado.options[estado.selectedIndex];
   if (estadoSeleccionado.value === "") {
@@ -126,7 +120,6 @@ function guardarUsuario() {
   const correo = document.getElementById("correo");
   const telefono = document.getElementById("telefono");
   const instagram = document.getElementById("instagram");
-  const contrasena = document.getElementById("contrasena");
   const estadoSelect = document.getElementById("estado");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
@@ -148,7 +141,6 @@ function guardarUsuario() {
       correo: correo.value,
       telefono: telefono.value,
       instagram: instagram.value,
-      contrasena: contrasena.value,
       fechaInteraccion: fechaInteraccion,
       estado: estado,
       idRol: idRol,
@@ -229,7 +221,6 @@ function editarUsuario(usuario) {
   const correo = usuario.correo;
   const telefono = usuario.telefono;
   const instagram = usuario.instagram;
-  const contrasena = usuario.contrasena;
   const estadoSelect = document.getElementById("estado");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
@@ -242,7 +233,6 @@ function editarUsuario(usuario) {
   $("#correo").val(correo);
   $("#telefono").val(telefono);
   $("#instagram").val(instagram);
-  $("#contrasena").val(contrasena);
   $("#estado").val(estado);
   $("#idRol").val(idRol);
 
@@ -259,7 +249,6 @@ const guardarCambios = async (idUsuarioSeleccionado) => {
     const correo = $("#correo").val();
     const telefono = $("#telefono").val();
     const instagram = $("#instagram").val();
-    const contrasena = $("#contrasena").val();
     const fechaInteraccion = $("#fechaInteraccion").val();
     const idRol = $("#idRol").val();
     const estado = $("#estado").val();
@@ -278,7 +267,6 @@ const guardarCambios = async (idUsuarioSeleccionado) => {
             correo,
             telefono,
             instagram,
-            contrasena,
             fechaInteraccion,
             idRol,
             estado,

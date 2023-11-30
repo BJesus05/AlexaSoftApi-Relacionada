@@ -8,8 +8,8 @@ document.getElementById("btnConfirmar").addEventListener("click", async (event) 
 
 document.getElementById("btnConfirmarColaborador").addEventListener("click", async (e) => {
   e.preventDefault()
- validarColaborador()
- 
+  validarColaborador()
+
 });
 /*LISTENER DE VALIDAR COLABORADOR Y GUARDAR VENTA */
 
@@ -23,23 +23,23 @@ const validarFormulario = async () => {
 
   if (estado.value.trim() === "") {
     await mostrarAlerta("Por favor, selecciona una opcion");
-  }else if(estado.value == 2){
+  } else if (estado.value == 2) {
     await cargarModal()
-  }else{
+  } else {
     var btnConfirmar = document.getElementById("btnConfirmar");
 
     //OBTIENE EL ATRIBUTO DEL BOTON QUE TIENE EL ID
     var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
-  
+
     //EJECUTA EL GUARDADO JUNTO CON EL ID
-  
+
     await guardarCambios(idCotizacion);
   }
 
 }
 
 /*ALERTA ACTUALIZACION EXITOSA*/
-const  mostrarAlertaExitosa= async(mensaje)=> {
+const mostrarAlertaExitosa = async (mensaje) => {
   Swal.fire({
     imageUrl: "../../../images/logoAlexa.jpg",
     imageWidth: 200,
@@ -55,7 +55,7 @@ const  mostrarAlertaExitosa= async(mensaje)=> {
       popup: "custom-alert-class",
     },
   });
-  setTimeout( () => {
+  setTimeout(() => {
     //OCULTA LA VENTANA MODAL
     $("#staticBackdrop").modal("hide");
     Swal.fire({
@@ -65,7 +65,7 @@ const  mostrarAlertaExitosa= async(mensaje)=> {
       showConfirmButton: false,
       allowOutsideClick: false,
       timer: 1500,
-    }).then(async() => {
+    }).then(async () => {
       await listCotizaciones();
     });
   }, 1500);
@@ -120,7 +120,7 @@ const eliminarCotizacion = async (idCotizacion) => {
 
 /*ALERTA CONFIRMAR ELIMINAR*/
 const confirmDelete = async (idCotizacion) => {
- await Swal.fire({
+  await Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
     icon: "warning",
@@ -129,7 +129,7 @@ const confirmDelete = async (idCotizacion) => {
     cancelButtonColor: "#3085d6",
     confirmButtonText: "Eliminar",
     cancelButtonText: "Cancelar",
-  }).then( async(result) => {
+  }).then(async (result) => {
     if (result.isConfirmed) {
       await eliminarCotizacion(idCotizacion);
       await Swal.fire({
@@ -165,11 +165,11 @@ const guardarCambios = async (idCotizacionSeleccionado) => {
       );
 
       if (response.ok) {
-        console.log("Cambios guardados correctamente"); 
+        console.log("Cambios guardados correctamente");
         mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
         miModal.hide();
       } else {
-        console.log("Hubo un problema al guardar los cambios"); 
+        console.log("Hubo un problema al guardar los cambios");
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -244,7 +244,7 @@ const guardarVenta = async (idCotizacion) => {
       );
 
       if (response.ok) {
-        console.log("Venta guardada correctamente"); 
+        console.log("Venta guardada correctamente");
       } else {
         Swal.fire({
           icon: "error",
@@ -262,21 +262,21 @@ const guardarVenta = async (idCotizacion) => {
 
 
 /*VALIDAR COLABORADORES */
-const validarColaborador = async ()=>{
+const validarColaborador = async () => {
   document.getElementById("elegirColaborador").setAttribute("novalidate", "true");
   const idColaborador = document.getElementById("colaborador");
   console.log(idColaborador)
   if (idColaborador.value.trim() === "") {
     await mostrarAlerta("Por favor, selecciona una opcion");
-  }else{
+  } else {
     //OBTIENE EL ELEMENTO POR ID
-  var btnConfirmar = document.getElementById("btnConfirmarColaborador");
-  // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
-  var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
-  // VALIDAR CAMPO Y GUARDAR VENTA
+    var btnConfirmar = document.getElementById("btnConfirmarColaborador");
+    // OBTIENE EL ATRIBUTO DEL BOTON, TIENE EL ID
+    var idCotizacion = btnConfirmar.getAttribute("data-idcotizacion");
+    // VALIDAR CAMPO Y GUARDAR VENTA
 
-  await guardarVenta(idCotizacion);
-  await guardarCambios(idCotizacion)
+    await guardarVenta(idCotizacion);
+    await guardarCambios(idCotizacion)
   }
 }
 /*VALIDAR COLABORADORES */
@@ -286,24 +286,25 @@ const validarColaborador = async ()=>{
 /*CARGAR MODAL DE COLABORADORES */
 const miModal = new bootstrap.Modal(document.getElementById("elegirColaborador"));
 const cargarModal = async () => {
-  const colaboradores = await buscarColaborador(); 
+  const colaboradores = await buscarColaborador();
+
+
+
 
   let content = ``;
+
+  content += `<option value="" disabled selected>Selecciona un colaborador</option>`;
+
   colaboradores.forEach((colaborador) => {
-    content += `
-      <select class="form-control" id="colaborador" name="colaborador">
-        <option value="" disabled selected>Selecciona un colaborador</option>
-        <option value="${colaborador.idColaborador}">${colaborador.nombre}</option>
-      </select>
-    `;
+    content += `<option value="${colaborador.idColaborador}">${colaborador.nombre}</option>`;
   });
 
-  await $("#colaboradores").html(content);
+  await $("#colaborador").html(content);
 
   const boton = document.getElementById("btnConfirmar");
-  
+
   // Agregar un evento al botón para abrir el modal
-  boton.addEventListener("click",async () => {
+  boton.addEventListener("click", async () => {
     await miModal.show();
   });
 }

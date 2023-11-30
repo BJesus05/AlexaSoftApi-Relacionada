@@ -53,7 +53,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -367,18 +367,7 @@ const listUsuarios = async () => {
     <td> ${usuario.cedula} </td>
     <td> ${usuario.correo} </td>
     <td> ${usuario.telefono} </td>
-    <td> ${usuario.instagram} </td>
-    <td class="contrasena-cell">
-      <span class="password-value">${usuario.contrasena.replace(
-        /./g,
-        "*"
-      )}</span>
-        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
-          usuario
-        ).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-eye-slash"></i>
-        </button>
-    </td>   
+    <td> ${usuario.instagram} </td>   
     <td> ${usuario.estado} </td>
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
@@ -407,22 +396,6 @@ const listUsuarios = async () => {
     alert(error);
   }
 };
-
-// Función para alternar la visibilidad de la contraseña
-function togglePasswordVisibility(button, usuario) {
-  const passwordValue = button.previousElementSibling;
-  const isVisible = passwordValue.classList.toggle("visible");
-
-  if (isVisible) {
-    // Si es visible, mostrar la contraseña real
-    passwordValue.textContent = usuario.contrasena;
-    button.innerHTML = '<i class="fa-solid fa-eye"></i>';
-  } else {
-    // Si no es visible, mostrar asteriscos
-    passwordValue.textContent = usuario.contrasena.replace(/./g, "*");
-    button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
-  }
-}
 
 $(document).ready(function () {
   $.ajax({

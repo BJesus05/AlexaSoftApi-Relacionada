@@ -8,7 +8,7 @@ router.use(cors());
 // Usuario
 router.get("/usuarios", async (req, res) => {
   try {
-    const [result] = await Pool.query("SELECT * FROM usuario");
+    const [result] = await Pool.query("SELECT usuario.idUsuario, usuario.nombre, usuario.cedula, usuario.correo, usuario.telefono, usuario.instagram, usuario.estado, usuario.fechaInteraccion, roles.nombre AS idRol FROM usuario INNER JOIN roles ON usuario.idRol = roles.idRol)");
     console.log(result);
     res.json(result);
   } catch (error) {
@@ -34,11 +34,11 @@ router.get("/usuarios/:idUsuario", async (req, res) => {
 
 router.post('/usuarios/registrar', async (req, res) => {
   try {
-    const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
-    const [result] = await Pool.query("INSERT INTO usuario(nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol) VALUES (?,?,?,?,?,?,?,?,?)", [nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol]);
+    const { nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol } = req.body;
+    const [result] = await Pool.query("INSERT INTO usuario(nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol) VALUES (?,?,?,?,?,?,?,?)", [nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol]);
     res.json({
       idUsuario: result.insertId,
-      nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol
+      nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol
     })
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -48,11 +48,11 @@ router.post('/usuarios/registrar', async (req, res) => {
 
 router.put("/usuarios/editar/:idUsuario", async (req, res) => {
   try {
-    const { nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol } = req.body;
+    const { nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol } = req.body;
     console.log("IdRol para guardar: " + idRol);
     const [result] = await Pool.query(
-      "UPDATE usuario set nombre = ?, cedula = ?, correo = ?, telefono = ?, instagram = ?, contrasena = ?, estado = ?, fechaInteraccion = ?, idRol = ? where idUsuario = ?",
-      [nombre, cedula, correo, telefono, instagram, contrasena, estado, fechaInteraccion, idRol, req.params.idUsuario]
+      "UPDATE usuario set nombre = ?, cedula = ?, correo = ?, telefono = ?, instagram = ?, estado = ?, fechaInteraccion = ?, idRol = ? where idUsuario = ?",
+      [nombre, cedula, correo, telefono, instagram, estado, fechaInteraccion, idRol, req.params.idUsuario]
     );
     res.json(result);
   } catch (error) {
@@ -176,11 +176,11 @@ router.get("/permisos/:idPermiso", async (req, res) => {
 
 router.post('/permisos/registrar', async (req, res) => {
   try {
-    const { nombre, descripcion, estado } = req.body;
-    const [result] = await Pool.query("INSERT INTO permisos(nombre, descripcion, estado) VALUES (?,?,?)", [nombre, descripcion, estado]);
+    const { nombre, descripcion } = req.body;
+    const [result] = await Pool.query("INSERT INTO permisos(nombre, descripcion) VALUES (?,?)", [nombre, descripcion]);
     res.json({
       idPermiso: result.insertId,
-      nombre, descripcion, estado
+      nombre, descripcion
     })
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -190,10 +190,10 @@ router.post('/permisos/registrar', async (req, res) => {
 
 router.put("/permisos/editar/:idPermiso", async (req, res) => {
   try {
-    const { nombre, descripcion, estado } = req.body;
+    const { nombre, descripcion } = req.body;
     const [result] = await Pool.query(
-      "UPDATE permisos set nombre = ?, descripcion = ?, estado = ? where idPermiso = ?",
-      [nombre, descripcion, estado, req.params.idPermiso]
+      "UPDATE permisos set nombre = ?, descripcion = ? where idPermiso = ?",
+      [nombre, descripcion, req.params.idPermiso]
     );
     res.json(result);
   } catch (error) {
