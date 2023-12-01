@@ -20,6 +20,9 @@ function validarFormulario() {
   if (descripcion.value.trim() === "") {
     mostrarAlerta("Por favor, completa la descripcion");
     return false;
+  } else if (!descripcion.checkValidity()) {
+    mostrarAlerta("Descripción: Por favor, ingrese solo letras.");
+    return false;
   }
 
   var btnConfirmar = document.getElementById("btnConfirmar");

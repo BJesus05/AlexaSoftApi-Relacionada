@@ -101,7 +101,8 @@
                                 Ventas
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="../cotizaciones/cotizaciones.html">Cotizaciones</a></li>
+                                <li><a class="dropdown-item textoNav"
+                                        href="../cotizaciones/cotizaciones.html">Cotizaciones</a></li>
 
                                 <hr class="dropdown-divider">
                                 <li><a class="dropdown-item textoNav" href="../ventas/ventas.html">Ventas</a></li>
@@ -144,7 +145,7 @@
                         <th>Instagram</th>
                         <th>Estado</th>
                         <th>Fecha Interacción</th>
-                        <th>idRol</th>
+                        <th>Rol</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -167,7 +168,7 @@
                         <div class="mb-3">
                             <label for="nombre" class="col-form-label">Nombre:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="nombre" required>
+                            <input type="text" pattern="[A-Za-z ]+" class="form-control" id="nombre" required>
                         </div>
                         <div class="mb-3">
                             <label for="cedula" class="col-form-label">Cedula:</label>
@@ -176,8 +177,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="correo" class="col-form-label">Correo:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="email" class="form-control" id="correo" required> 
+                            <input type="email" class="form-control" id="correo" required>
                         </div>
                         <div class="mb-3">
                             <label for="telefono" class="col-form-label">Teléfono:</label>
@@ -188,10 +188,6 @@
                             <label for="instagram" class="col-form-label">Instagram:</label>
                             <!-- Quiten el pattern si no usarán el type="text" -->
                             <input type="text" class="form-control" id="instagram" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="contrasena" class="col-form-label">Contraseña:</label>
-                            <input type="password" class="form-control" id="contrasena" required>
                         </div>
                         <div class="mb-3">
                             <label for="estado" class="col-form-label">Estado</label>

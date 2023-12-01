@@ -8,9 +8,22 @@ router.use(cors());
 // Usuario
 router.get("/usuarios", async (req, res) => {
   try {
-    const [result] = await Pool.query("SELECT usuario.idUsuario, usuario.nombre, usuario.cedula, usuario.correo, usuario.telefono, usuario.instagram, usuario.estado, usuario.fechaInteraccion, roles.nombre AS idRol FROM usuario INNER JOIN roles ON usuario.idRol = roles.idRol)");
+    const query = `
+      SELECT usuario.idUsuario, usuario.nombre, usuario.cedula, usuario.correo, 
+             usuario.telefono, usuario.instagram, usuario.estado, 
+             usuario.fechaInteraccion, roles.nombre AS nombreRol 
+      FROM usuario 
+      INNER JOIN roles ON usuario.idRol = roles.idRol`;
+    const [result] = await Pool.query(query);
     console.log(result);
-    res.json(result);
+    
+    // Modificar la estructura del objeto usuario antes de enviarlo al cliente
+    const usuarioRol = result.map((usuario) => ({
+      ...usuario,
+      idRol: usuario.nombreRol  // Cambiar el valor de idRol al nombre del rol
+    }));
+
+    res.json(usuarioRol);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

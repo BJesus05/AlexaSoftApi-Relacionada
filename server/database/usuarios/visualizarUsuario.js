@@ -53,7 +53,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -367,7 +367,18 @@ const listUsuarios = async () => {
     <td> ${usuario.cedula} </td>
     <td> ${usuario.correo} </td>
     <td> ${usuario.telefono} </td>
-    <td> ${usuario.instagram} </td>   
+    <td> ${usuario.instagram} </td>
+    <td class="contrasena-cell">
+      <span class="password-value">${usuario.contrasena.replace(
+        /./g,
+        "*"
+      )}</span>
+        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
+          usuario
+        ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-eye-slash"></i>
+        </button>
+    </td>   
     <td> ${usuario.estado} </td>
     <td> ${usuario.fechaInteraccion} </td>
     <td> ${usuario.idRol} </td>
@@ -393,32 +404,49 @@ const listUsuarios = async () => {
     });
     $("#usuarios").html(content);
   } catch (error) {
-    alert(error);
+    console.error(error);
+    // Mostrar un mensaje de error en la interfaz o registrar el error según sea necesario
   }
 };
 
 $(document).ready(function () {
   $.ajax({
-      url: 'http://localhost:4000/roles',
-      method: 'GET',
-      success: function (data) {
-          // Limpiar opciones actuales del Select
-          $('#idRol').empty();
+    url: "http://localhost:4000/roles",
+    method: "GET",
+    success: function (data) {
+      // Limpiar opciones actuales del Select
+      $("#idRol").empty();
 
-          // Agregar la opción por defecto
-          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+      // Agregar la opción por defecto
+      $("#idRol").append(
+        '<option value="" selected disabled>Selecciona un rol</option>'
+      );
 
-          // Agregar opciones de roles desde la respuesta del servidor
-          data.forEach(function (rol) {
-              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
-          });
-      },
-      error: function (error) {
-          console.error('Error al obtener roles: ', error);
-      }
+      // Agregar opciones de roles desde la respuesta del servidor
+      data.forEach(function (rol) {
+        $("#idRol").append(
+          '<option value="' + rol.idRol + '">' + rol.nombre + "</option>"
+        );
+      });
+    },
+    error: function (error) {
+      console.error("Error al obtener roles: ", error);
+    },
   });
 });
 
 $(document).ready(async () => {
   await initDataTable();
 });
+
+/*{ <td class="contrasena-cell">
+      <span class="password-value">${usuario.contrasena.replace(
+        /./g,
+        "*"
+      )}</span>
+        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
+          usuario
+        ).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-eye-slash"></i>
+        </button>
+    </td>  }*/
