@@ -243,15 +243,23 @@ router.get("/permisosxrol", async (req, res) => {
   }
 });
 
-router.get("/permisosxrol/:idPermisoXRol ", async (req, res) => {
+router.get("/permisosxrol/:idRol", async (req, res) => {
   try {
-    const [result] = await Pool.query("SELECT * FROM roles_permisos WHERE idPermisoXRol = ?", [
-      req.params.idPermisoXRol,
-    ]);
+    const [result] = await Pool.query("SELECT * FROM roles_permisos WHERE idRol = ?", [req.params.idRol]);
     console.log(result);
-    if (result.length === 0) {
-      res.status(404).json({ mensaje: "Permiso no encontrado" });
-    }
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/permisosxusuario/:idRol", async (req, res) => {
+  try {
+    const idRol = req.params.idRol;
+    const [result] = await Pool.query(
+      "SELECT roles_permisos.idPermisoXRol, roles.nombre AS idRol, permisos.nombre AS idPermiso FROM roles_permisos INNER JOIN permisos ON roles_permisos.idPermiso = permisos.idPermiso INNER JOIN roles ON roles_permisos.idrol = roles.idrol WHERE roles.nombre = ?",
+      [idRol]
+    );
     res.json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
