@@ -366,9 +366,9 @@ const listUsers = async () => {
                   <td> ${user.estado} </td>
                   <td> ${user.idCategoriaServicio} </td>
                   <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarServicio(${servicios.idServicio})">
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarServicio(${user.idServicio})">
         <i class="fa-solid fa-pencil"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${servicios.idServicios})"><i class="fa-solid fa-trash-can"></i></button>
+        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idServicios})"><i class="fa-solid fa-trash-can"></i></button>
     </td>
   </tr>`;
     });
