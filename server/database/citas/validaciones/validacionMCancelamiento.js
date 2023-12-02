@@ -10,11 +10,11 @@ function validarFormulario() {
   // Validar Campo 1
   var motivo = document.getElementById("motivoRegistro");
   if (motivo.value.trim() === "") {
-      mostrarAlerta("Por favor, completa el campo motivo");
-      return false;
-  } else if (!motivo.checkValidity()) {
-      mostrarAlerta("Motivo: Por favor, ingrese solo letras.");
-      return false;
+    mostrarAlerta("Por favor, completa el campo motivo");
+    return false;
+  } else if (!/^[a-zA-Z\s]+$/.test(motivo.value.trim())) {
+    mostrarAlerta("Motivo: Por favor, ingrese solo letras ");
+    return false;
   }
 
   var btnConfirmar = document.getElementById("btnConfirmar");

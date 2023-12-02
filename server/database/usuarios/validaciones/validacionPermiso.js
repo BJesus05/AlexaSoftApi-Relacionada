@@ -24,12 +24,6 @@ function validarFormulario() {
     mostrarAlerta("Descripción: Por favor, ingrese solo letras.");
     return false;
   }
-  var estado = document.getElementById("estado");
-  var estadoSeleccionado = estado.options[estado.selectedIndex];
-  if (estadoSeleccionado.value === "") {
-    mostrarAlerta("Estado: Por favor, selecciona un estado válido.");
-    return false;
-  }
 
   var btnConfirmar = document.getElementById("btnConfirmar");
   var idPermiso = btnConfirmar.getAttribute("data-idpermiso");
@@ -83,9 +77,6 @@ function mostrarAlerta(mensaje) {
 
 function guardarPermiso() {
   const nombre = document.getElementById("nombre");
-  const estadoSelect = document.getElementById("estado");
-  const estadoSeleccionado = estadoSelect.value;
-  const estado = estadoSeleccionado;
   const descripcion = document.getElementById("descripcion");
 
   const url = "http://localhost:4000/permisos/registrar";
@@ -98,7 +89,6 @@ function guardarPermiso() {
     body: JSON.stringify({
       nombre: nombre.value,
       descripcion: descripcion.value,
-      estado: estado,
     }),
   })
     .then((response) => {
@@ -178,11 +168,9 @@ const guardarCambios = async (idPermisoSeleccionado) => {
   if (idPermisoSeleccionado) {
     const idPermiso = idPermisoSeleccionado;
     const nombre = $("#nombre").val();
-    const estado = $("#estado").val();
     const descripcion = $("#descripcion").val();
     console.log(idPermiso)
     console.log(nombre)
-    console.log(estado)
     console.log(descripcion)
 
     try {
@@ -195,7 +183,7 @@ const guardarCambios = async (idPermisoSeleccionado) => {
           },
           body: JSON.stringify({
             nombre,
-            estado,
+            descripcion,
           }),
         }
       );

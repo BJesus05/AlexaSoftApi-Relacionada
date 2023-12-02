@@ -21,7 +21,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3] },
+    { className: "centered", targets: [0, 1, 2] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -333,7 +333,6 @@ const listPermisos = async () => {
     <td> ${permiso.idPermiso} </td>
     <td> ${permiso.nombre} </td>
     <td> ${permiso.descripcion} </td>
-    <td> ${permiso.estado} </td>
     <td>
         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarPermiso(${permiso.idPermiso})">
           <i class="fa-solid fa-pencil"></i>

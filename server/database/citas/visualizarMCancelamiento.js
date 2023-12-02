@@ -29,6 +29,62 @@ let dataTableOptions = {
       exportOptions: {
         columns: ":visible",
       },
+      customize: function (doc) {
+        //Borrar titulo por defecto
+        doc.content.splice(0, 1);
+
+        var now = new Date();
+        var jsDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+        //Margen de la tabla
+        doc.pageMargins = [20, 80, 20, 30];
+
+        //Encabezado propio
+        doc['header'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Alexandra Torres:\nNit: 145.236.742-2",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Fecha:' + jsDate,
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+        //Pie de pagina propio
+        doc['footer'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Direccion: Bacano/Colombia 57-98",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Web: www.alexandrasoft.com.barranquilla',
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+      }
     },
     {
       extend: "print",

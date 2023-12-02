@@ -26,11 +26,65 @@ let dataTableOptions = {
       text: ' PDF <i class="fas fa-file-pdf"></i> ',
       titleAttr: "Exportar a PDF",
       className: "btn btn-danger",
-      pageLength: 100,
-      orientation: "landscape",
       exportOptions: {
         columns: ":visible",
       },
+      customize: function (doc) {
+        //Borrar titulo por defecto
+        doc.content.splice(0, 1);
+
+        var now = new Date();
+        var jsDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+        //Margen de la tabla
+        doc.pageMargins = [20, 80, 20, 30];
+
+        //Encabezado propio
+        doc['header'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Alexandra Torres:\nNit: 145.236.742-2",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Fecha:' + jsDate,
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+        //Pie de pagina propio
+        doc['footer'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Direccion: Bacano/Colombia 57-98",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Web: www.alexandrasoft.com.barranquilla',
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+      }
     },
     {
       extend: "print",
@@ -53,7 +107,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+    { className: "centered", targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -335,6 +389,37 @@ const updateFilteredList = () => {
   }
 }; */
 
+async function obtenerPermisosPorRol(idRol) {
+  try {
+    const response = await fetch(`http://localhost:4000/permisosxusuario/${idRol}`);
+    const permisos = await response.json();
+    return permisos.map((permiso) => permiso.idPermiso).join(', ');
+  } catch (error) {
+    console.error('Error al obtener permisos:', error.message);
+    return "Error al obtener permisos";
+  }
+}
+
+async function openDetalleModal(usuario) {
+  // Contenido del modal con la información del usuario
+  const modalContent = `
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Detalles del Usuario</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Nombre:</strong> ${usuario.nombre}</p>
+      <p><strong>Rol:</strong> ${usuario.nombreRol}</p>
+      <p><strong>Permisos:</strong> ${await obtenerPermisosPorRol(usuario.idRol)}</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+    </div>
+  `;
+  $("#detalleUsuarioModal .modal-content").html(modalContent);
+  $("#detalleUsuarioModal").modal("show");
+}
+
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
     dataTable.destroy();
@@ -357,92 +442,61 @@ const listUsuarios = async () => {
     const response = await fetch("http://localhost:4000/usuarios");
     const usuarios = await response.json();
 
-    let content = ``;
-    usuarios.forEach((usuario) => {
-      console.log("usuario   ", JSON.stringify(usuario));
-      content += `
-  <tr>
-    <td> ${usuario.idUsuario} </td>
-    <td> ${usuario.nombre} </td>
-    <td> ${usuario.cedula} </td>
-    <td> ${usuario.correo} </td>
-    <td> ${usuario.telefono} </td>
-    <td> ${usuario.instagram} </td>
-    <td class="contrasena-cell">
-      <span class="password-value">${usuario.contrasena.replace(
-        /./g,
-        "*"
-      )}</span>
-        <button class="btn btn-sm toggle-password" onclick="togglePasswordVisibility(this, ${JSON.stringify(
-          usuario
-        ).replace(/"/g, "&quot;")})">
-          <i class="fa-solid fa-eye-slash"></i>
-        </button>
-    </td>   
-    <td> ${usuario.estado} </td>
-    <td> ${usuario.fechaInteraccion} </td>
-    <td> ${usuario.idRol} </td>
-    <td>
-    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ${
-      usuario.idRol !== 1
-        ? `onclick="editarUsuario(${JSON.stringify(usuario).replace(
-            /"/g,
-            "&quot;"
-          )})"`
-        : "disabled"
-    }><i class="fa-solid fa-pencil"></i></button>
-      <button class="btn btn-sm btn-danger" ${
-        usuario.idRol !== 1
-          ? `onclick="confirmDelete(${JSON.stringify(usuario.idUsuario).replace(
-              /"/g,
-              "&quot;"
-            )})"`
-          : "disabled"
-      }><i class="fa-solid fa-trash-can"></i></button>    
-      </td>
-  </tr>`;
-    });
+    const content = usuarios.map((usuario) => `
+      <tr>
+        <td>${usuario.idUsuario}</td>
+        <td>${usuario.nombre}</td>
+        <td>${usuario.cedula}</td>
+        <td>${usuario.correo}</td>
+        <td>${usuario.telefono}</td>
+        <td>${usuario.instagram}</td>  
+        <td>${usuario.estado}</td>
+        <td>${usuario.fechaInteraccion}</td>
+        <td>${usuario.idRol}</td>
+        <td>
+          <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ${
+            usuario.idRol !== 1 ? `onclick="editarUsuario(${JSON.stringify(usuario).replace(/"/g, "&quot;")})"` : "disabled"
+          }><i class="fa-solid fa-pencil"></i></button>
+          <button class="btn btn-sm btn-danger" ${
+            usuario.idRol !== 1 ? `onclick="confirmDelete(${JSON.stringify(usuario.idUsuario).replace(/"/g, "&quot;")})"` : "disabled"
+          }><i class="fa-solid fa-trash-can"></i></button>
+          <button class="btn btn-sm btn-success" onclick="openDetalleModal(${JSON.stringify(usuario).replace(/"/g, "&quot;")})">
+          <i class="fa-solid fa-eye"></i>
+          </button>
+        </td>
+      </tr>`
+    ).join('');
+
     $("#usuarios").html(content);
   } catch (error) {
-    alert(error);
+    console.error(error);
+    // Mostrar un mensaje de error en la interfaz o registrar el error según sea necesario
   }
 };
 
-// Función para alternar la visibilidad de la contraseña
-function togglePasswordVisibility(button, usuario) {
-  const passwordValue = button.previousElementSibling;
-  const isVisible = passwordValue.classList.toggle("visible");
-
-  if (isVisible) {
-    // Si es visible, mostrar la contraseña real
-    passwordValue.textContent = usuario.contrasena;
-    button.innerHTML = '<i class="fa-solid fa-eye"></i>';
-  } else {
-    // Si no es visible, mostrar asteriscos
-    passwordValue.textContent = usuario.contrasena.replace(/./g, "*");
-    button.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
-  }
-}
-
 $(document).ready(function () {
   $.ajax({
-      url: 'http://localhost:4000/roles',
-      method: 'GET',
-      success: function (data) {
-          // Limpiar opciones actuales del Select
-          $('#idRol').empty();
+    url: "http://localhost:4000/roles",
+    method: "GET",
+    success: function (data) {
+      // Limpiar opciones actuales del Select
+      $("#idRol").empty();
 
-          // Agregar la opción por defecto
-          $('#idRol').append('<option value="" selected disabled>Selecciona un rol</option>');
+      // Agregar la opción por defecto
+      $("#idRol").append(
+        '<option value="" selected disabled>Selecciona un rol</option>'
+      );
 
-          // Agregar opciones de roles desde la respuesta del servidor
-          data.forEach(function (rol) {
-              $('#idRol').append('<option value="' + rol.idRol + '">' + rol.nombre + '</option>');
-          });
-      },
-      error: function (error) {
-          console.error('Error al obtener roles: ', error);
-      }
+      // Agregar opciones de roles desde la respuesta del servidor
+      data.forEach(function (rol) {
+        $("#idRol").append(
+          '<option value="' + rol.idRol + '">' + rol.nombre + "</option>"
+        );
+      });
+    },
+    error: function (error) {
+      console.error("Error al obtener roles: ", error);
+    },
   });
 });
 

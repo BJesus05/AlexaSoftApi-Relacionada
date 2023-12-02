@@ -19,7 +19,7 @@ router.get('/ventas', async (req, res) => {
 
 router.get('/ventas/c', async (req, res) => {
     try {
-        const [result] = await Pool.query("SELECT c.idColaborador, u.nombre  from colaboradores c join usuario u on c.idUsuario = u.idUsuario where u.estado = 'habilitado'");
+        const [result] = await Pool.query("SELECT c.idColaborador, u.nombre  from colaboradores c join usuario u on c.idUsuario = u.idUsuario where u.estado = 'Activo'");
         //console.log(result)
         res.json(result)
     } catch (error) {
