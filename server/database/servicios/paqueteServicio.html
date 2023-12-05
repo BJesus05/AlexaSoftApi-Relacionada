@@ -55,10 +55,10 @@
                                 Agendamiento
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item textoNav" href="#">Agendamiento</a></li>
+                                <li><a class="dropdown-item textoNav" href="agendamiento.html">Agendamiento</a></li>
 
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item textoNav" href="horario.html">Horario</a></li>
+                                <li><a class="dropdown-item textoNav" href="#">Horario</a></li>
 
                                 <hr class="dropdown-divider">
                                 <li><a class="dropdown-item textoNav" href="motivoscancelamiento.html">Motivo Cancelación</a></li>
@@ -131,6 +131,7 @@
     </nav> <!-- Fin Navbar -->
 
     <!-- Inicio DataTable -->
+
     <div class="container my-5">
         <div class="row">
             <table id="example" class="table table-striped" style="width: 100%">
@@ -140,18 +141,12 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Fecha</th>
-                        <th>Hora</th>
-                        <th>detalle</th>
-                        <th>estado</th>
-                        <th>DetalleCancelamiento</th>
-                        <th>usuario</th>
-                        <th>paquete</th>
-                        <th>Horario</th>
+                        <th>idPaquete</th>
+                        <th>idServicio</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
-                <tbody id="table_users"></tbody>
+                <tbody id="paqueteServicio"></tbody>
             </table>
         </div>
     </div> <!-- Fin DataTable -->
@@ -168,54 +163,19 @@
                 <div class="modal-body mt-auto">
                     <form id="miFormulario" novalidate>
                         <div class="mb-3">
-                            <label for="fechaCita" class="col-form-label">Fecha:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="date" class="form-control" id="fechaCita" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="horaCita" class="col-form-label">Hora:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="time" class="form-control" id="horaCita" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="detalleCita" class="col-form-label">Detalle:</label>
-                            <!-- Quiten el pattern si no usarán el type="text" -->
-                            <input type="text" pattern="[A-Za-z]+" class="form-control" id="detalleCita" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="estadoCita" class="col-form-label">Estado</label>
-                            <select class="form-select" aria-label="Default select example" id="estadoCita" required>
-                                <option value="1" selected>Espera</option>
-                                <option value="2">Aceptado</option>
-                                <option value="3">Cancelado</option>
+                            <label for="idPaquete" class="col-form-label">idPaquete:</label>
+                            <select id="idPaquete">
                             </select>
-                        </div>
+                    </div> 
+                    <div class="mb-3">
+                        <label for="idServicio" class="col-form-label">idServicio:</label>
+                        <select id="idServicio">
+                        </select>
+                    </div> 
 
-                        <div class="mb-3">
-                                <label for="motivoCancelacion" class="col-form-label">Motivo Cancelación:</label>
-                                <select id="motivoCancelacion">
-                                </select>
-                        </div> 
-                        <div class="mb-3">
-                            <label for="usuarioCita" class="col-form-label">Usuario:</label>
-                            <select id="usuarioCita">
-                            </select>
-                        </div> 
-                        <div class="mb-3">
-                            <label for="paqueteCita" class="col-form-label">Paquete:</label>
-                            <select id="paqueteCita">
-                            </select>
-                        </div> 
-                        <div class="mb-3">
-                            <label for="horarioCita" class="col-form-label">Horario:</label>
-                            <select id="horarioCita">
-                            </select>
-                        </div> 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" class="btn btn-primary"
-                            id="btnConfirmar" onclick="validarFormulario(event)">Confirmar</button>
+                            <button type="submit" class="btn btn-primary" id="btnConfirmar">Confirmar</button>
                         </div>
                     </form>
                 </div>
@@ -223,44 +183,10 @@
         </div>
     </div> <!-- Fin Modal -->
 
-     <!-- Inicio Modal editar -->
-     <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-     <div class="modal-dialog modal-dialog-centered min-vh-100">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
-             </div>
-             <div class="modal-body mt-auto">
-                 <form id="EditarFormulario" novalidate>
-                     <div class="mb-3">
-                         <label for="estadoCita" class="col-form-abel">Estado</label>
-                         <select class="form-select" aria-label="Deflault select example" id="estadoCitaEditar" required>
-                             <option value="" selected disabled>Selecciona un estado</option>
-                             <option value="2">Aceptado</option>
-                             <option value="3">Cancelado</option>
-                         </select>
-                     </div>
-                     <div class="mb-3">
-                        <label for="motivoCancelacionEditar" class="col-form-label">Motivo Cancelación:</label>
-                        <select id="motivoCancelacionEditar">
-                        </select>
-                    </div> 
-                     <div class="modal-footer">
-                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                         <button type="submit" class="btn btn-primary"
-                         id="btnConfirmarEditar" onclick="validarCambio(event)">Confirmar</button>
-                     </div>
-                 </form>
-             </div>
-         </div>
-     </div>
- </div> <!-- Fin Modal -->
-
 </body>
 
 <!-- Personalizado JS -->
-<script src="validaciones/validacionAgendamiento.js"></script>
+<script src="validaciones/validacionPaqueteServicio.js"></script>
 
 <!-- JQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
@@ -286,7 +212,7 @@
 <script src="../dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
 <script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
-<script src="vizualizarAgendamiento.js"></script>
-<script src="cargarDatos.js"></script>
+<script src="visualizarPaqueteServicio.js"></script>
+<script src="cargarDatosp.js"></script>
 
 </html>

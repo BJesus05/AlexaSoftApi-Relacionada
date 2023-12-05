@@ -20,9 +20,25 @@ function validarFormulario() {
   }
 
   // Validar Campo 2
-  var descripcion = document.getElementById("descripcion");
-  if (descripcion.value.trim() === "") {
-    mostrarAlerta("Por favor, Ingrese la hora de Incio");
+  var marca = document.getElementById("marca");
+  if (marca.value.trim() === "") {
+    mostrarAlerta("Por favor, completa el campo 1");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } else if (!marca.checkValidity()) {
+    mostrarAlerta("Marca: Por favor, ingrese solo letras.");
+    return false;
+  }
+
+  // Validar Campo 3
+  var precio = document.getElementById("precio");
+  if (precio.value.trim() === "") {
+    mostrarAlerta("Por favor, Ingrese el precio");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
+
+  var unidades = document.getElementById("unidades");
+  if (unidades.value.trim() === "") {
+    mostrarAlerta("Por favor, Ingrese las unidades");
     return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } 
 
@@ -36,14 +52,15 @@ function validarFormulario() {
     return false;
   }
 
-  var btnConfirmar = document.getElementById("btnConfirmar");
-  var idPaquete = btnConfirmar.getAttribute("data-idpaquete");
 
-  if (idPaquete) {
-    guardarCambios(idPaquete);
+  var btnConfirmar = document.getElementById("btnConfirmar");
+  var idProducto = btnConfirmar.getAttribute("data-idproducto");
+
+  if (idProducto) {
+    guardarCambios(idProducto);
   } else {
-    mostrarAlertaExitosa("Validación exitosa. Creando nuevo paquete...");
-    guardarpaquete();
+    mostrarAlertaExitosa("Validación exitosa. Creando nuevo producto...");
+    guardarproducto();
   }
 }
 
@@ -87,7 +104,7 @@ function mostrarAlerta(mensaje) {
   });
 }
 
-const confirmDelete = (idPaquete) => {
+const confirmDelete = (idProducto) => {
   Swal.fire({
     title: "¿Estás seguro?",
     text: "¡No podrás revertir esto!",
@@ -106,7 +123,7 @@ const confirmDelete = (idPaquete) => {
         confirmButtonColor: "#198754",
         confirmButtonText: "Confirmar",
       }).then(() => {
-        eliminarPaquete(idPaquete).then((eliminado) => {
+        eliminarProducto(idProducto).then((eliminado) => {
           if (eliminado) {
             location.reload();
           }
@@ -116,15 +133,17 @@ const confirmDelete = (idPaquete) => {
   });
 };
 
-function guardarpaquete() {
+function guardarproducto() {
   const nombre = document.getElementById("nombre");
-  const descripcion = document.getElementById("descripcion");
+  const marca = document.getElementById("marca");
+  const precio = document.getElementById("precio");
+  const unidades = document.getElementById("unidades");
   const estadoSelect = document.getElementById("estado");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
 
 
-  const url = "http://localhost:4000/paquete/registro";
+  const url = "http://localhost:4000/productos/registro";
 
   fetch(url, {
     method: "POST",
@@ -133,7 +152,9 @@ function guardarpaquete() {
     },
     body: JSON.stringify({
       nombre: nombre.value,
-      descripcion: descripcion.value,
+      marca: marca.value,
+      precio: precio.value,
+      unidades: unidades.value,
       estado: estado,
 
     }),
@@ -145,9 +166,9 @@ function guardarpaquete() {
       return response.json();
     })
     .then((data) => {
-      const nuevaPaquete = [];
-      nuevaPaquete.push(data);
-      mostrar(nuevaPaquete);
+      const nuevaProducto = [];
+      nuevaProducto.push(data);
+      mostrar(nuevaProducto);
       location.reload();
     })
     .catch((error) => {
@@ -155,10 +176,10 @@ function guardarpaquete() {
     });
 }
 
-function eliminarPaquete(idPaquete) {
-  var url = `http://localhost:4000/paquete/eliminar/`;
+function eliminarProducto(idServicio) {
+  var url = `http://localhost:4000/productos/eliminar/`;
 
-  return fetch(url + idPaquete, {
+  return fetch(url + idServicio, {
     method: "DELETE",
   })
     .then((response) => {
@@ -175,28 +196,33 @@ function eliminarPaquete(idPaquete) {
     });
 }
 
-const editarPaquete = (idPaquete) => {
-  const paquete = users.find((user) => user.idPaquete === idPaquete);
+const editarProducto = (idProducto) => {
+  const producto = users.find((user) => user.idProducto === idProducto);
 
-  $("#nombre").val(paquete.nombre);
-  $("#descripcion").val(paquete.descripcion);
-  $("#estado").val(paquete.estado);
-  $("#btnConfirmar").attr("data-idpaquete", idPaquete);
+  $("#nombre").val(producto.nombre);
+  $("#marca").val(producto.marca);
+  $("#precio").val(producto.precio);
+  $("#unidades").val(producto.unidades);
+  $("#estado").val(producto.estado);
+  $("#btnConfirmar").attr("data-idproducto", idProducto);
+
   $("#staticBackdrop").modal("show");
 };
 
-const guardarCambios = async (paqueteidSeleccionado) => {
-  if (paqueteidSeleccionado) {
-    const idPaquete = paqueteidSeleccionado;
-    console.log(idPaquete)
+const guardarCambios = async (productoidSeleccionado) => {
+  if (productoidSeleccionado) {
+    const idProducto = productoidSeleccionado;
+    console.log(idProducto)
     const nombre = $("#nombre").val();
-    const descripcion = $("#descripcion").val();
+    const marca = $("#marca").val();
+    const precio = $("#precio").val();
+    const unidades = $("#unidades").val();
     const estado = $("#estado").val();
 
 
     try {
       const response = await fetch(
-        `http://localhost:4000/paquete/editar/${idPaquete}`,
+        `http://localhost:4000/productos/editar/${idProducto}`,
         {
           method: "PUT",
           headers: {
@@ -204,7 +230,9 @@ const guardarCambios = async (paqueteidSeleccionado) => {
           },
           body: JSON.stringify({
             nombre,
-            descripcion,
+            marca,
+            precio,
+            unidades,
             estado,
           }),
         }
@@ -224,7 +252,7 @@ const guardarCambios = async (paqueteidSeleccionado) => {
     } catch (error) {
       console.error("Error en la solicitud PUT", error);
     } finally {
-      paqueteidSeleccionado = null;
+      productoidSeleccionado = null;
     }
   }
 };

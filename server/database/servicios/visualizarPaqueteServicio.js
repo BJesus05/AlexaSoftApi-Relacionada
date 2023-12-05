@@ -108,12 +108,12 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4] },
+    { className: "centered", targets: [0, 1, 2, 3] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 10,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -408,7 +408,7 @@ const initDataTable = async () => {
 
 const listUsers = async () => {
   try {
-    const response = await fetch("http://localhost:4000/paquete/");
+    const response = await fetch("http://localhost:4000/paqueteServicio/");
     users = await response.json();
     console.log(users);
 
@@ -416,19 +416,16 @@ const listUsers = async () => {
     users.forEach((user) => {
       content += `
         <tr>
+          <td> ${user.idPaqueteXServicio} </td>
           <td> ${user.idPaquete} </td>
-          <td> ${user.nombre} </td>
-          <td> ${user.descripcion} </td> 
-          <td class="campo4"> ${user.estado} </td>
-
-          
+          <td> ${user.idServicio} </td> 
           <td>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarPaquete(${user.idPaquete})"><i class="fa-solid fa-pencil"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idPaquete})"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarPaqueteXServicio(${user.idPaqueteXServicio})"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idPaqueteXServicio})"><i class="fa-solid fa-trash-can"></i></button>
           </td>
         </tr>`;
     });
-    $("#paquete").html(content);
+    $("#paqueteServicio").html(content);
   } catch (error) {
     alert(error);
   }

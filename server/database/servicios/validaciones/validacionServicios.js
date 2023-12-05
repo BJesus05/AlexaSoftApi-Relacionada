@@ -1,4 +1,6 @@
-document.getElementById("miFormulario").addEventListener("submit", function (event) {
+document
+  .getElementById("miFormulario")
+  .addEventListener("submit", function (event) {
     event.preventDefault();
     validarFormulario();
   });
@@ -11,7 +13,7 @@ function validarFormulario() {
   var nombre = document.getElementById("nombre");
   if (nombre.value.trim() === "") {
     mostrarAlerta("Por favor, completa el campo 1");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!nombre.checkValidity()) {
     mostrarAlerta("Campo 1: Por favor, ingrese solo letras.");
     return false;
@@ -20,40 +22,33 @@ function validarFormulario() {
   // Validar Campo 2
   var descripcion = document.getElementById("descripcion");
   if (descripcion.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 2");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!descripcion.checkValidity()) {
-    mostrarAlerta("Campo 2: Por favor, ingrese solo letras.");
-    return false;
-  }
+    mostrarAlerta("Por favor, Ingrese la hora de Incio");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
 
   // Validar Campo 3
   var tiempoMinutos = document.getElementById("tiempoMinutos");
   if (tiempoMinutos.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 3");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!tiempoMinutos.checkValidity()) {
-    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
-    return false;
-  }
+    mostrarAlerta("Por favor, Ingrese la hora de fin");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } 
 
   // Validar Campo 4
   var estado = document.getElementById("estado");
   if (estado.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 4");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+    mostrarAlerta("Por favor, Ingrese un estado");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
   } else if (!estado.checkValidity()) {
     mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
     return false;
   }
 
-  // Validar Campo 5
   var idCategoriaServicio = document.getElementById("idCategoriaServicio");
   if (idCategoriaServicio.value.trim() === "") {
-    mostrarAlerta("Por favor, completa el campo 5");
-    return false;                                               // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
-  } else if (!idCategoriaServicio.checkValidity()) {
-    mostrarAlerta("Campo 3: Por favor, ingrese solo letras.");
+    mostrarAlerta("Por favor, Ingrese una categoria de servicio");
+    return false; // Modifiquen la validación según el campo que tengan, de caso contrario dejenlo.
+  } else if (!estado.checkValidity()) {
+    mostrarAlerta("Campo 4: Por favor, ingrese solo letras.");
     return false;
   }
 
@@ -65,42 +60,41 @@ function validarFormulario() {
     guardarCambios(idServicio);
   } else {
     mostrarAlertaExitosa("Validación exitosa. Creando nuevo servicio...");
-    guardarServicio();
+    guardarservicio();
   }
 }
 
-
 function mostrarAlertaExitosa(mensaje) {
+  Swal.fire({
+    imageUrl: "../../../images/logoAlexa.jpg",
+    imageWidth: 200,
+    imageHeight: 100,
+    imageAlt: "Alexa Soft",
+    title: "Cargando...",
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    willOpen: function () {
+      Swal.showLoading();
+    },
+    customClass: {
+      popup: "custom-alert-class",
+    },
+  });
+  setTimeout(() => {
+    $("#staticBackdrop").modal("hide");
     Swal.fire({
-        imageUrl: "../../images/logoAlexa.jpg",
-        imageWidth: 200,
-        imageHeight: 100,
-        imageAlt: "Alexa Soft",
-        title: "Cargando...", 
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        willOpen: function () {
-          Swal.showLoading();
-        },
-        customClass: {
-          popup: 'custom-alert-class'
-        },
-      });
-    setTimeout(() => {
-      $("#staticBackdrop").modal("hide");
-  
-      Swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: mensaje,
-        showConfirmButton: false,
-        allowOutsideClick: false,
-        timer: 2000,
-      }).then(() => {
-        document.getElementById("miFormulario").submit();
-      });
-    }, 3000);
-  }
+      icon: "success",
+      title: "Éxito",
+      text: mensaje,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      timer: 3000,
+    }).then(() => {
+      document.getElementById("miFormulario").reset();
+      location.reload();
+    });
+  }, 3000);
+}
 
 function mostrarAlerta(mensaje) {
   Swal.fire({
@@ -139,14 +133,14 @@ const confirmDelete = (idServicio) => {
   });
 };
 
-function guardarServicio() {
+function guardarservicio() {
   const nombre = document.getElementById("nombre");
   const descripcion = document.getElementById("descripcion");
   const tiempoMinutos = document.getElementById("tiempoMinutos");
   const estadoSelect = document.getElementById("estado");
-  const idCategoriaServicio = document.getElementById("idCategoriaServicio");
   const estadoSeleccionado = estadoSelect.value;
   const estado = estadoSeleccionado;
+  const idCategoriaServicio = document.getElementById("idCategoriaServicio");
 
   const url = "http://localhost:4000/servicios/registro";
 
@@ -160,7 +154,7 @@ function guardarServicio() {
       descripcion: descripcion.value,
       tiempoMinutos: tiempoMinutos.value,
       estado: estado,
-      idCategoriaServicio : idCategoriaServicio,
+      idCategoriaServicio: idCategoriaServicio.value,
     }),
   })
     .then((response) => {
@@ -200,18 +194,23 @@ function eliminarServicio(idServicio) {
     });
 }
 
-const editarServicio = (servicios) => {
-  $("#btnConfirmar").attr("data-idservicios", servicios.idServicio);
+const editarServicio = (idServicio) => {
+  const servicio = users.find((user) => user.idServicio === idServicio);
 
-  //ABRE EL MODAL (.SHOW)
-  openCreateModal()
+  $("#nombre").val(servicio.nombre);
+  $("#descripcion").val(servicio.descripcion);
+  $("#tiempoMinutos").val(servicio.tiempoMinutos);
+  $("#estado").val(servicio.estado);
+  $("#idCategoriaServicio").val(servicio.idCategoriaServicio);
+  $("#btnConfirmar").attr("data-idservicio", idServicio);
+
+  $("#staticBackdrop").modal("show");
 };
-/*FUNCION ABRIR MODAL Y AGREGAR ATRIBUTO AL BOTON*/
 
-
-/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
-const guardarCambios = async (idServicioSeleccionado) => {
-  if (idServicioSeleccionado) {
+const guardarCambios = async (servicioidSeleccionado) => {
+  if (servicioidSeleccionado) {
+    const idServicio = servicioidSeleccionado;
+    console.log(idServicio)
     const nombre = $("#nombre").val();
     const descripcion = $("#descripcion").val();
     const tiempoMinutos = $("#tiempoMinutos").val();
@@ -220,9 +219,9 @@ const guardarCambios = async (idServicioSeleccionado) => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/servicios/${idServicioSeleccionado}`,
+        `http://localhost:4000/servicios/editar/${idServicio}`,
         {
-          method: "PATCH", 
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -237,10 +236,10 @@ const guardarCambios = async (idServicioSeleccionado) => {
       );
 
       if (response.ok) {
-        
+        // La solicitud PUT fue exitosa
         mostrarAlertaExitosa("Los cambios fueron guardados correctamente.");
       } else {
-        
+        // La solicitud PUT no fue exitosa
         Swal.fire({
           icon: "error",
           title: "Error",
@@ -248,9 +247,9 @@ const guardarCambios = async (idServicioSeleccionado) => {
         });
       }
     } catch (error) {
-      console.error("Error en la solicitud PATCH", error);
+      console.error("Error en la solicitud PUT", error);
+    } finally {
+      servicioidSeleccionado = null;
     }
   }
 };
-/*FUNCION FETCH GUARDAR EN LA BASE DE DATOS*/
-

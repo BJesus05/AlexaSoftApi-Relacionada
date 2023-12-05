@@ -1,3 +1,4 @@
+
 let dataTable;
 let dataTableIsInitialized = false;
 
@@ -29,6 +30,62 @@ let dataTableOptions = {
       exportOptions: {
         columns: ":visible",
       },
+      customize: function (doc) {
+        //Borrar titulo por defecto
+        doc.content.splice(0, 1);
+
+        var now = new Date();
+        var jsDate = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear();
+        //Margen de la tabla
+        doc.pageMargins = [20, 80, 20, 30];
+
+        //Encabezado propio
+        doc['header'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Alexandra Torres:\nNit: 145.236.742-2",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Fecha:' + jsDate,
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+        //Pie de pagina propio
+        doc['footer'] = (function () {
+          return {
+            columns: [
+
+              {
+                alignment: 'left',
+                text: "Direccion: Bacano/Colombia 57-98",
+                fontSize: 12,
+                margin: [10, 0]
+              },
+              {
+                alignment: "right",
+                text: 'Web: www.alexandrasoft.com.barranquilla',
+                fontSize: 12,
+                margin: [10, 0]
+
+              }
+            ],
+            margin: 10
+
+          }
+        });
+      }
     },
     {
       extend: "print",
@@ -51,7 +108,7 @@ let dataTableOptions = {
   ],
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
-    { className: "centered", targets: [0, 1, 2, 3, 4, 5] },
+    { className: "centered", targets: [0, 1, 2, 3, 4] },
     { orderable: false, targets: [2] },
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
@@ -353,24 +410,24 @@ const listUsers = async () => {
   try {
     const response = await fetch("http://localhost:4000/servicios/");
     users = await response.json();
-    console.log(users)
+    console.log(users);
 
     let content = ``;
     users.forEach((user) => {
       content += `
-              <tr>
-                  <td> ${user.idServicio} </td>
-                  <td> ${user.nombre} </td>
-                  <td> ${user.descripcion} </td>
-                  <td> ${user.tiempoMinutos} </td>
-                  <td> ${user.estado} </td>
-                  <td> ${user.idCategoriaServicio} </td>
-                  <td>
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="editarServicio(${user.idServicio})">
-        <i class="fa-solid fa-pencil"></i></button>
-        <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idServicios})"><i class="fa-solid fa-trash-can"></i></button>
-    </td>
-  </tr>`;
+        <tr>
+          <td> ${user.idServicio} </td>
+          <td> ${user.nombre} </td>
+          <td> ${user.descripcion} </td>
+          <td> ${user.tiempoMinutos} </td>    
+          <td class="campo4"> ${user.estado} </td>
+          <td> ${user.idCategoriaServicio} </td>
+          
+          <td>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarServicio(${user.idServicio})"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idServicio})"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>`;
     });
     $("#servicios").html(content);
   } catch (error) {

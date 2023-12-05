@@ -113,7 +113,7 @@ let dataTableOptions = {
     // { searchable: false, targets: [1] }, (Este es el buscar por columna especifica)
     { width: "20%", targets: [1] },
   ],
-  pageLength: 3,
+  pageLength: 10,
   destroy: true,
   language: {
     processing: "Procesando...",
@@ -408,7 +408,7 @@ const initDataTable = async () => {
 
 const listUsers = async () => {
   try {
-    const response = await fetch("http://localhost:4000/paquete/");
+    const response = await fetch("http://localhost:4000/ServiciosProductos/");
     users = await response.json();
     console.log(users);
 
@@ -416,19 +416,18 @@ const listUsers = async () => {
     users.forEach((user) => {
       content += `
         <tr>
-          <td> ${user.idPaquete} </td>
-          <td> ${user.nombre} </td>
-          <td> ${user.descripcion} </td> 
-          <td class="campo4"> ${user.estado} </td>
-
-          
+          <td> ${user.idProductoXServicio} </td>
+          <td> ${user.idServicio} </td>
+          <td> ${user.idProducto} </td>
+          <td> ${user.cantidad} </td>
+          <td> ${user.unidadMedida} </td> 
           <td>
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarPaquete(${user.idPaquete})"><i class="fa-solid fa-pencil"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idPaquete})"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" onclick="editarServicioXProducto(${user.idProductoXServicio})"><i class="fa-solid fa-pencil"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="confirmDelete(${user.idProductoXServicio})"><i class="fa-solid fa-trash-can"></i></button>
           </td>
         </tr>`;
     });
-    $("#paquete").html(content);
+    $("#ServiciosProductos").html(content);
   } catch (error) {
     alert(error);
   }

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AlexaSoft Plantilla</title>
+
+    <!-- Icon Pestaña (Favicon)-->
+    <link rel="icon" type="image/x-icon" href="../../../images/letter-a.png">
+
+    <!-- personalizados CSS -->
+    <link rel="stylesheet" href="../dataTable/estiloGeneral.css">
+
+    <!-- Font-Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- DataTable CSS -->
+    <link href="../dataTable/DataTables-1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="../dataTable/Buttons-2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Enlace SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+</head>
+
+<body>
+    <!-- Inicio Navbar -->
+    <nav class="navbar bg-body-tertiary border-bottom border-dark sinFondo fixed-top sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="../../../images/logoAlexa.jpg" alt="Bootstrap" width="150" height="auto">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="me-2 textoNav">Opciones</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle textoNav" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Agendamiento
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item textoNav" href="agendamiento.html">Agendamiento</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="#">Horario</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="motivoscancelamiento.html">Motivo Cancelación</a></li>
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle textoNav" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Servicios
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item textoNav" href="#">Paquetes</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="">Servicios</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="">Productos</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle textoNav" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Compras
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item textoNav" href="#">Retirar Insumos</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="#">Compras</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="#">Proveedores</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle textoNav" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Ventas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item textoNav" href="../cotizaciones/cotizaciones.html">Cotizaciones</a></li>
+
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="../ventas/ventas.html">Ventas</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle textoNav" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Usuarios
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item textoNav" href="../usuarios/roles.html">Roles</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="../usuarios/usuarios.html">Usuarios</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item textoNav" href="../usuarios/permisos.html">Permisos</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav> <!-- Fin Navbar -->
+
+    <!-- Inicio DataTable -->
+
+    <div class="container my-5">
+        <div class="row">
+            <table id="example" class="table table-striped" style="width: 100%">
+                <caption>
+                    Copyright © AlexaSoft
+                </caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>nombe</th>
+                        <th>descripcion</th>
+                        <th>estado</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody id="paquete"></tbody>
+            </table>
+        </div>
+    </div> <!-- Fin DataTable -->
+
+    <!-- Inicio Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered min-vh-100">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal Plantilla</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body mt-auto">
+                    <form id="miFormulario" novalidate>
+                        <div class="mb-3">
+                            <label for="nombre" class="col-form-label">Nombre:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="text" pattern="[A-Za-z  ]+" class="form-control" id="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="col-form-label">Descripcion:</label>
+                            <!-- Quiten el pattern si no usarán el type="text" -->
+                            <input type="text" pattern="[A-Za-z  ]+" class="form-control" id="descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estado" class="col-form-label">Estado</label>
+                            <select class="form-select" aria-label="Default select example" id="estado" required>
+                                <option value="" selected disabled>Selecciona un estado</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" id="btnConfirmar">Confirmar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Fin Modal -->
+
+</body>
+
+<!-- Personalizado JS -->
+<script src="validaciones/validacionPaqute.js"></script>
+
+<!-- JQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<!-- DataTable JS -->
+<script src="../dataTable/JSZip-3.10.1/jszip.min.js"></script>
+<script src="../dataTable/pdfmake-0.2.7/pdfmake.min.js"></script>
+<script src="../dataTable/pdfmake-0.2.7/vfs_fonts.js"></script>
+<script src="../dataTable/DataTables-1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="../dataTable/DataTables-1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.bootstrap5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.colVis.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.html5.min.js"></script>
+<script src="../dataTable/Buttons-2.4.2/js/buttons.print.min.js"></script>
+<script src="visualizarPaquete.js"></script>
+
+</html>
